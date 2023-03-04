@@ -1,0 +1,74 @@
+{
+  "name": "messaging",
+  "description": "This microservice is sends user a notification for booking confirmation and ticketing",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "keywords": [
+    "feathers"
+  ],
+  "author": {},
+  "contributors": [],
+  "bugs": {},
+  "engines": {
+    "node": ">= 18.12.1"
+  },
+  "feathers": {
+    "language": "js",
+    "packager": "npm",
+    "database": "mysql",
+    "framework": "koa",
+    "transports": [
+      "rest",
+      "websockets"
+    ],
+    "schema": "typebox"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "files": [
+    "lib/client.js",
+    "lib/**/*.d.ts",
+    "lib/**/*.shared.js"
+  ],
+  "main": "src/client",
+  "type": "module",
+  "scripts": {
+    "start": "node src",
+    "dev": "nodemon src/",
+    "prettier": "npx prettier \"**/*.js\" --write",
+    "mocha": "cross-env NODE_ENV=test mocha test/ --recursive --exit",
+    "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
+    "bundle:client": "npm pack --pack-destination ./public",
+    "migrate": "knex migrate:latest",
+    "migrate:make": "knex migrate:make"
+  },
+  "dependencies": {
+    "@feathersjs/adapter-commons": "^5.0.0",
+    "@feathersjs/authentication": "^5.0.0",
+    "@feathersjs/authentication-client": "^5.0.0",
+    "@feathersjs/configuration": "^5.0.0",
+    "@feathersjs/errors": "^5.0.0",
+    "@feathersjs/feathers": "^5.0.0",
+    "@feathersjs/knex": "^5.0.0",
+    "@feathersjs/koa": "^5.0.0",
+    "@feathersjs/schema": "^5.0.0",
+    "@feathersjs/socketio": "^5.0.0",
+    "@feathersjs/transport-commons": "^5.0.0",
+    "@feathersjs/typebox": "^5.0.0",
+    "knex": "^2.4.2",
+    "mysql": "^2.18.1",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@feathersjs/cli": "^5.0.0",
+    "@feathersjs/rest-client": "^5.0.0",
+    "axios": "^1.3.4",
+    "cross-env": "^7.0.3",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.21",
+    "prettier": "^2.8.4"
+  }
+}
