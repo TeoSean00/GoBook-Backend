@@ -1,6 +1,6 @@
 # messaging
 
-> This microservice is sends user a notification for booking confirmation and ticketing
+> Messaging microservice
 
 ## About
 
@@ -19,7 +19,6 @@ This project uses [Feathers](http://feathersjs.com). An open source framework fo
 3. Start your app
 
     ```
-    npm run migrate # Run migrations to set up the database
     npm start
     ```
 

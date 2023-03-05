@@ -6,7 +6,7 @@ import socketio from '@feathersjs/socketio'
 
 import { configurationValidator } from './configuration.js'
 import { logError } from './hooks/log-error.js'
-import { mysql } from './mysql.js'
+import { mongodb } from './mongodb.js'
 
 import { services } from './services/index.js'
 import { channels } from './channels.js'
@@ -33,7 +33,7 @@ app.configure(
   })
 )
 app.configure(channels)
-app.configure(mysql)
+app.configure(mongodb)
 
 app.configure(services)
 

@@ -9,8 +9,5 @@
     "default": 10,
     "max": 50
   },
-  "mysql": {
-    "client": "mysql",
-    "connection": "mysql://root:@localhost:3306/messaging"
-  }
+  "mongodb": "mongodb://127.0.0.1:27017/messaging"
 }
