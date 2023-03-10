@@ -16,7 +16,7 @@ client = MongoClient(host='localhost',
                         )
 
 db = client['class_schedule']
-    
+
 
 CORS(app)  
 
@@ -25,11 +25,8 @@ def index():
     return "Hello there, there are the classes"
 
 @app.route('/users')
-def get_stored_animals():
-    _users = db.users.find()
-    print(_users)
-    users = [{"id": user["_id"], "name": user["username"]} for user in _users]
-    print(users)
+def get_all_classes():
+    users = db.users.find()
     return json.loads(json_util.dumps(users))
 
 if __name__ == '__main__':
