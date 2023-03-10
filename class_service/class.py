@@ -16,6 +16,40 @@ client = MongoClient(host='localhost',
                         )
 
 db = client['class_db']
+sample_data = [
+    {
+    "className": "Data Breach Management (Synchronous e-learning)",
+    "classSize": 10,
+    "date": "10-4-2023",
+    "participants": [
+    ],
+    "categories": ["PSEA","SF_Series"]
+    },
+    {
+    "className": "Data Breach Management (Synchronous e-learning)",
+    "classSize": 10,
+    "date": "10-4-2023",
+    "participants": [
+    ],
+    "categories": ["PSEA","SF_Series"]
+    },
+    {
+    "className": "Data Breach Management (Synchronous e-learning)",
+    "classSize": 10,
+    "date": "10-4-2023",
+    "participants": [
+    ],
+    "categories": ["PSEA","SF_Series"]
+    },
+    {
+    "className": "Data Breach Management (Synchronous e-learning)",
+    "classSize": 10,
+    "date": "10-4-2023",
+    "participants": [
+    ],
+    "categories": ["PSEA","SF_Series"]
+    }
+]
 
 
 CORS(app)  
@@ -24,10 +58,22 @@ CORS(app)
 def index():
     return "Hello there, there are the classes"
 
+
 @app.route('/class')
 def get_all_classes():
     classes = db.classes.find()
     return json.loads(json_util.dumps(classes))
+
+
+@app.route('/class/createDB')
+def create_db():
+    db_exists = client.list_database_names()
+    if 'class_db' in db_exists:
+        client.drop_database('class_db')
+    db = client['class_db']
+    for data in sample_data:
+        db["classes"].insert_one(data)
+    return "Sample data inserted successfully" + str(sample_data)
 
 
 
