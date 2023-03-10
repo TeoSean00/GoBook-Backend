@@ -1,14 +1,19 @@
 {
   "name": "message_service",
   "version": "1.0.0",
-  "description": "Messaging microservice",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
-  "author": "Keith Loh",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mailgen": "^2.0.27",
+    "nodemailer": "^6.9.1",
+    "nodemon": "^2.0.21"
   }
 }
