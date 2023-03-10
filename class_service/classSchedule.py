@@ -15,7 +15,7 @@ client = MongoClient(host='localhost',
                         port=27017
                         )
 
-db = client['class_schedule']
+db = client['class_db']
 
 
 CORS(app)  
@@ -24,10 +24,12 @@ CORS(app)
 def index():
     return "Hello there, there are the classes"
 
-@app.route('/users')
+@app.route('/class')
 def get_all_classes():
-    users = db.users.find()
-    return json.loads(json_util.dumps(users))
+    classes = db.classes.find()
+    return json.loads(json_util.dumps(classes))
+
+
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
