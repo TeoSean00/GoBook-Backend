@@ -17,7 +17,47 @@ client = MongoClient(host='localhost',
                         )
 
 db = client['user_db']
-    
+sample_data = [
+    {
+    "name": "Test User 1",
+    "preferences": [],
+    "attended_classes": [],
+    "reviews": [
+        "Review 1",
+        "Review 2"
+    ]
+    },
+    {
+    "name": "Test User 2",
+    "preferences": [],
+    "attended_classes": [],
+    "reviews": []
+    },
+    {
+    "name": "Test User 3",
+    "preferences": [],
+    "attended_classes": [],
+    "reviews": [
+        "Review 1",
+        "Review 2",
+        "Review 3"
+    ]
+    },
+    {
+    "name": "Test User 4",
+    "preferences": [],
+    "attended_classes": [],
+    "reviews": [
+        "Review 1",
+    ]
+    },
+    {
+    "name": "Test User 5",
+    "preferences": [],
+    "attended_classes": [],
+    "reviews": []
+    },
+]
 
 CORS(app)  
 
@@ -25,17 +65,36 @@ CORS(app)
 def index():
     return "Hello there, there are the users"
 
+# Creating users WILL DROP WHOLE DB PLEASE BEAR IN MIND
+@app.route('/createDB')
+def create_db():
+    db_exists = client.list_database_names()
+    if 'user_db' in db_exists:
+        client.drop_database('user_db')
+        db = client['user_db']
+    for data in sample_data:
+        db["users"].insert_one(data)
+    return "Sample data inserted successfully" + str(sample_data)
+
+# find all users
 @app.route('/users')
-def get_stored_animals():
+def get_all_users():
     users = db.users.find()
-    print(users)
     return json.loads(json_util.dumps(users))
 
+# Get one user by their id (Or can change to name)
+@app.route('/users/<userid>')
+def get_user(userid):
+    object = ObjectId(userid)
+    myquery = { "_id": object }
+    user = db.users.find_one(myquery)
+    return json.loads(json_util.dumps(user))
 
-# @app.route('/users/add', methods=['GET'])
-# def add_stored_animals():
+# Add user but we dont need to
+# @app.route('/users/<name>', methods=['POST'])
+# def add_stored_animals(name):
 #     addObject = {
-#         "name": "Test User 5",
+#         "name": name,
 #         "preferences": [],
 #         "attended_classes": [],
 #         "reviews": []
@@ -43,15 +102,43 @@ def get_stored_animals():
 #     db.users.insert_one(addObject)
 #     return addObject
 
-@app.route('/users/<userid>', methods=['PUT'])
-def update_stored_animals(userid):
+# Update a user using his userid (Not sure if we should update by username instead ah)
+# Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
+# add review
+@app.route('/users/addreview/<userid>', methods=['PUT'])
+def add_user_review(userid):
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
     object = ObjectId(userid)
     myquery = { "_id": object }
     # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$set": { "reviews": ["Review 1", "Review 2", "Review 3"] } }
+    newvalues = { "$push": { "reviews": data } }
     # query = db.users.find_one({"_id": object })
-    db.users.find_one_and_update(myquery, newvalues)
-    return "USER ID RETURNED IS " + str(userid)
+    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    return json.loads(json_util.dumps(updated_user))
+
+# add class
+@app.route('/users/addclass/<userid>', methods=['PUT'])
+def add_user_class(userid):
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    object = ObjectId(userid)
+    myquery = { "_id": object }
+    # myquery = db.users.find_one({"_id" : userid})
+    newvalues = { "$push": { "attended_classes": data } }
+    # query = db.users.find_one({"_id": object })
+    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    return json.loads(json_util.dumps(updated_user))
+
+# Add preferences
+@app.route('/users/addpref/<userid>', methods=['PUT'])
+def add_user_preferences(userid):
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    object = ObjectId(userid)
+    myquery = { "_id": object }
+    # myquery = db.users.find_one({"_id" : userid})
+    newvalues = { "$push": { "preferences": data } }
+    # query = db.users.find_one({"_id": object })
+    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    return json.loads(json_util.dumps(updated_user))
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
