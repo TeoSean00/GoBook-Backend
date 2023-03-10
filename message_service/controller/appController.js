@@ -47,6 +47,11 @@ const signup = async (req, res) => {
 // Real email sending function
 const getBill = (req, res) => {
   const { userEmail } = req.body;
+  const { userName } = req.body;
+  const { orderID } = req.body;
+  const { courseName } = req.body;
+  const { coursePrice } = req.body;
+  const { courseDescription } = req.body;
 
   let config = {
     service: "gmail",
@@ -59,23 +64,25 @@ const getBill = (req, res) => {
   let transporter = nodemailer.createTransport(config);
 
   let MailGenerator = new Mailgen({
-    theme: "default",
+    theme: "salted",
     product: {
-      name: "Mailgen",
+      name: "Skills Future",
       link: "https://mailgen.js/",
+      // Optional Product Logo
+      // logo: 'https://mailgen.js/img/logo.png'
     },
   });
 
   let response = {
     body: {
-      name: "Messaging Service",
-      intro: "Your ticket is as follows",
+      name: userName,
+      intro: ` Ticket is ${orderID}`,
       table: {
         data: [
           {
-            item: "Nodemailer Stack Book",
-            description: "A Backend application",
-            price: "$10.99",
+            item: courseName,
+            description: coursePrice,
+            price: courseDescription,
           },
         ],
       },
@@ -88,7 +95,7 @@ const getBill = (req, res) => {
   let message = {
     from: EMAIL,
     to: userEmail,
-    subject: "Your ticket",
+    subject: `Order #${orderID}`,
     html: mail,
   };
 
