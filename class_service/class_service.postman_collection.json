@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "1c6158da-1aeb-49fc-a840-b80bea9de68b",
+		"name": "ESD class_service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get_all_classes",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get_class",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "update_class_participant",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"640b20dbdb2ce51f6be6a508\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/class/640beba4e40079ad482e3743",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"class",
+						"640beba4e40079ad482e3743"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
