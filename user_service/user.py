@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 
 client = MongoClient(host='localhost',
-                        port=27017
+                        port=27018
                         )
 
 db = client['user_db']
@@ -66,12 +66,12 @@ def index():
     return "Hello there, there are the users"
 
 # Creating users WILL DROP WHOLE DB PLEASE BEAR IN MIND
-@app.route('/createDB')
+@app.route('/users/createDB')
 def create_db():
     db_exists = client.list_database_names()
     if 'user_db' in db_exists:
         client.drop_database('user_db')
-        db = client['user_db']
+    db = client['user_db']
     for data in sample_data:
         db["users"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
@@ -123,7 +123,7 @@ def add_user_class(userid):
     object = ObjectId(userid)
     myquery = { "_id": object }
     # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "attended_classes": data } }
+    newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
@@ -142,4 +142,4 @@ def add_user_preferences(userid):
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
