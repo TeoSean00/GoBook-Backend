@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask, render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS
 from os import environ
@@ -101,9 +102,10 @@ def get_user(classId):
 @app.route('/class/<classId>', methods=['PUT'])
 def add_user_class(classId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
+    print(data)
     object = ObjectId(classId)
     myquery = { "_id": object }
-    newvalues = { "$push": { "participants": data } ,  "$inc": { "availableSlots" : -1 } }
+    newvalues = { "$push": { "participants": data['userId'] } ,  "$inc": { "availableSlots" : -1 } }
     updated_class = db.classes.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_class))
 
