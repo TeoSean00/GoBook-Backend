@@ -3,9 +3,9 @@ const Mailgen = require("mailgen");
 
 const { EMAIL, PASSWORD } = require("../env.js");
 const { Descriptions } = require("antd");
-
+const {successEmailLog, failureEmailLog } = require("./emailLog.js")
 // Send mail from testing account
-const signup = async (req, res) => {
+const test = async (req, res) => {
   // testing account
   let testAccount = await nodemailer.createTestAccount();
 
@@ -40,12 +40,10 @@ const signup = async (req, res) => {
     .catch((error) => {
       return res.status(500).json({ message: "Something went wrong" });
     });
-
-  // res.status(201).json("Signup Successfull");
 };
 
 // Real email sending function
-const getBill = (req, res) => {
+const emailTicket = (req, res) => {
   const { userEmail } = req.body;
   const { userName } = req.body;
   const { orderID } = req.body;
@@ -102,9 +100,12 @@ const getBill = (req, res) => {
   transporter
     .sendMail(message)
     .then(() => {
+
+      successEmailLog()
       return res.status(201).json({ msg: "Email sent successfully" });
     })
     .catch((error) => {
+      failureEmailLog()
       return res.status(500).json({ msg: "Email failed to send" });
     });
 
@@ -112,6 +113,6 @@ const getBill = (req, res) => {
 };
 
 module.exports = {
-  signup,
-  getBill,
+  test,
+  emailTicket,
 };
