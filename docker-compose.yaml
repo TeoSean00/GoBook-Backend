@@ -1,0 +1,16 @@
+services:
+  class_db:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - class_db_mongo:/data/class_db
+
+  class_service:
+    build: ./class_service/
+    container_name: class_service
+    ports: ["5000:5000"]
+    depends_on:
+      - class_db
+volumes:
+  class_db_mongo:
