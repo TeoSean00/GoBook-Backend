@@ -1,9 +1,10 @@
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
-
+const logger = require("../utils/logger");
 const { EMAIL, PASSWORD } = require("../env.js");
-const { Descriptions } = require("antd");
-const {successEmailLog, failureEmailLog } = require("./emailLog.js")
+const EmailModel = require("../schema/emailLog.js");
+const { getLogger } = require("nodemailer/lib/shared/index.js");
+
 // Send mail from testing account
 const test = async (req, res) => {
   // testing account
@@ -43,7 +44,7 @@ const test = async (req, res) => {
 };
 
 // Real email sending function
-const emailTicket = (req, res) => {
+const emailTicket = async (req, res) => {
   const { userEmail } = req.body;
   const { userName } = req.body;
   const { orderID } = req.body;
@@ -59,6 +60,16 @@ const emailTicket = (req, res) => {
     },
   };
 
+  const emailObject = new EmailModel({
+    userEmail: userEmail,
+    userName: userName,
+    orderID: orderID,
+    courseName: courseName,
+    coursePrice: coursePrice,
+    courseDescription: courseDescription,
+    date: Date.now(),
+    success: true,
+  });
   let transporter = nodemailer.createTransport(config);
 
   let MailGenerator = new Mailgen({
@@ -100,16 +111,18 @@ const emailTicket = (req, res) => {
   transporter
     .sendMail(message)
     .then(() => {
-
-      successEmailLog()
       return res.status(201).json({ msg: "Email sent successfully" });
     })
     .catch((error) => {
-      failureEmailLog()
+      emailObject.success = false;
+      logger.info(error);
       return res.status(500).json({ msg: "Email failed to send" });
+    })
+    .finally(async () => {
+      logger.info("Logging emailObject to mongo");
+      logger.info(`was the email sent successfully? ${emailObject.success}`);
+      await emailObject.save();
     });
-
-  // res.status(201).json("Get Bill successfully");
 };
 
 module.exports = {
