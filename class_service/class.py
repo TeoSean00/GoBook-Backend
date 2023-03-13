@@ -13,7 +13,7 @@ import json
 app = Flask(__name__)
 
 
-client = MongoClient(host='localhost',
+client = MongoClient(host='class_db',
                         port=27017
                         )
 

@@ -19,11 +19,12 @@ def index():
 # Getting classes signed up by user
 @app.route('/users/getAttendedClasses/<userid>', methods=['GET'])
 def get_class(userid):
+    print("USER ID IS",userid)
     class_output = []
-    user_data = requests.request("GET", "http://localhost:5001/users/" + userid)
+    user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
-        class_data = requests.request("GET", "http://localhost:5000/class/" + enrolled_class)
+        class_data = requests.request("GET", "http://class_service:5000/class/" + enrolled_class)
         class_output.append(class_data.json())
     return class_output
 
