@@ -16,7 +16,7 @@ public class PaymentServiceApplication {
 
 	@PostConstruct
 	public void setup(){
-		Stripe.apiKey = stripeApiKey;
+		Stripe.apiKey = "sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP";
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(PaymentServiceApplication.class, args);
