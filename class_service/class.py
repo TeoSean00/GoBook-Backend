@@ -91,7 +91,7 @@ def create_db():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
-@app.route('/class/<classId>')
+@app.route('/class/<classId>', methods=['GET'])
 def get_user(classId):
     object = ObjectId(classId)
     myquery = { "_id": object }
