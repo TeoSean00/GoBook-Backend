@@ -143,7 +143,7 @@ def get_class(classId):
 
 # add participant
 @app.route('/class/<classId>', methods=['PUT'])
-def add_user_class(classId):
+def add_user(classId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
     print(data)
     object = ObjectId(classId)
