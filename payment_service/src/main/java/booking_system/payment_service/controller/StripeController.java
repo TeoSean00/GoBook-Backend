@@ -58,8 +58,10 @@ public class StripeController {
             case "payment_intent.succeeded":
                 PaymentIntent paymentIntent = (PaymentIntent) stripeObject;
                 System.out.println("Payment for " + paymentIntent.getAmount() + " succeeded.");
+                logger.info("Payment for id={}, {} succeeded", paymentIntent.getId(), paymentIntent.getAmount());
                 // Then define and call a method to handle the successful payment intent.
                 // handlePaymentIntentSucceeded(paymentIntent);
+                
                 break;
             case "payment_method.attached":
                 PaymentMethod paymentMethod = (PaymentMethod) stripeObject;
