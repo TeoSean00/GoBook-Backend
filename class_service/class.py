@@ -12,6 +12,10 @@ import json
 
 app = Flask(__name__)
 
+# for docker
+# client = MongoClient(host='class_db',
+#                         port=27017
+#                         )
 
 client = MongoClient(host='localhost',
                         port=27017
@@ -128,8 +132,10 @@ def create_db():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
+
+# get class details from class Id
 @app.route('/class/<classId>')
-def get_user(classId):
+def get_class(classId):
     object = ObjectId(classId)
     myquery = { "_id": object }
     currClass = db.classes.find_one(myquery)
@@ -137,7 +143,7 @@ def get_user(classId):
 
 # add participant
 @app.route('/class/<classId>', methods=['PUT'])
-def add_user_class(classId):
+def add_user(classId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
     print(data)
     object = ObjectId(classId)

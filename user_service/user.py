@@ -11,7 +11,10 @@ import json
 
 app = Flask(__name__)
 
-
+# For docker
+# client = MongoClient(host='user_db',
+#                         port=27018
+#                         )
 client = MongoClient(host='localhost',
                         port=27018
                         )
@@ -106,7 +109,7 @@ def get_user(userid):
 # Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
 # add review
 @app.route('/users/addreview/<userid>', methods=['PUT'])
-def add_user_review(userid):
+def add_review(userid):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
     object = ObjectId(userid)
     myquery = { "_id": object }
@@ -118,7 +121,7 @@ def add_user_review(userid):
 
 # add class
 @app.route('/users/addclass/<userid>', methods=['PUT'])
-def add_user_class(userid):
+def add_class(userid):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
     object = ObjectId(userid)
     myquery = { "_id": object }
@@ -130,7 +133,7 @@ def add_user_class(userid):
 
 # Add preferences
 @app.route('/users/addpref/<userid>', methods=['PUT'])
-def add_user_preferences(userid):
+def add_preferences(userid):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
     object = ObjectId(userid)
     myquery = { "_id": object }
