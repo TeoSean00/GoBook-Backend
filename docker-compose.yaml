@@ -1,44 +1,62 @@
 services:
-  class_db:
-    image: mongo:latest
+  # class_db:
+  #   image: mongo:latest
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - bookingApp
+
+  # class_service:
+  #   build: ./class_service/
+  #   container_name: class_service
+  #   ports: ["5000:5000"]
+  #   depends_on:
+  #     - class_db
+  #   networks:
+  #     - bookingApp
+
+  # user_db:
+  #   image: mongo:latest
+  #   command: mongod --port 27018
+  #   ports:
+  #     - 27018-27018
+  #   networks:
+  #     - bookingApp
+
+  # user_service:
+  #   build: ./user_service/
+  #   container_name: user_service
+  #   ports: ["5001:5001"]
+  #   depends_on:
+  #     - user_db
+  #   networks:
+  #     - bookingApp
+
+  # get_class_complex_service:
+  #   build: ./get_class_complex_service/
+  #   container_name: get_class_complex_service
+  #   ports: ["5005:5005"]
+  #   networks:
+  #     - bookingApp
+
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
     ports:
-      - 27017:27017
-    networks:
-      - bookingApp
-
-  class_service:
-    build: ./class_service/
-    container_name: class_service
-    ports: ["5000:5000"]
-    depends_on:
-      - class_db
-    networks:
-      - bookingApp
-
-  user_db:
-    image: mongo:latest
-    command: mongod --port 27018
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: "bitnami/kafka:latest"
     ports:
-      - 27018-27018
-    networks:
-      - bookingApp
-
-  user_service:
-    build: ./user_service/
-    container_name: user_service
-    ports: ["5001:5001"]
+      - "9092:9092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
-      - user_db
-    networks:
-      - bookingApp
-
-  get_class_complex_service:
-    build: ./get_class_complex_service/
-    container_name: get_class_complex_service
-    ports: ["5005:5005"]
-    networks:
-      - bookingApp
-
-networks:
-  bookingApp:
-    driver: bridge
+      - zookeeper
+# networks:
+#   bookingApp:
+#     driver: bridge

@@ -1,28 +1,13 @@
-import os
-
-from flask import Flask, render_template, request, url_for, redirect, jsonify
-from flask_cors import CORS
-from os import environ
-from pymongo import MongoClient
-from bson import json_util
-from bson.objectid import ObjectId
-
-from datetime import datetime
+from kafka import KafkaProducer
 import json
+import time
 
-app = Flask(__name__)
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+                         value_serializer=lambda x:
+                         json.dumps(x).encode('utf-8'))
 
-# for docker
-# client = MongoClient(host='class_db',
-#                         port=27017
-#                         )
 
-client = MongoClient(host='localhost',
-                     port=27017
-                     )
-
-db = client['class_db']
-sample_data = [
+f = [
     {
         "className": "CAD-Engineering-Design-5",
         "content": "On completion of the module, students should be able to create 2D drawings of engineering components using a CAD system as well as produce 3D solid models and also to design a mechanical system comprising various machine elements.\r\n\r\nCAD and Engineering Design (ME4011FP) is one of the modules leading to HIGHER NITEC IN TECHNOLOGY - MECHANICAL ENGINEERING.",
@@ -239,57 +224,7 @@ sample_data = [
     }
 ]
 
-
-CORS(app)
-
-
-@app.route('/', methods=('GET', 'POST'))
-def index():
-    return "Hello there, there are the classes"
-
-
-@app.route('/class')
-def get_all_classes():
-    classes = db.classes.find()
-    return json.loads(json_util.dumps(classes))
-
-
-@app.route('/class/createDB')
-def create_db():
-    db_exists = client.list_database_names()
-    if 'class_db' in db_exists:
-        client.drop_database('class_db')
-    db = client['class_db']
-    for data in sample_data:
-        db["classes"].insert_one(data)
-    return "Sample data inserted successfully" + str(sample_data)
-
-
-# get class details from class Id
-@app.route('/class/<classId>')
-def get_class(classId):
-    object = ObjectId(classId)
-    myquery = {"_id": object}
-    currClass = db.classes.find_one(myquery)
-    return json.loads(json_util.dumps(currClass))
-
-# add participant
-
-
-@app.route('/class/<classId>', methods=['PUT'])
-def add_user_class(classId):
-    # This will be a the json put in the request. Use postman to add the partcipant using PUT
-    data = request.get_json()
-    print(data)
-    object = ObjectId(classId)
-    myquery = {"_id": object}
-    newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-        "availableSlots": -1}}
-    updated_class = db.classes.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_class))
-
-
-if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) +
-          ": manage class Schedule ...")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+for classObj in f:
+    classData = classObj["className"]
+    producer.send('booking', classData)
+    time.sleep(5)  # Add a delay to simulate streaming
