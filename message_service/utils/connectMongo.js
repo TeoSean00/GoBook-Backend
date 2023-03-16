@@ -2,7 +2,7 @@ const { dbUri } = require("../env.js");
 const mongoose = require("mongoose");
 const logger = require("./logger");
 
-async function connect() {
+async function connectMongo() {
 
   try {
     await mongoose.connect(dbUri);
@@ -13,4 +13,4 @@ async function connect() {
   }
 }
 
-module.exports = connect;
+module.exports = connectMongo;

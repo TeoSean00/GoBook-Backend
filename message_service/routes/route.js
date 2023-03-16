@@ -4,6 +4,6 @@ const { test, emailTicket } = require("../controller/appController.js");
 
 // HTTP Request
 router.post("/user/test", test);
-router.post("/product/emailTicket", emailTicket);
+// router.post("/product/emailTicket", emailTicket);
 
 module.exports = router;

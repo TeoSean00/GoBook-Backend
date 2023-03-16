@@ -44,13 +44,23 @@ const test = async (req, res) => {
 };
 
 // Real email sending function
-const emailTicket = async (req, res) => {
-  const { userEmail } = req.body;
-  const { userName } = req.body;
-  const { orderID } = req.body;
-  const { courseName } = req.body;
-  const { coursePrice } = req.body;
-  const { courseDescription } = req.body;
+// Changed from req,res to data as it is now called from the queue
+const emailTicket = async (data) => {
+  const {
+    userEmail,
+    userName,
+    orderID,
+    courseName,
+    coursePrice,
+    courseDescription,
+  } = data;
+
+  // const { userEmail } = req.body;
+  // const { userName } = req.body;
+  // const { orderID } = req.body;
+  // const { courseName } = req.body;
+  // const { coursePrice } = req.body;
+  // const { courseDescription } = req.body;
 
   let config = {
     service: "gmail",
@@ -111,12 +121,13 @@ const emailTicket = async (req, res) => {
   transporter
     .sendMail(message)
     .then(() => {
-      return res.status(201).json({ msg: "Email sent successfully" });
+      // return res.status(201).json({ msg: "Email sent successfully" });
+      logger.info("Email sent successfully");
     })
     .catch((error) => {
       emailObject.success = false;
       logger.info(error);
-      return res.status(500).json({ msg: "Email failed to send" });
+      // return res.status(500).json({ msg: "Email failed to send" });
     })
     .finally(async () => {
       logger.info("Logging emailObject to mongo");
