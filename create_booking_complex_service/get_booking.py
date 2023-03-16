@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 from flask import Flask, Response,render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS, cross_origin
@@ -38,8 +39,11 @@ def create_payment():
     # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
     url = 'http://localhost:8080/create-payment-intent'
     response_data = requests.post(url,data)
-    print("RESPONSE IS",response_data)
-    return jsonify(response_data)
+    for item in response_data:
+        print("ITEM IS",item)
+    
+    response_str = response_data.content.decode()
+    return json.loads(response_str)
 
 
 """
