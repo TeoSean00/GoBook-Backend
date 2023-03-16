@@ -24,6 +24,16 @@ CORS(app)
 # 
 
 
+@app.route('/booking/createPayment', methods=['POST'])
+async def create_payment():
+    data = request.get_json()
+    class_output = []
+    # This is for docker
+    # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
+    url = 'http://localhost:8080/create-payment-intent'
+    response_data = requests.post(url,data)
+    print("RESPONSE IS",response_data)
+    return response_data
 
 
 """
@@ -37,6 +47,7 @@ coursePrice: String,
 courseDescription: String
 }
 
+Example of Order JSON Object
 {
     "userEmail" : "celov54484@gpipes.com",
     "userName" : "celo",
@@ -45,7 +56,6 @@ courseDescription: String
     "coursePrice" : "$2000",
     "courseDescription" : "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management"
 }
-
 """
 
 
@@ -53,13 +63,11 @@ courseDescription: String
 @app.route("/emailservice", methods=['POST'])
 def processEmailService():
 
-    # order = request.json.get()
     order = request.get_json()
-    # print(order)
     order_msg = json.dumps(order)
     print("order msg is after this")
     print(order_msg)
-    # Send the order object to the messaging microservice
+    # Send the order object to the messaging microservice via RabbitMQ
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="message.", 
             body=order_msg, properties=pika.BasicProperties(delivery_mode = 2))
     
@@ -70,17 +78,6 @@ def processEmailService():
             "order": "success"
         }
     }
-
-@app.route('/booking/createPayment', methods=['POST'])
-async def create_payment():
-    data = request.get_json()
-    class_output = []
-    # This is for docker
-    # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
-    url = 'http://localhost:8080/create-payment-intent'
-    response_data = requests.post(url,data)
-    print("RESPONSE IS",response_data)
-    return response_data
 
 
 if __name__ == "__main__":
