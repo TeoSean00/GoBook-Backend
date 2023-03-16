@@ -44,7 +44,7 @@ services:
   #   build: ./payment_service/
   #   container_name: payment_service
   #   ports:
-  #     - "8080:8080"
+  #     - 8080:8080
 
   rabbitmq:
     image: rabbitmq:3-management

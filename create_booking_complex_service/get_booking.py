@@ -1,7 +1,7 @@
 import os
-
-from flask import Flask, render_template, request, url_for, redirect,jsonify
-from flask_cors import CORS
+import requests
+from flask import Flask, Response,render_template, request, url_for, redirect,jsonify
+from flask_cors import CORS, cross_origin
 from os import environ
 # from pymongo import MongoClient
 # from bson import json_util
@@ -17,6 +17,11 @@ app = Flask(__name__)
 
 CORS(app)  
 
+@app.before_request
+def basic_authentication():
+    if request.method.lower() == 'options':
+        return Response()
+
 # Mongo Client
 # client = MongoClient(host='localhost',
 #                         port=27017
@@ -25,7 +30,8 @@ CORS(app)
 
 
 @app.route('/booking/createPayment', methods=['POST'])
-async def create_payment():
+@cross_origin()
+def create_payment():
     data = request.get_json()
     class_output = []
     # This is for docker
@@ -33,7 +39,7 @@ async def create_payment():
     url = 'http://localhost:8080/create-payment-intent'
     response_data = requests.post(url,data)
     print("RESPONSE IS",response_data)
-    return response_data
+    return jsonify(response_data)
 
 
 """

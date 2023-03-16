@@ -12,26 +12,27 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
- 
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class PaymentController {
 
     private static Gson gson = new Gson();
-    
+
     public class CreatePayment {
         @SerializedName("items")
         Object[] items;
 
         public Object[] getItems() {
-        return items;
+            return items;
         }
     }
 
     public class CreatePaymentResponse {
         private String clientSecret;
+
         public CreatePaymentResponse(String clientSecret) {
-        this.clientSecret = clientSecret;
+            this.clientSecret = clientSecret;
         }
     }
 
@@ -43,18 +44,16 @@ public class PaymentController {
     }
 
     @PostMapping("/create-payment-intent")
-    public String createPaymentIntent(@RequestBody CreatePayment createPayment) throws StripeException {
-        PaymentIntentCreateParams params =
-            PaymentIntentCreateParams.builder()
-            .setAmount(15 * 100L)
-            .setCurrency("sgd")
-            .setAutomaticPaymentMethods(
-                PaymentIntentCreateParams.AutomaticPaymentMethods
-                .builder()
-                .setEnabled(true)
-                .build()
-            )
-            .build();
+    public String createPaymentIntent(CreatePayment createPayment) throws StripeException {
+        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+                .setAmount(15 * 100L)
+                .setCurrency("sgd")
+                .setAutomaticPaymentMethods(
+                        PaymentIntentCreateParams.AutomaticPaymentMethods
+                                .builder()
+                                .setEnabled(true)
+                                .build())
+                .build();
 
         // Create a PaymentIntent with the order amount and currency
         PaymentIntent paymentIntent = PaymentIntent.create(params);
@@ -62,4 +61,3 @@ public class PaymentController {
         return gson.toJson(paymentResponse);
     };
 }
-
