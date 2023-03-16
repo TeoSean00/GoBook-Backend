@@ -71,6 +71,17 @@ def processEmailService():
         }
     }
 
+@app.route('/booking/createPayment', methods=['POST'])
+async def create_payment():
+    data = request.get_json()
+    class_output = []
+    # This is for docker
+    # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
+    url = 'http://localhost:8080/create-payment-intent'
+    response_data = requests.post(url,data)
+    print("RESPONSE IS",response_data)
+    return response_data
+
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " to register for a class")
