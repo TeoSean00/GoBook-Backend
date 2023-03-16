@@ -55,6 +55,7 @@ const emailTicket = async (data) => {
     courseDescription,
   } = data;
 
+  // No longer taking from request body for object
   // const { userEmail } = req.body;
   // const { userName } = req.body;
   // const { orderID } = req.body;
@@ -118,6 +119,7 @@ const emailTicket = async (data) => {
     html: mail,
   };
 
+  // No longer require a res to be sent back as it is now called from the queue
   transporter
     .sendMail(message)
     .then(() => {
