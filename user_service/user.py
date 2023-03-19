@@ -5,9 +5,12 @@ from os import environ
 from pymongo import MongoClient
 from bson import json_util
 from bson.objectid import ObjectId
-
+import amqp_setup
 from datetime import datetime
 import json
+
+monitorBindingKey='booking.info'
+
 
 app = Flask(__name__)
 
@@ -120,16 +123,16 @@ def add_review(userid):
     return json.loads(json_util.dumps(updated_user))
 
 # add class
-@app.route('/users/addclass/<userid>', methods=['PUT'])
-def add_class(userid):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    object = ObjectId(userid)
-    myquery = { "_id": object }
-    # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "attended_classes": data["classId"] } }
-    # query = db.users.find_one({"_id": object })
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_user))
+# @app.route('/users/addclass/<userid>', methods=['PUT'])
+# def add_class(userid):
+#     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+#     object = ObjectId(userid)
+#     myquery = { "_id": object }
+#     # myquery = db.users.find_one({"_id" : userid})
+#     newvalues = { "$push": { "attended_classes": data["classId"] } }
+#     # query = db.users.find_one({"_id": object })
+#     updated_user = db.users.find_one_and_update(myquery, newvalues)
+#     return json.loads(json_util.dumps(updated_user))
 
 # Add preferences
 @app.route('/users/addpref/<userid>', methods=['PUT'])
@@ -143,6 +146,39 @@ def add_preferences(userid):
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
 
+# AMQP receiver portion
+
+def receiveBookingInfo():
+    amqp_setup.check_setup()
+        
+    queue_name = 'class_service'
+    
+    # set up a consumer and start to wait for coming messages
+    amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+    amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
+    #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
+
+def callback(channel, method, properties, body): # required signature for the callback; no return
+    print("\n Received booking info from " + __file__)
+    updateUserDetails(json.loads(body))
+    print() # print a new line feed
+
+def updateUserDetails(booking_info):
+    print("Processing and updating backend")
+    # obtain user id from booking_info JSON'
+    data = booking_info
+    print(data)
+    object = ObjectId(classId)
+    myquery = { "_id": object }
+    # myquery = db.users.find_one({"_id" : userid})
+    newvalues = { "$push": { "attended_classes": data["classId"] } }
+    # query = db.users.find_one({"_id": object })
+    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    return json.loads(json_util.dumps(updated_user))
+
+
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
+    print(": monitoring routing key '{}' in exchange '{}' ...".format(monitorBindingKey, amqp_setup.exchangename))
+    receiveBookingInfo()
     app.run(host='0.0.0.0', port=5001, debug=True)

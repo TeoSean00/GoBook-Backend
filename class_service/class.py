@@ -8,7 +8,10 @@ from bson import json_util
 from bson.objectid import ObjectId
 
 from datetime import datetime
+import amqp_setup
 import json
+
+monitorBindingKey='booking.info'
 
 app = Flask(__name__)
 
@@ -276,20 +279,53 @@ def get_class(classId):
 # add participant
 
 
-@app.route('/class/<classId>', methods=['PUT'])
-def add_user_class(classId):
-    # This will be a the json put in the request. Use postman to add the partcipant using PUT
-    data = request.get_json()
-    print(data)
-    object = ObjectId(classId)
+# @app.route('/class/<classId>', methods=['PUT'])
+# def add_user_class(classId):
+#     # This will be a the json put in the request. Use postman to add the partcipant using PUT
+#     data = request.get_json()
+#     print(data)
+#     object = ObjectId(classId)
+#     myquery = {"_id": object}
+#     newvalues = {"$push": {"participants": data['userId']},  "$inc": {
+#         "availableSlots": -1}}
+#     updated_class = db.classes.find_one_and_update(myquery, newvalues)
+#     return json.loads(json_util.dumps(updated_class))
+
+
+# AMQP receiver portion
+
+def receiveBookingInfo():
+    amqp_setup.check_setup()
+        
+    queue_name = 'class_service'
+    
+    # set up a consumer and start to wait for coming messages
+    amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+    amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
+    #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
+
+def callback(channel, method, properties, body): # required signature for the callback; no return
+    print("\n Received booking info from " + __file__)
+    updateClassDetails(json.loads(body))
+    print() # print a new line feed
+
+def updateClassDetails(booking_info):
+    print("Processing and updating backend")
+    # obtain class id from booking_info JSON'
+    # check pyMongo how to update
+    data = booking_info
+    print(booking_info)
+    # retrieve userid instead
+    object = ObjectId(userId)
     myquery = {"_id": object}
     newvalues = {"$push": {"participants": data['userId']},  "$inc": {
         "availableSlots": -1}}
     updated_class = db.classes.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_class))
 
-
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +
           ": manage class Schedule ...")
+    print(": monitoring routing key '{}' in exchange '{}' ...".format(monitorBindingKey, amqp_setup.exchangename))
+    receiveBookingInfo()
     app.run(host='0.0.0.0', port=5000, debug=True)
