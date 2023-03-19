@@ -36,7 +36,7 @@ channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 
 #bind user_service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.info') 
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
 
@@ -48,7 +48,7 @@ channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 
 #bind class_service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.info') 
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
 

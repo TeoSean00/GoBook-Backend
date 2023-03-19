@@ -9,7 +9,7 @@ import amqp_setup
 from datetime import datetime
 import json
 
-monitorBindingKey='booking.info'
+monitorBindingKey='booking.*'
 
 
 app = Flask(__name__)
@@ -168,13 +168,14 @@ def updateUserDetails(booking_info):
     # obtain user id from booking_info JSON'
     data = booking_info
     print(data)
-    object = ObjectId(classId)
-    myquery = { "_id": object }
-    # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "attended_classes": data["classId"] } }
-    # query = db.users.find_one({"_id": object })
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_user))
+    # object = ObjectId(data['userId'])
+    # myquery = { "_id": object }
+    # # myquery = db.users.find_one({"_id" : userid})
+    # newvalues = { "$push": { "attended_classes": data["classId"] } }
+    # # query = db.users.find_one({"_id": object })
+    # updated_user = db.users.find_one_and_update(myquery, newvalues)
+    # return json.loads(json_util.dumps(updated_user))
+    return
 
 
 if __name__ == '__main__':

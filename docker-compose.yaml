@@ -1,10 +1,10 @@
 services:
-  # class_db:
-  #   image: mongo:latest
-  #   ports:
-  #     - 27017:27017
-  #   networks:
-  #     - bookingApp
+  class_db:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    # networks:
+    #   - bookingApp
 
   # class_service:
   #   build: ./class_service/
@@ -15,13 +15,13 @@ services:
   #   networks:
   #     - bookingApp
 
-  # user_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27018
-  #   ports:
-  #     - 27018-27018
-  #   networks:
-  #     - bookingApp
+  user_db:
+    image: mongo:latest
+    command: mongod --port 27018
+    ports:
+      - 27018-27018
+    # networks:
+    #   - bookingApp
 
   # user_service:
   #   build: ./user_service/

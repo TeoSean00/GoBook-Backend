@@ -11,7 +11,7 @@ from datetime import datetime
 import amqp_setup
 import json
 
-monitorBindingKey='booking.info'
+monitorBindingKey='booking.*'
 
 app = Flask(__name__)
 
@@ -316,12 +316,13 @@ def updateClassDetails(booking_info):
     data = booking_info
     print(booking_info)
     # retrieve userid instead
-    object = ObjectId(userId)
-    myquery = {"_id": object}
-    newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-        "availableSlots": -1}}
-    updated_class = db.classes.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_class))
+    # object = ObjectId(data['classId'])
+    # myquery = {"_id": object}
+    # newvalues = {"$push": {"participants": data['userId']},  "$inc": {
+    #     "availableSlots": -1}}
+    # updated_class = db.classes.find_one_and_update(myquery, newvalues)
+    # return json.loads(json_util.dumps(updated_class))
+    return
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +

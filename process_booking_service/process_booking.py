@@ -6,12 +6,10 @@ from os import environ
 # from pymongo import MongoClient
 # from bson import json_util
 # from bson.objectid import ObjectId
-
 from datetime import datetime
 import json
 import pika
-
-import amqp_setup
+import requests
 
 app = Flask(__name__)
 
@@ -29,9 +27,27 @@ def process_booking():
     # pass payment_response and class_booking jSON
     # class_booking will need to have class id , run id , userid
     response = requests.request("POST", update_booking_URL,
-    # json=payment response and class data
+    # for testing
+    json={
+        "userEmail" : "celov54484@gpipes.com",
+        "userName" : "celo",
+        "orderID" : "4500",
+        "courseName" : "Data Structure Algorithms",
+        "coursePrice" : "$2000",
+        "courseDescription" : "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management",
+        "classId" : 3,
+        "runId": 1,
+        "userId": 10,
+        }
     )
-    return 
+
+    return {
+        "code": 201,
+        "data": {
+            "order": "success"
+        }
+    }
+
 @app.route('/booking/createPayment', methods=['POST'])
 async def create_payment():
     data = request.get_json()
