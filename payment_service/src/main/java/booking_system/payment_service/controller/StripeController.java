@@ -87,7 +87,7 @@ public class StripeController {
                 // handlePaymentIntentSucceeded(paymentIntent);
                 HttpEntity<PaymentIntent> request = new HttpEntity<>(paymentIntent, headers);
 
-                ResponseEntity<Object> result = restTemplate.postForEntity(processing_URL, request, Object.class);
+                ResponseEntity<String> result = restTemplate.postForEntity(processing_URL, request, String.class);
                 System.out.println(result);
                 break;
             case "payment_method.attached":

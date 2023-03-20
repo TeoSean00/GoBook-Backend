@@ -44,15 +44,21 @@ services:
     build: ./payment_service/
     container_name: payment_service
     ports:
-      - "8080:8080"
+      - 8080:8080
+
+  stripe-cli:
+    image: stripe/stripe-cli
+    network_mode: host
+    container_name: stripe-cli
+    command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
+    # env_file:
+    #   - stripe_cli.env
 
   process_booking:
     build: ./process_booking_service/
     container_name: process_booking
     ports:
       - 5008:5008
-    # networks:
-    #   - bookingApp
 
   # rabbitmq:
   #   image: rabbitmq:3-management

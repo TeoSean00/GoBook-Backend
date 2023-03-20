@@ -44,11 +44,14 @@ def process_booking():
 @cross_origin()
 def create_payment():
     data = request.get_json()
-    class_output = []
+    print('This is file recevied by create_payment', file=sys.stderr)
+    print(data, file=sys.stderr)
     # This is for docker
-    # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
     url = 'http://host.docker.internal:8080/create-payment-intent'
-    response_data = requests.post(url,data)
+    # url = 'http://localhost:8080/create-payment-intent'
+    headers = {'Content-Type': 'application/json'}
+
+    response_data = requests.post(url,data=json.dumps(data),headers=headers)
     for item in response_data:
         print("ITEM IS",item)
 
