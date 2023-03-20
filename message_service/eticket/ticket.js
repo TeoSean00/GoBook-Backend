@@ -31,8 +31,11 @@ async function createPDF(dataObject) {
         // create a pdf document
         await page.pdf({
             path: 'eticket.pdf',
-            // format: 'A4',
-            printBackground: false,
+            format: 'A4',
+            // width: '120px',
+            // height: '120px',
+            printBackground: true,
+            preferCSSPageSize: false,
 
         })
         logger.info("done creating pdf");
