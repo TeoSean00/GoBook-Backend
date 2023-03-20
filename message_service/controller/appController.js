@@ -4,6 +4,8 @@ const logger = require("../utils/logger");
 const { EMAIL, PASSWORD } = require("../env.js");
 const EmailModel = require("../schema/emailLog.js");
 const { getLogger } = require("nodemailer/lib/shared/index.js");
+const createPDF = require("../eticket/ticket.js");
+const QRCode = require("qrcode");
 
 // Send mail from testing account
 const test = async (req, res) => {
@@ -82,6 +84,37 @@ const emailTicket = async (data) => {
     success: true,
   });
   let transporter = nodemailer.createTransport(config);
+
+  //! QR CODE 
+  // Create QR Code Img File
+  // QRCode.toFile('./img/qr.png', 'https://www.skillsfuture.gov.sg', {
+  //   errorCorrectionLevel: 'H'
+  // }, function(err) {
+  //   if (err) throw err;
+  //   console.log('QR code saved!');
+  // });
+
+  // Create QR Code as Binary String
+   const imgStringPromise = QRCode.toDataURL('https://www.skillsfuture.gov.sg'
+  );
+  const imgString = await imgStringPromise;
+
+  // testing to see if imgString is correct
+  console.log("what is imageString containing?");
+  logger.info(imgString);
+  
+  // Create of PDF
+  const dataObject = 
+  {
+    "COURSE_NAME":courseName,
+    "NAME" : userName,
+    "TICKET_NUMBER": orderID,
+    "imgSrc": imgString
+  };
+
+  logger.info("starting createPDF Function call ")
+  await createPDF(dataObject);
+  logger.info("createPDF Function call completed ")
 
   let MailGenerator = new Mailgen({
     theme: "salted",
