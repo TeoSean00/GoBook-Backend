@@ -150,6 +150,13 @@ const emailTicket = async (data) => {
     to: userEmail,
     subject: `Order #${orderID}`,
     html: mail,
+    attachments: [
+      {
+      filename: 'eticket.pdf',
+      path: 'eticket.pdf',
+      contentType: 'application/pdf'
+      }
+    ]
   };
 
   // No longer require a res to be sent back as it is now called from the queue

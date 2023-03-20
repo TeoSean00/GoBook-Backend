@@ -39,8 +39,8 @@ async function createPDF(dataObject) {
 
         })
         logger.info("done creating pdf");
-        await browser.close();
-        process.exit()
+        // await browser.close();
+        // process.exit()
     }
     catch (e) {
         console.log(e);
