@@ -9,6 +9,7 @@ from os import environ
 # from bson.objectid import ObjectId
 
 from datetime import datetime
+from kafka import KafkaProducer
 import json
 
 app = Flask(__name__)
@@ -17,11 +18,10 @@ CORS(app)
 
 update_booking_URL = "http://localhost:5007/update_booking"
 
-# Mongo Client
-# client = MongoClient(host='localhost',
-#                         port=27017
-#                         )
-# 
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+                         value_serializer=lambda x:
+                         json.dumps(x).encode('utf-8'))
+
 @app.route('/update_payment', methods=['POST'])
 def process_booking():
 
@@ -29,7 +29,12 @@ def process_booking():
     print('This is error output', file=sys.stderr)
     print(data, file=sys.stderr)
 
+    # send data to the kafka log
+    producer.send('booking', data)
 
+    url = 'http://host.docker.internal:5007/update_booking'
+    headers = {'Content-Type': 'application/json'}
+    response_data = requests.post(url,data=json.dumps(data),headers=headers)
 
 
 
