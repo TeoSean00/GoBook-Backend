@@ -15,13 +15,13 @@ services:
     # networks:
     #   - bookingApp
 
-  # user_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27018
-  #   ports:
-  #     - 27018-27018
-  #   networks:
-  #     - bookingApp
+  user_db:
+    image: mongo:latest
+    command: mongod --port 27018
+    ports:
+      - 27018-27018
+    # networks:
+    #   - bookingApp
 
   # user_service:
   #   build: ./user_service/

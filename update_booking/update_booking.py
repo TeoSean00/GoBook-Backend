@@ -4,7 +4,6 @@ from flask_cors import CORS
 import os, sys
 
 import requests
-from invokes import invoke_http
 
 import amqp_setup
 import pika
@@ -16,7 +15,8 @@ CORS(app)
 @app.route("/update_booking",methods=['POST'])
 def update_booking():
     data = request.get_json()
-    print('request data from process_booking: ',data)
+    dataObject = json.dumps(data)
+    print('request data from process_booking: ',dataObject)
 
     # flag and code for testing
     payment_successful,code = True, 200
@@ -25,30 +25,35 @@ def update_booking():
 
     # if payment response successful
     if payment_successful:
-        print('\n\n-----Publishing the (class booking) message with routing_key=booking.info-----')
+        print('\n\n-----Publishing the (class booking) message with routing_key=booking.*-----')
         # publish class details JSON message to rabbitMQ
         # which will update the backend
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.info", 
-            body=data, properties=pika.BasicProperties(delivery_mode = 2)) 
+            body=dataObject, properties=pika.BasicProperties(delivery_mode = 2)) 
         # make message persistent within the matching queues until it is received by some receiver 
         # (the matching queues have to exist and be durable and bound to the exchange)
 
         # continue even if this invocation fails        
         print("\Booking info ({:d}) published to the RabbitMQ Exchange:".format(
-            code), data)
+            code), dataObject)
         
         # then when response received from this update, fire off email
         # publish email message and JSON data to rabbitMQ
-        
+
         print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----')
         # notification is listening to email_service queue 
         # binding key is email.info as well
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info", 
-            body=data, properties=pika.BasicProperties(delivery_mode = 2)) 
+            body=dataObject, properties=pika.BasicProperties(delivery_mode = 2)) 
         # No need to return response to process_booking
-        return 
+        return {
+            "code": 201,
+            "data": {
+                "order": "success"
+            }
+        } 
 
     
     # else if unsuccessful, fire email only
@@ -59,12 +64,16 @@ def update_booking():
         # binding key is email.info as well
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info", 
-            body=data, properties=pika.BasicProperties(delivery_mode = 2)) 
+            body=dataObject, properties=pika.BasicProperties(delivery_mode = 2)) 
 
     # No need to return response to process_booking
 
-    return 
-
+    return {
+        "code": 201,
+        "data": {
+            "order": "success"
+        }
+    }
 
 
 # -------------------------- EMAIL -------------------------------

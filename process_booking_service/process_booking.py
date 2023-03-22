@@ -7,10 +7,11 @@ from os import environ
 # from pymongo import MongoClient
 # from bson import json_util
 # from bson.objectid import ObjectId
-
 from datetime import datetime
 from kafka import KafkaProducer
 import json
+import pika
+import requests
 
 app = Flask(__name__)
 
@@ -40,10 +41,27 @@ def process_booking():
 
     # pass payment_response and class_booking jSON
     # class_booking will need to have class id , run id , userid
-    # response = requests.request("POST", update_booking_URL,
-    # # json=payment response and class data
-    # )
-    return "Success!"
+    response = requests.request("POST", update_booking_URL,
+    # for testing
+    json={
+        "userEmail" : "celov54484@gpipes.com",
+        "userName" : "celo",
+        "orderID" : "4500",
+        "courseName" : "Data Structure Algorithms",
+        "coursePrice" : "$2000",
+        "courseDescription" : "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management",
+        "classId" : 3,
+        "runId": 1,
+        "userId": 10,
+        }
+    )
+
+    return {
+        "code": 201,
+        "data": {
+            "order": "success"
+        }
+    }
 
 @app.route('/booking/createPayment', methods=['POST'])
 @cross_origin()
