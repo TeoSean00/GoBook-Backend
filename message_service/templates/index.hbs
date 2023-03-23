@@ -65,16 +65,16 @@
 			<div class="column-1">
 				<div class="text-frame">
 					<div class="event">{{COURSE_NAME}}</div>
-					<div class="date">26 August, 2021</div>
+					<div class="date">{{DATE}}</div>
 					<br />
 					<div class="name">{{NAME}}</div>
-					<div class="ticket-id">{{TICKET_NUMBER}}</div>
+					<div class="ticket-id">Ticket #{{TICKET_NUMBER}}</div>
 				</div>
 			</div>
 
 			<div class="column-2">
 				<div class="qr-holder">
-					<img src="data:image/png;base64,${{imgString}}" width="120px" height="120px"/>
+					<img src="https://api.qrserver.com/v1/create-qr-code/?data={{IMG_SRC}}&size=120x120" width="120px" height="120px"/>
 				</div>
 			</div>
 		</div>

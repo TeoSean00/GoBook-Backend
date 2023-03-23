@@ -5,7 +5,7 @@ const { EMAIL, PASSWORD } = require("../env.js");
 const EmailModel = require("../schema/emailLog.js");
 const { getLogger } = require("nodemailer/lib/shared/index.js");
 const createPDF = require("../eticket/ticket.js");
-const QRCode = require("qrcode");
+const date = require('date-and-time');
 
 // Send mail from testing account
 const test = async (req, res) => {
@@ -83,9 +83,12 @@ const emailTicket = async (data) => {
     date: Date.now(),
     success: true,
   });
+  const now = new Date();
+  const formattedDate = date.format(now, 'MMM DD YYYY');
+  console.log(formattedDate);
   let transporter = nodemailer.createTransport(config);
 
-  //! QR CODE 
+  //! QR CODE NOT NEEDED ANYMORE CALL API TO GET QR CODE
   // Create QR Code Img File
   // QRCode.toFile('./img/qr.png', 'https://www.skillsfuture.gov.sg', {
   //   errorCorrectionLevel: 'H'
@@ -95,13 +98,13 @@ const emailTicket = async (data) => {
   // });
 
   // Create QR Code as Binary String
-   const imgStringPromise = QRCode.toDataURL('https://www.skillsfuture.gov.sg'
-  );
-  const imgString = await imgStringPromise;
+  //  const imgStringPromise = QRCode.toDataURL('https://www.skillsfuture.gov.sg'
+  // );
+  // const imgString = await imgStringPromise;
 
   // testing to see if imgString is correct
-  console.log("what is imageString containing?");
-  logger.info(imgString);
+  // console.log("what is imageString containing?");
+  // logger.info(imgString);
   
   // Create of PDF
   const dataObject = 
@@ -109,8 +112,10 @@ const emailTicket = async (data) => {
     "COURSE_NAME":courseName,
     "NAME" : userName,
     "TICKET_NUMBER": orderID,
-    "imgSrc": imgString
+    "DATE": formattedDate,
+    "IMG_SRC": "https://www.skillsfuture.gov.sg"
   };
+  // I need the link to the course on the website
 
   logger.info("starting createPDF Function call ")
   await createPDF(dataObject);
@@ -120,7 +125,7 @@ const emailTicket = async (data) => {
     theme: "salted",
     product: {
       name: "Skills Future",
-      link: "https://mailgen.js/",
+      link: "https://www.skillsfuture.gov.sg",
       // Optional Product Logo
       // logo: 'https://mailgen.js/img/logo.png'
     },

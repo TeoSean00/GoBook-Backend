@@ -1,5 +1,3 @@
-const QRCode = require('qrcode');
-// const mustache = require('mustache');
 const logger = require("../utils/logger");
 const { getLogger } = require("nodemailer/lib/shared/index.js");
 
@@ -30,10 +28,11 @@ async function createPDF(dataObject) {
         
         // create a pdf document
         await page.pdf({
+            // displayHeaderFooter: true,
             path: 'eticket.pdf',
-            format: 'A4',
-            // width: '120px',
-            // height: '120px',
+            // format: 'A4',
+            width: '603px',
+            height: '201px',
             printBackground: true,
             preferCSSPageSize: false,
 
