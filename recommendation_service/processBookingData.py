@@ -1,6 +1,12 @@
 from confluent_kafka import Consumer, KafkaError
 from contentBasedFilter import ContentBasedFilter
 from tools import publish_message
+from kafka import KafkaProducer
+from json import dumps
+
+
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+                         value_serializer=lambda x: dumps(x).encode('utf-8'))
 
 c = Consumer({
     'bootstrap.servers': 'localhost:9092',
@@ -23,5 +29,5 @@ while True:
     else:
         print('Received message: {}'.format(msg.value().decode('utf-8')))
         history = msg.value().decode('utf-8')
-        recommendations = ContentBasedFilter.get_recommendations(history)
-        publish_message('recommendations', ', '.join(recommendations))
+        recommendations = ContentBasedFilter.get_recommendations(history.strip())
+        producer.send('recommendations', ','.join(recommendations))
