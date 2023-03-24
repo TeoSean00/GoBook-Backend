@@ -15,13 +15,13 @@ monitorBindingKey='booking.*'
 app = Flask(__name__)
 
 # for docker
-# client = MongoClient(host='class_db',
-#                         port=27017
-#                         )
+client = MongoClient(host='class_db',
+                        port=27017
+                        )
 
-client = MongoClient(host='localhost',
-                     port=27017
-                     )
+# client = MongoClient(host='localhost',
+#                      port=27017
+#                      )
 
 db = client['class_db']
 sample_data = [
@@ -33,28 +33,33 @@ sample_data = [
         "classSize": 25,
         # displayed as pills for each date
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -76,38 +81,40 @@ sample_data = [
         "classSize":30,
         "availableSlots":12,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
         },
         "fees":1620,
-        # if assessment true, display "An assessment will be conducted at the end of the course."
         "assessment":True,
-        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
         "certification":False,
-        # course category
         "category":["Data", "PDPA", "Cyber"]
     },
     {
@@ -119,28 +126,33 @@ sample_data = [
         "classSize":30,
         "availableSlots":20,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -162,28 +174,33 @@ sample_data = [
         "classSize":20,
         "availableSlots":10,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -205,28 +222,33 @@ sample_data = [
         "classSize":30,
         "availableSlots":20,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }

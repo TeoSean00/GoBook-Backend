@@ -1,5 +1,5 @@
-volumes:
-  rabbitmq_data:
+# volumes:
+#   rabbitmq_data:
 
 services:
   ##################################
