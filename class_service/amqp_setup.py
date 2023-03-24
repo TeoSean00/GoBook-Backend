@@ -1,10 +1,11 @@
 import pika
+from os import environ ###
 
 # These module-level variables are initialized whenever a new instance of python interpreter imports the module;
 # In each instance of python interpreter (i.e., a program run), the same module is only imported once (guaranteed by the interpreter).
 
-hostname = "localhost" # default hostname
-port = 5672 # default port
+hostname = environ.get('rabbit_host') or 'localhost' ###
+port = environ.get('rabbit_port') or 5672 ###
 # connect to the broker and set up a communication channel in the connection
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
@@ -36,7 +37,7 @@ channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 
 #bind user_service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.info') 
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
 
@@ -48,7 +49,7 @@ channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 
 #bind class_service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.info') 
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
 

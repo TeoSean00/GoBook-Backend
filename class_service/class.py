@@ -8,21 +8,20 @@ from bson import json_util
 from bson.objectid import ObjectId
 
 from datetime import datetime
-import amqp_setup
 import json
 
-monitorBindingKey='booking.info'
+monitorBindingKey='booking.*'
 
 app = Flask(__name__)
 
 # for docker
-# client = MongoClient(host='class_db',
-#                         port=27017
-#                         )
+client = MongoClient(host='class_db',
+                        port=27017
+                        )
 
-client = MongoClient(host='localhost',
-                     port=27017
-                     )
+# client = MongoClient(host='localhost',
+#                      port=27017
+#                      )
 
 db = client['class_db']
 sample_data = [
@@ -34,28 +33,33 @@ sample_data = [
         "classSize": 25,
         # displayed as pills for each date
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -77,38 +81,40 @@ sample_data = [
         "classSize":30,
         "availableSlots":12,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
         },
         "fees":1620,
-        # if assessment true, display "An assessment will be conducted at the end of the course."
         "assessment":True,
-        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
         "certification":False,
-        # course category
         "category":["Data", "PDPA", "Cyber"]
     },
     {
@@ -120,28 +126,33 @@ sample_data = [
         "classSize":30,
         "availableSlots":20,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -163,28 +174,33 @@ sample_data = [
         "classSize":20,
         "availableSlots":10,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -206,28 +222,33 @@ sample_data = [
         "classSize":30,
         "availableSlots":20,
         "courseRuns":{
-            1: {
-                "date": "21/06 - 24/06",
+            "1": {
+                "date": "21/06",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
-            2:{
-                "date": "07/07 - 10/07",
+            "2":{
+                "date": "07/07",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            3:{
-                "date": "11/08 - 14/08",
+            "3":{
+                "date": "11/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            4:{
-                "date": "16/08 - 19/08",
+            "4":{
+                "date": "16/08",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
-            5:{
-                "date": "21/10 - 24/10",
+            "5":{
+                "date": "21/10",
+                "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], }
@@ -294,38 +315,37 @@ def get_class(classId):
 
 # AMQP receiver portion
 
-def receiveBookingInfo():
-    amqp_setup.check_setup()
+# def receiveBookingInfo():
+#     amqp_setup.check_setup()
         
-    queue_name = 'class_service'
+#     queue_name = 'class_service'
     
-    # set up a consumer and start to wait for coming messages
-    amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
-    amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
-    #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
+#     # set up a consumer and start to wait for coming messages
+#     amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+#     amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
+#     #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
 
-def callback(channel, method, properties, body): # required signature for the callback; no return
-    print("\n Received booking info from " + __file__)
-    updateClassDetails(json.loads(body))
-    print() # print a new line feed
+# def callback(channel, method, properties, body): # required signature for the callback; no return
+#     print("\n Received booking info from " + __file__)
+#     updateClassDetails(json.loads(body))
+#     print() # print a new line feed
 
-def updateClassDetails(booking_info):
-    print("Processing and updating backend")
-    # obtain class id from booking_info JSON'
-    # check pyMongo how to update
-    data = booking_info
-    print(booking_info)
-    # retrieve userid instead
-    object = ObjectId(userId)
-    myquery = {"_id": object}
-    newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-        "availableSlots": -1}}
-    updated_class = db.classes.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_class))
+# def updateClassDetails(booking_info):
+#     print("Processing and updating backend")
+#     # obtain class id from booking_info JSON'
+#     # check pyMongo how to update
+#     data = booking_info
+#     print(booking_info)
+#     # retrieve userid instead
+#     # object = ObjectId(data['classId'])
+#     # myquery = {"_id": object}
+#     # newvalues = {"$push": {"participants": data['userId']},  "$inc": {
+#     #     "availableSlots": -1}}
+#     # updated_class = db.classes.find_one_and_update(myquery, newvalues)
+#     # return json.loads(json_util.dumps(updated_class))
+#     return
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +
           ": manage class Schedule ...")
-    print(": monitoring routing key '{}' in exchange '{}' ...".format(monitorBindingKey, amqp_setup.exchangename))
-    receiveBookingInfo()
     app.run(host='0.0.0.0', port=5000, debug=True)
