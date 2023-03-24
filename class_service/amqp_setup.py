@@ -28,25 +28,50 @@ channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, dura
 # Here can be a place to set up all queues needed by the microservices,
 # - instead of setting up the queues using RabbitMQ UI.
 
-############   Error queue   #############
-#declare Error queue
-queue_name = 'Error'
+
+###########   user_service queue   #############
+# declare user_service queue
+queue_name = 'user_service'
 channel.queue_declare(queue=queue_name, durable=True) 
     # 'durable' makes the queue survive broker restarts
 
-#bind Error queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='*.error') 
+#bind user_service queue
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
 
-############   Activity_Log queue    #############
-#declare Activity_Log queue
-queue_name = 'Activity_Log'
+
+###########   class_service queue   #############
+# declare class_service queue
+queue_name = 'class_service'
+channel.queue_declare(queue=queue_name, durable=True) 
+    # 'durable' makes the queue survive broker restarts
+
+#bind class_service queue
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
+    # bind the queue to the exchange via the key
+    # any routing_key with two words and ending with '.error' will be matched
+
+
+# ###########   Error queue   #############
+# # declare Error queue
+# queue_name = 'Error'
+# channel.queue_declare(queue=queue_name, durable=True) 
+#     # 'durable' makes the queue survive broker restarts
+
+# #bind Error queue
+# channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='*.error') 
+#     # bind the queue to the exchange via the key
+#     # any routing_key with two words and ending with '.error' will be matched
+
+############   email_Service queue    #############
+#declare email_Service queue
+queue_name = 'email_service'
 channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 
-#bind Activity_Log queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='#') 
+#bind email_Service queue
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='email.info') 
     # bind the queue to the exchange via the key
     # 'routing_key=#' => any routing_key would be matched
     
