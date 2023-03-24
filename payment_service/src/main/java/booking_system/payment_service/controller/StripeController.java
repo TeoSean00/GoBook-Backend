@@ -3,6 +3,7 @@ package booking_system.payment_service.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,13 +17,36 @@ import com.stripe.model.PaymentMethod;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
 @RestController
 public class StripeController {
 
     private Logger logger = LoggerFactory.getLogger(StripeController.class);
 
+    private HttpHeaders headers;
+
+    private RestTemplate restTemplate;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
+
+    public String processing_URL = "http://host.docker.internal:5008/update_payment";
+
+    public StripeController() {
+        this.restTemplate = restTemplate();
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+    }
 
     @PostMapping("/stripe/events")
     public String handleStripeEvent(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
@@ -61,10 +85,14 @@ public class StripeController {
                 logger.info("Payment for id={}, {} succeeded", paymentIntent.getId(), paymentIntent.getAmount());
                 // Then define and call a method to handle the successful payment intent.
                 // handlePaymentIntentSucceeded(paymentIntent);
-                
+                HttpEntity<PaymentIntent> request = new HttpEntity<>(paymentIntent, headers);
+
+                ResponseEntity<String> result = restTemplate.postForEntity(processing_URL, request, String.class);
+                System.out.println(result);
                 break;
             case "payment_method.attached":
                 PaymentMethod paymentMethod = (PaymentMethod) stripeObject;
+                logger.info("payment method attached", paymentMethod);
                 // Then define and call a method to handle the successful attachment of a
                 // PaymentMethod.
                 // handlePaymentMethodAttached(paymentMethod);

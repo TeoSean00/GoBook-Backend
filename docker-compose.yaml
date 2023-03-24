@@ -1,57 +1,87 @@
+volumes:
+  rabbitmq_data:
+
 services:
+  ##################################
+  # class_db: The Class database
+  ##################################
+
   class_db:
     image: mongo:latest
     ports:
-      - 27017:27017
-    # networks:
-    #   - bookingApp
+      - "27017:27017"
 
-  # class_service:
-  #   build: ./class_service/
-  #   container_name: class_service
-  #   ports: ["5000:5000"]
-  #   depends_on:
-  #     - class_db
-  #   networks:
-  #     - bookingApp
+  ##################################
+  # class_service: The Class microservice
+  ##################################
 
-  user_db:
-    image: mongo:latest
-    command: mongod --port 27018
+  class_service:
+    build: ./class_service/
+    container_name: class_service
+    depends_on:
+      - class_db
     ports:
-      - 27018-27018
-    # networks:
-    #   - bookingApp
+      - "5000:5000"
+
+  ##################################
+  # user_db: The User database
+  ##################################
+
+  # user_db:
+  #   image: mongo:latest
+  #   command: mongod --port 27018
+  #   ports:
+  #     - "27018-27018"
+
+  ##################################
+  # user_service: The User microservice
+  ##################################
 
   # user_service:
   #   build: ./user_service/
   #   container_name: user_service
-  #   ports: ["5001:5001"]
+  #   ports:
+  #     - "5001:5001"
   #   depends_on:
   #     - user_db
-  #   networks:
-  #     - bookingApp
 
   # get_class_complex_service:
   #   build: ./get_class_complex_service/
   #   container_name: get_class_complex_service
-  #   ports: ["5005:5005"]
-  #   networks:
-  #     - bookingApp
+  #   ports:
+  #     - "5005:5005"
 
   # payment_service:
   #   platform: linux/amd64
   #   build: ./payment_service/
   #   container_name: payment_service
   #   ports:
-  #     - "8080:8080"
+  #     - 8080:8080
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - 5672:5672
-      - 15672:15672
+  # stripe-cli:
+  #   image: stripe/stripe-cli
+  #   network_mode: host
+  #   container_name: stripe-cli
+  #   command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
+  # env_file:
+  #   - stripe_cli.env
+
+  # process_booking:
+  #   build: ./process_booking_service/
+  #   container_name: process_booking
+  #   ports:
+  #     - 5008:5008
+
+  # rabbitmq:
+  #   image: rabbitmq
+  #   hostname: esd-rabbit
+  #   container_name: rabbitmq
+  #   restart: always
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes:
+  #     - rabbitmq_data:/var/lib/rabbitmq
 
   # zookeeper:
   #   image: "bitnami/zookeeper:latest"
@@ -74,3 +104,4 @@ services:
 # networks:
 #   bookingApp:
 #     driver: bridge
+
