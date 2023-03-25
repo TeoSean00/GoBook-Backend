@@ -137,6 +137,15 @@ services:
     restart: always
     depends_on:
       - kafka
+
+  consumer_service:
+    build: ./consumer_service/
+    container_name: consumer_service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "5010:5010"
 # networks:
 #   bookingApp:
 #     driver: bridge

@@ -1,0 +1,5 @@
+confluent-kafka==2.0.2
+Flask==2.2.3
+Flask-Cors==3.0.10
+kafka-python==2.0.2
+Flask-SocketIO==5.3.3
