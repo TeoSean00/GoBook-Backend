@@ -284,7 +284,3 @@ class ContentBasedFilter:
 
         # Return the top 10 most similar titles
         return df.iloc[titles_indices]['className'].tolist()
-
-
-print(ContentBasedFilter.get_recommendations(
-    "Advanced-Information-Management-Classroom-Asynchronous"))
