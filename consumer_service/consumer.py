@@ -6,7 +6,7 @@ import os
 import threading
 
 app = Flask(__name__)
-socketio = SocketIO(app,cors_allowed_origins="http://172.21.0.5:5173")
+socketio = SocketIO(app,cors_allowed_origins="*")
 
 consumer = KafkaConsumer('recommendations',
                          bootstrap_servers=['kafka:9092'],
