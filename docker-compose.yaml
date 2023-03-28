@@ -24,26 +24,26 @@ services:
   #     - "5006:5006"
 
   #################################
-  review_db: The Class database
+  # review_db: The Class database
   #################################
 
-  review_db:
-    image: mongo:latest
-    command: mongod --port 27021
-    ports:
-      - "27021:27021"
+  # review_db:
+  #   image: mongo:latest
+  #   command: mongod --port 27021
+  #   ports:
+  #     - "27021:27021"
 
   #################################
-  review_service: The Class microservice
+  # review_service: The Class microservice
   #################################
 
-  review_service:
-    build: ./review_service/
-    container_name: review_service
-    depends_on:
-      - review_db
-    ports:
-      - "5004:5004"
+  # review_service:
+  #   build: ./review_service/
+  #   container_name: review_service
+  #   depends_on:
+  #     - review_db
+  #   ports:
+  #     - "5004:5004"
 
   ##################################
   # user_db: The User database
@@ -97,18 +97,19 @@ services:
   #   network_mode: host
   #   container_name: stripe-cli
   #   command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
-  # env_file:
-  #   - stripe_cli.env
+  #   env_file:
+  #     - stripe_cli.env
 
   ##################################
   # process_booking: The booking microservice
   ##################################
 
-  # process_booking:
-  #   build: ./process_booking_service/
-  #   container_name: process_booking
-  #   ports:
-  #     - 5008:5008
+  process_booking:
+    build: ./process_booking_service/
+    container_name: process_booking
+    restart: always
+    ports:
+      - 5008:5008
 
   ##################################
   # rabbitmq: The rabbitmq broker

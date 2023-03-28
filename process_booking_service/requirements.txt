@@ -3,3 +3,5 @@ Flask-Cors==3.0.10
 pika==1.2.0
 requests==2.28.2
 pymongo==4.3.3
+confluent-kafka==2.0.2
+kafka-python==2.0.2
