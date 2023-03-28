@@ -298,8 +298,6 @@ def get_class(classId):
     return json.loads(json_util.dumps(currClass))
 
 # add participant
-
-
 # @app.route('/class/<classId>', methods=['PUT'])
 # def add_user_class(classId):
 #     # This will be a the json put in the request. Use postman to add the partcipant using PUT
@@ -311,6 +309,12 @@ def get_class(classId):
 #         "availableSlots": -1}}
 #     updated_class = db.classes.find_one_and_update(myquery, newvalues)
 #     return json.loads(json_util.dumps(updated_class))
+
+
+
+
+
+
 
 
 # AMQP receiver portion
