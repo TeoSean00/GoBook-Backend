@@ -1,5 +1,5 @@
-# volumes:
-#   rabbitmq_data:
+volumes:
+  rabbitmq_data:
 
 services:
   ##################################
@@ -78,6 +78,29 @@ services:
   #     - "5005:5005"
 
   ##################################
+  # message_db: The Message database
+  ##################################
+
+  message_db:
+    image: mongo:latest
+    command: mongod --port 27019
+    ports:
+      - "27019-27019"
+
+  ##################################
+  # messaging service: The messaging microservice
+  ##################################
+
+  message_service:
+    build: ./message_service/
+    container_name: message_service
+    restart: always
+    ports:
+      - "5010:5010"
+    depends_on:
+      - rabbitmq
+
+  ##################################
   # payment_service: The payment microservice
   ##################################
 
@@ -115,16 +138,16 @@ services:
   # rabbitmq: The rabbitmq broker
   ##################################
 
-  # rabbitmq:
-  #   image: rabbitmq
-  #   hostname: esd-rabbit
-  #   container_name: rabbitmq
-  #   restart: always
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   volumes:
-  #     - rabbitmq_data:/var/lib/rabbitmq
+  rabbitmq:
+    image: rabbitmq
+    hostname: esd-rabbit
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
 
   ##################################
   # kafka: The kafka broker w zookeeper
