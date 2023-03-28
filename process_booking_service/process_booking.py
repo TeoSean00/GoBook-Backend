@@ -19,9 +19,10 @@ CORS(app)
 
 update_booking_URL = "http://localhost:5007/update_booking"
 
-p = KafkaProducer(bootstrap_servers=['localhost:9092'],
-                         value_serializer=lambda x: json.dumps(x).encode('utf-8'))
-print("Kafka Producer has been initiated...")
+# Setting up kafka producer for recommendation
+# p = KafkaProducer(bootstrap_servers=['kafka:9092'],
+#                          value_serializer=lambda x: json.dumps(x).encode('utf-8'))
+# print("Kafka Producer has been initiated...")
 
 @app.route('/update_payment', methods=['POST'])
 def process_booking():
@@ -30,29 +31,35 @@ def process_booking():
     print('This is error output', file=sys.stderr)
     print(data, file=sys.stderr)
 
-    url = 'http://host.docker.internal:5007/update_booking'
-    headers = {'Content-Type': 'application/json'}
-    response_data = requests.post(url,data=json.dumps(data),headers=headers)
+    # Sample response data from payment service
+    temporary_response_data = {'amount': 200000, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 200000, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB', 'confirmation_method': 'automatic', 'created': 1680003858, 'currency': 'sgd', 'id': 'pi_3MqawoJTqG9NvRuT1CIECYYH', 'latest_charge': {'id': 'ch_3MqawoJTqG9NvRuT1geYkf4z'}, 'livemode': False, 'metadata': {'courseDescription': "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management", 'userEmail': 'celov54484@gpipes.com', 'coursename': 'Data Structure Algorithms', 'runID': '1', 'orderID': '4500', 'userID': '10', 'classId': '3'}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1Mqax8JTqG9NvRuTdQ8sxHYn'}, 'payment_method_options': 
+{'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
 
-    # send data to the kafka log
-    p.send('booking', data)
+    # url = 'http://host.docker.internal:5007/update_booking'
+    # headers = {'Content-Type': 'application/json'}
+    # response_data = requests.post(url,data=json.dumps(data),headers=headers)
+
+    ##################################
+    # Sending of booking data to kafka log
+    # p.send('booking', data)
+    ##################################
+    
     
     # pass payment_response and class_booking jSON
     # class_booking will need to have class id , run id , userid
-    response = requests.request("POST", update_booking_URL,
-    # for testing
-    json={
-        "userEmail" : "celov54484@gpipes.com",
-        "userName" : "celo",
-        "orderID" : "4500",
-        "courseName" : "Data Structure Algorithms",
-        "coursePrice" : "$2000",
-        "courseDescription" : "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management",
-        "classId" : 3,
-        "runId": 1,
-        "userId": 10,
-        }
-    )
+    # response = requests.request("POST", update_booking_URL,
+    # json={
+    #     "userEmail" : "celov54484@gpipes.com",
+    #     "userName" : "celo",
+    #     "orderID" : "4500",
+    #     "courseName" : "Data Structure Algorithms",
+    #     "coursePrice" : "$2000",
+    #     "courseDescription" : "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management",
+    #     "classId" : 3,
+    #     "runId": 1,
+    #     "userId": 10,
+    #     }
+    # )
 
     return {
         "code": 201,
