@@ -12,15 +12,12 @@ import json
 
 app = Flask(__name__)
 
-
-client = MongoClient(host='localhost',
-                        port=27017
+client = MongoClient(host='review_db',
+                        port=27021
                         )
 
 db = client['review_db']
-sample_data = [
-    ]
-
+sample_data = []
 
 CORS(app)  
 
@@ -51,7 +48,7 @@ def get_classes_from_user(userId):
     return json.loads(json_util.dumps(reviews))
 
 
-# add participant
+# add review
 @app.route('/review', methods=['POST'])
 def add_user_class():
     data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
