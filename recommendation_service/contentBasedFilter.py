@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import sys
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -8,8 +9,6 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nltk.download('stopwords')
 nltk.download('punkt')
-
-# Load the Netflix dataset
 
 
 class ContentBasedFilter:
@@ -261,12 +260,15 @@ class ContentBasedFilter:
         print("------- df received is --------")
         print(df.head())
         print("------- booking received is --------")
-        print(booking)
-        print("------- df received is --------")
-        print(cosine_sim)
+        print(booking,file=sys.stderr)
+        print("------- cosine sim received is --------")
+        print(cosine_sim,file=sys.stderr)
+        print(type(booking))
         
         # Get the index of the title in the dataframe
         idx = df[df['className'] == booking].index[0]
+        print("------- idx is --------")
+        print(idx)
 
         # Compute the cosine similarity between the title and all other titles
         sim_scores = list(enumerate(cosine_sim[idx]))
@@ -282,7 +284,3 @@ class ContentBasedFilter:
 
         # Return the top 10 most similar titles
         return df.iloc[titles_indices]['className'].tolist()
-
-
-# print(ContentBasedFilter.get_recommendations(
-#     "Advanced-Information-Management-Classroom-Asynchronous"))
