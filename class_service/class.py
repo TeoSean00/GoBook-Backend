@@ -34,31 +34,31 @@ sample_data = [
         # displayed as pills for each date
         "courseRuns":{
             "1": {
-                "date": "21/06",
+                "date": "2023-4-12",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
             "2":{
-                "date": "07/07",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "3":{
-                "date": "11/08",
+                "date": "2023-4-13",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "4":{
-                "date": "16/08",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "5":{
-                "date": "21/10",
+                "date": "2023-4-14",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
@@ -82,31 +82,31 @@ sample_data = [
         "availableSlots":12,
         "courseRuns":{
             "1": {
-                "date": "21/06",
+                "date": "2023-4-12",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
             "2":{
-                "date": "07/07",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "3":{
-                "date": "11/08",
+                "date": "2023-4-13",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "4":{
-                "date": "16/08",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "5":{
-                "date": "21/10",
+                "date": "2023-4-14",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
@@ -127,31 +127,31 @@ sample_data = [
         "availableSlots":20,
         "courseRuns":{
             "1": {
-                "date": "21/06",
+                "date": "2023-4-12",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
             "2":{
-                "date": "07/07",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "3":{
-                "date": "11/08",
+                "date": "2023-4-13",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "4":{
-                "date": "16/08",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "5":{
-                "date": "21/10",
+                "date": "2023-4-14",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
@@ -175,31 +175,31 @@ sample_data = [
         "availableSlots":10,
         "courseRuns":{
             "1": {
-                "date": "21/06",
+                "date": "2023-4-12",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
             "2":{
-                "date": "07/07",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "3":{
-                "date": "11/08",
+                "date": "2023-4-13",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "4":{
-                "date": "16/08",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "5":{
-                "date": "21/10",
+                "date": "2023-4-14",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
@@ -223,31 +223,31 @@ sample_data = [
         "availableSlots":20,
         "courseRuns":{
             "1": {
-                "date": "21/06",
+                "date": "2023-4-12",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ]},
             "2":{
-                "date": "07/07",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "3":{
-                "date": "11/08",
+                "date": "2023-4-13",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "4":{
-                "date": "16/08",
-                "timeslot" : "10.00am - 11.00am",
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
                 "availableSlots": 25,
                 "participants": [
                 ], },
             "5":{
-                "date": "21/10",
+                "date": "2023-4-14",
                 "timeslot" : "10.00am - 11.00am",
                 "availableSlots": 25,
                 "participants": [
