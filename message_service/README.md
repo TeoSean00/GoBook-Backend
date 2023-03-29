@@ -36,5 +36,29 @@ docker build . -t messaging_service
 ```
 2. Docker Run (Change the ports as you wish)
 ```
-docker run -p 3000:3000 messaging_service
+docker run -p 5010:5010 messaging_service
+```
+
+#### ENV for testing
+```
+module.exports = {
+  EMAIL: "esdg07t01@gmail.com",
+  PASSWORD: "ackxcbcupcpcrhvh",
+  dbUri: "mongodb://localhost:27017/messaging",
+  port: 5010,
+  rabbitMQ: "amqp://localhost:5672",
+  queueName: "email_service",
+};
+```
+
+#### ENV for production
+```
+module.exports = {
+  EMAIL: "esdg07t01@gmail.com",
+  PASSWORD: "ackxcbcupcpcrhvh",
+  dbUri: "mongodb://message_db:27019/messaging",
+  port: 5010,
+  rabbitMQ: "amqp://rabbitmq:5672",
+  queueName: "email_service",
+};
 ```

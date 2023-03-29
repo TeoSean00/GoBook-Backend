@@ -128,6 +128,7 @@ services:
   ##################################
 
   process_booking:
+    platform: linux/amd64
     build: ./process_booking_service/
     container_name: process_booking
     restart: always
