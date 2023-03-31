@@ -1,5 +1,5 @@
-volumes:
-  rabbitmq_data:
+# volumes:
+#   rabbitmq_data:
 
 services:
   ##################################
@@ -27,23 +27,23 @@ services:
   # review_db: The Class database
   #################################
 
-  # review_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27021
-  #   ports:
-  #     - "27021:27021"
+  review_db:
+    image: mongo:latest
+    command: mongod --port 27021
+    ports:
+      - "27021:27021"
 
   #################################
   # review_service: The Class microservice
   #################################
 
-  # review_service:
-  #   build: ./review_service/
-  #   container_name: review_service
-  #   depends_on:
-  #     - review_db
-  #   ports:
-  #     - "5004:5004"
+  review_service:
+    build: ./review_service/
+    container_name: review_service
+    depends_on:
+      - review_db
+    ports:
+      - "5004:5004"
 
   ##################################
   # user_db: The User database
@@ -81,24 +81,24 @@ services:
   # message_db: The Message database
   ##################################
 
-  message_db:
-    image: mongo:latest
-    command: mongod --port 27019
-    ports:
-      - "27019-27019"
+  # message_db:
+  #   image: mongo:latest
+  #   command: mongod --port 27019
+  #   ports:
+  #     - "27019-27019"
 
   ##################################
   # messaging service: The messaging microservice
   ##################################
 
-  message_service:
-    build: ./message_service/
-    container_name: message_service
-    restart: always
-    ports:
-      - "5010:5010"
-    depends_on:
-      - rabbitmq
+  # message_service:
+  #   build: ./message_service/
+  #   container_name: message_service
+  #   restart: always
+  #   ports:
+  #     - "5010:5010"
+  #   depends_on:
+  #     - rabbitmq
 
   ##################################
   # payment_service: The payment microservice
@@ -127,28 +127,28 @@ services:
   # process_booking: The booking microservice
   ##################################
 
-  process_booking:
-    platform: linux/amd64
-    build: ./process_booking_service/
-    container_name: process_booking
-    restart: always
-    ports:
-      - 5008:5008
+  # process_booking:
+  #   platform: linux/amd64
+  #   build: ./process_booking_service/
+  #   container_name: process_booking
+  #   restart: always
+  #   ports:
+  #     - 5008:5008
 
   ##################################
   # rabbitmq: The rabbitmq broker
   ##################################
 
-  rabbitmq:
-    image: rabbitmq
-    hostname: esd-rabbit
-    container_name: rabbitmq
-    restart: always
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+  # rabbitmq:
+  #   image: rabbitmq
+  #   hostname: esd-rabbit
+  #   container_name: rabbitmq
+  #   restart: always
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes:
+  #     - rabbitmq_data:/var/lib/rabbitmq
 
   ##################################
   # kafka: The kafka broker w zookeeper
