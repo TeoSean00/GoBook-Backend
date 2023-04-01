@@ -1,7 +1,7 @@
 import os
 import sys
 import requests
-from flask import Flask, Response,render_template, request, url_for, redirect,jsonify
+from flask import Flask, Response, render_template, request, url_for, redirect, jsonify
 from flask_cors import CORS, cross_origin
 from os import environ
 # from pymongo import MongoClient
@@ -16,7 +16,7 @@ import amqp_setup
 
 app = Flask(__name__)
 
-CORS(app)  
+CORS(app)
 
 update_booking_URL = "http://localhost:5007/update_booking"
 
@@ -24,6 +24,7 @@ update_booking_URL = "http://localhost:5007/update_booking"
 # p = KafkaProducer(bootstrap_servers=['kafka:9092'],
 #                          value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 # print("Kafka Producer has been initiated...")
+
 
 @app.route('/update_payment', methods=['POST'])
 def process_booking():
@@ -33,8 +34,8 @@ def process_booking():
     print(data, file=sys.stderr)
 
     # Sample response data from payment service
-    temporary_response_data = {'amount': 200000, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 200000, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB', 'confirmation_method': 'automatic', 'created': 1680003858, 'currency': 'sgd', 'id': 'pi_3MqawoJTqG9NvRuT1CIECYYH', 'latest_charge': {'id': 'ch_3MqawoJTqG9NvRuT1geYkf4z'}, 'livemode': False, 'metadata': {'courseDescription': "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management", 'userEmail': 'celov54484@gpipes.com', 'coursename': 'Data Structure Algorithms', 'runID': '1', 'orderID': '4500', 'userID': '10', 'classId': '3'}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1Mqax8JTqG9NvRuTdQ8sxHYn'}, 'payment_method_options': 
-{'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
+    temporary_response_data = {'amount': 200000, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 200000, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB', 'confirmation_method': 'automatic', 'created': 1680003858, 'currency': 'sgd', 'id': 'pi_3MqawoJTqG9NvRuT1CIECYYH', 'latest_charge': {'id': 'ch_3MqawoJTqG9NvRuT1geYkf4z'}, 'livemode': False, 'metadata': {'courseDescription': "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management", 'userEmail': 'celov54484@gpipes.com', 'coursename': 'Data Structure Algorithms', 'runID': '1', 'orderID': '4500', 'userID': '10', 'classId': '3'}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1Mqax8JTqG9NvRuTdQ8sxHYn'}, 'payment_method_options':
+                               {'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
 
     # url = 'http://host.docker.internal:5007/update_booking'
     # headers = {'Content-Type': 'application/json'}
@@ -44,8 +45,17 @@ def process_booking():
     # Sending of booking data to kafka log
     # p.send('booking', data)
     ##################################
-    
-    
+
+    ##################################
+    # Sending amqp to message service
+    print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----')
+    # notification is listening to email_service queue
+    # binding key is email.info as well
+
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
+                                     body=dataObject, properties=pika.BasicProperties(delivery_mode=2))
+    # No need to return response to process_booking
+
     # pass payment_response and class_booking jSON
     # class_booking will need to have class id , run id , userid
     # response = requests.request("POST", update_booking_URL,
@@ -69,6 +79,7 @@ def process_booking():
         }
     }
 
+
 @app.route('/booking/createPayment', methods=['POST'])
 @cross_origin()
 def create_payment():
@@ -80,12 +91,12 @@ def create_payment():
     # url = 'http://localhost:8080/create-payment-intent'
     headers = {'Content-Type': 'application/json'}
 
-    response_data = requests.post(url,data=json.dumps(data),headers=headers)
+    response_data = requests.post(url, data=json.dumps(data), headers=headers)
     for item in response_data:
-        print("ITEM IS",item)
+        print("ITEM IS", item)
 
-    # data received is 
-    # {'amount': 1500, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 1500, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MnMh6JTqG9NvRuT0xGeHdCj_secret_gsKWOlAlwTsdvsj1Ru9cK6goW', 'confirmation_method': 'automatic', 'created': 1679234084, 'currency': 'sgd', 'id': 'pi_3MnMh6JTqG9NvRuT0xGeHdCj', 'latest_charge': {'id': 'ch_3MnMh6JTqG9NvRuT0DB1hg0w'}, 'livemode': False, 'metadata': {}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1MnMhFJTqG9NvRuT8Hf2rccH'}, 'payment_method_options': {'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}  
+    # data received is
+    # {'amount': 1500, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 1500, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MnMh6JTqG9NvRuT0xGeHdCj_secret_gsKWOlAlwTsdvsj1Ru9cK6goW', 'confirmation_method': 'automatic', 'created': 1679234084, 'currency': 'sgd', 'id': 'pi_3MnMh6JTqG9NvRuT0xGeHdCj', 'latest_charge': {'id': 'ch_3MnMh6JTqG9NvRuT0DB1hg0w'}, 'livemode': False, 'metadata': {}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1MnMhFJTqG9NvRuT8Hf2rccH'}, 'payment_method_options': {'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
     response_str = response_data.content.decode()
     return json.loads(response_str)
 
@@ -180,8 +191,8 @@ def update_booking():
         }
     }
 
-
 if __name__ == "__main__":
-    print("This is flask " + os.path.basename(__file__) + " to coordinate payments with updating of class and user services")
+    print("This is flask " + os.path.basename(__file__) +
+          " to coordinate payments with updating of class and user services")
     app.run(host="0.0.0.0", port=5008, debug=True)
-print(f"Flask app is initialized on port 5007")
+print(f"Flask app is initialized on port 5008")

@@ -28,8 +28,8 @@ def index():
 
 @app.route('/review' , methods=['GET'])
 def get_all_classes():
-    classes = db.classes.find()
-    return json.loads(json_util.dumps(classes))
+    reviews = db.reviews.find()
+    return json.loads(json_util.dumps(reviews))
 
 @app.route('/review/createDB')
 def create_db():
@@ -47,10 +47,15 @@ def get_classes_from_user(userId):
     reviews  = db.reviews.find( { "userId": userId } )
     return json.loads(json_util.dumps(reviews))
 
+# get all reviews fors this class
+@app.route('/review/class/<classId>')
+def get_reviews_for_class(classId):
+    reviews = db.reviews.find({"classId": classId})
+    return json.loads(json_util.dumps(reviews))
 
 # add review
 @app.route('/review', methods=['POST'])
-def add_user_class():
+def add_user_review():
     data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
     db.reviews.insert_one(data)
     return "added review successfully"
