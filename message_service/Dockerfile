@@ -18,6 +18,10 @@ COPY package*.json ./
 # Install the app's dependencies
 RUN npm install
 # RUN npm ci --only=production
+RUN npm ci --omit=dev
+
+# Set the NODE_ENV environment variable to production
+ENV NODE_ENV=production 
 
 # Copy the rest of the app's source code to the working directory
 COPY . .
@@ -26,6 +30,6 @@ COPY . .
 EXPOSE 5010
 
 # Start the app
-CMD ["npm", "start"]
+CMD ["npm", "run","start-prod"]
 
 # 
