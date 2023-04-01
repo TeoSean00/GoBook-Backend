@@ -5,7 +5,7 @@ import pika
 
 hostname = "esd-rabbit" # default hostname
 port = 5672 # default port
-# connect to the broker and set up a communication channel in the connection
+# ? connect to the broker and set up a communication channel in the connection
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
         host=hostname, port=port,
@@ -28,29 +28,18 @@ channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, dura
 # Here can be a place to set up all queues needed by the microservices,
 # - instead of setting up the queues using RabbitMQ UI.
 
-
-###########   user_service queue   #############
-# declare user_service queue
-queue_name = 'user_service'
-channel.queue_declare(queue=queue_name, durable=True) 
+############   email_Service queue    #############
+#declare email_Service queue
+queue_name = 'email_service'
+channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 
-#bind user_service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
+#bind email_Service queue
+channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='email.info') 
     # bind the queue to the exchange via the key
-    # any routing_key with two words and ending with '.error' will be matched
+    # 'routing_key=#' => any routing_key would be matched
+    
 
-
-###########   class_service queue   #############
-# declare class_service queue
-queue_name = 'class_service'
-channel.queue_declare(queue=queue_name, durable=True) 
-    # 'durable' makes the queue survive broker restarts
-
-#bind class_service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking.*') 
-    # bind the queue to the exchange via the key
-    # any routing_key with two words and ending with '.error' will be matched
 
 
 # ###########   Error queue   #############
@@ -64,17 +53,7 @@ channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='booking
 #     # bind the queue to the exchange via the key
 #     # any routing_key with two words and ending with '.error' will be matched
 
-############   email_Service queue    #############
-#declare email_Service queue
-queue_name = 'email_service'
-channel.queue_declare(queue=queue_name, durable=True)
-    # 'durable' makes the queue survive broker restarts
 
-#bind email_Service queue
-channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='email.info') 
-    # bind the queue to the exchange via the key
-    # 'routing_key=#' => any routing_key would be matched
-    
 
 """
 This function in this module sets up a connection and a channel to a local AMQP broker,
