@@ -266,18 +266,7 @@ sample_data = [
 
 CORS(app)
 
-
-@app.route('/', methods=('GET', 'POST'))
-def index():
-    return "Hello there, there are the classes"
-
-
-@app.route('/class')
-def get_all_classes():
-    classes = db.classes.find()
-    return json.loads(json_util.dumps(classes))
-
-
+# This API is to initialize the document in Mongo and fill with sample data
 @app.route('/class/createDB')
 def create_db():
     db_exists = client.list_database_names()
@@ -288,6 +277,17 @@ def create_db():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
+# Testing Route 
+@app.route('/', methods=('GET', 'POST'))
+def index():
+    return "Hello there, there are the classes"
+
+# This API will get all classes
+@app.route('/class')
+def get_all_classes():
+    classes = db.classes.find()
+    return json.loads(json_util.dumps(classes))
+
 
 # get class details from class Id
 @app.route('/class/<classId>')
@@ -297,57 +297,19 @@ def get_class(classId):
     currClass = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(currClass))
 
-# add participant
-# @app.route('/class/<classId>', methods=['PUT'])
-# def add_user_class(classId):
-#     # This will be a the json put in the request. Use postman to add the partcipant using PUT
-#     data = request.get_json()
-#     print(data)
-#     object = ObjectId(classId)
-#     myquery = {"_id": object}
-#     newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-#         "availableSlots": -1}}
-#     updated_class = db.classes.find_one_and_update(myquery, newvalues)
-#     return json.loads(json_util.dumps(updated_class))
+# add user to class participants
+@app.route('/class/<classId>', methods=['PUT'])
+def add_user_class(classId):
+    # This will be a the json put in the request. Use postman to add the partcipant using PUT
+    data = request.get_json()
+    print(data)
+    object = ObjectId(classId)
+    myquery = {"_id": object}
+    newvalues = {"$push": {"participants": data['userId']},  "$inc": {
+        "availableSlots": -1}}
+    updated_class = db.classes.find_one_and_update(myquery, newvalues)
+    return json.loads(json_util.dumps(updated_class))
 
-
-
-
-
-
-
-
-# AMQP receiver portion
-
-# def receiveBookingInfo():
-#     amqp_setup.check_setup()
-        
-#     queue_name = 'class_service'
-    
-#     # set up a consumer and start to wait for coming messages
-#     amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
-#     amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
-#     #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
-
-# def callback(channel, method, properties, body): # required signature for the callback; no return
-#     print("\n Received booking info from " + __file__)
-#     updateClassDetails(json.loads(body))
-#     print() # print a new line feed
-
-# def updateClassDetails(booking_info):
-#     print("Processing and updating backend")
-#     # obtain class id from booking_info JSON'
-#     # check pyMongo how to update
-#     data = booking_info
-#     print(booking_info)
-#     # retrieve userid instead
-#     # object = ObjectId(data['classId'])
-#     # myquery = {"_id": object}
-#     # newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-#     #     "availableSlots": -1}}
-#     # updated_class = db.classes.find_one_and_update(myquery, newvalues)
-#     # return json.loads(json_util.dumps(updated_class))
-#     return
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +
