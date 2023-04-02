@@ -11,24 +11,25 @@ from datetime import datetime
 import json
 
 monitorBindingKey='booking.*'
-
 app = Flask(__name__)
 
 # for docker
-client = MongoClient(host='class_db',
-                        port=27017
-                        )
+# client = MongoClient(host='class_db',
+#                         port=27017
+#                         )
 
-# client = MongoClient(host='localhost',
-#                      port=27017
-#                      )
-
+client = MongoClient(host='localhost',
+                     port=27017
+                     )
+portNum = 5006
 db = client['class_db']
 sample_data = [
     {
         "className": "CAD-Engineering-Design-5",
         "content": "On completion of the module, students should be able to create 2D drawings of engineering components using a CAD system as well as produce 3D solid models and also to design a mechanical system comprising various machine elements.\r\n\r\nCAD and Engineering Design (ME4011FP) is one of the modules leading to HIGHER NITEC IN TECHNOLOGY - MECHANICAL ENGINEERING.",
         "objective": "On completion of the module, students should be able to create 2D drawings of engineering components using a CAD system as well as produce 3D solid models and also to design a mechanical system comprising various machine elements.",
+         "participants": [
+        ],
         "categories": ["SSG-Non-WSQ"],
         "classSize": 25,
         # displayed as pills for each date
@@ -79,7 +80,6 @@ sample_data = [
         "participants": [
         ],
         "classSize":30,
-        "availableSlots":12,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -117,14 +117,13 @@ sample_data = [
         "certification":False,
         "category":["Data", "PDPA", "Cyber"]
     },
-    {
+    {   
         "className": "Advanced-Information-Management-Classroom-Asynchronous",
         "content": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "objective": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "participants": [
         ],
         "classSize":30,
-        "availableSlots":20,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -172,7 +171,6 @@ sample_data = [
         "participants": [
         ],
         "classSize":20,
-        "availableSlots":10,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -220,7 +218,6 @@ sample_data = [
         "participants": [
         ],
         "classSize":30,
-        "availableSlots":20,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -298,15 +295,18 @@ def get_class(classId):
     return json.loads(json_util.dumps(currClass))
 
 # add user to class participants
-@app.route('/class/<classId>', methods=['PUT'])
-def add_user_class(classId):
+@app.route('/class/<classId>/<runId>', methods=['PUT'])
+def add_user_class(classId, runId):
     # This will be a the json put in the request. Use postman to add the partcipant using PUT
     data = request.get_json()
     print(data)
     object = ObjectId(classId)
+    courseRun = f"courseRuns.{runId}.participants"
+    courseRunSlots = f"courseRuns.{runId}.availableSlots"
     myquery = {"_id": object}
-    newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-        "availableSlots": -1}}
+    # update overall class list and course run class list
+    newvalues = {"$push": {"participants": data['userId'],courseRun: data['userId']},  "$inc": {
+        courseRunSlots: -1}}
     updated_class = db.classes.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_class))
 
