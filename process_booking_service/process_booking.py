@@ -64,9 +64,52 @@ def process_booking():
     print(data, file=sys.stderr)
 
     # Sample response data from payment service
-    temporary_response_data = {'amount': 1420, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 1420, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB', 'confirmation_method': 'automatic', 'created': 1680003858, 'currency': 'sgd', 'id': 'pi_3MqawoJTqG9NvRuT1CIECYYH', 'latest_charge': {'id': 'ch_3MqawoJTqG9NvRuT1geYkf4z'}, 'livemode': False, 'metadata': {'courseDescription': "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.", 'userEmail': 'celov54484@gpipes.com', 'coursename': 'Advanced-Information-Management-Classroom-Asynchronous', 'runID': '1', 'orderID': '4500', 'userID': '112532673980137782859', 'classId': '642924c830f6877e418e1650'}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1Mqax8JTqG9NvRuTdQ8sxHYn'}, 'payment_method_options':
-                               {'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
-
+    {
+    "amount": 1420,
+    "amount_capturable": 0,
+    "amount_details": {
+        "tip": {}
+    },
+    "amount_received": 1420,
+    "automatic_payment_methods": {
+        "enabled": True
+    },
+    "capture_method": "automatic",
+    "client_secret": "pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB",
+    "confirmation_method": "automatic",
+    "created": 1680003858,
+    "currency": "sgd",
+    "id": "pi_3MqawoJTqG9NvRuT1CIECYYH",
+    "latest_charge": {
+        "id": "ch_3MqawoJTqG9NvRuT1geYkf4z"
+    },
+    "livemode": False,
+    "metadata": {
+        "courseDescription": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
+        "userEmail": "celov54484@gpipes.com",
+        "coursename": "Advanced-Information-Management-Classroom-Asynchronous",
+        "runID": "1",
+        "orderID": "4500",
+        "userID": "112532673980137782859",
+        "classId": "64294fd360d77b957414d18b"
+    },
+    "object": "payment_intent",
+    "payment_method": {
+        "id": "pm_1Mqax8JTqG9NvRuTdQ8sxHYn"
+    },
+    "payment_method_options": {
+        "card": {
+            "request_three_d_secure": "automatic"
+        },
+        "paynow": {}
+    },
+    "payment_method_types": [
+        "card",
+        "paynow"
+    ],
+    "status": "succeeded"
+}
+    
 
     # ? Now to update the class and user service that book is confirmed
     # ? 1. Invoke class service
@@ -78,23 +121,42 @@ def process_booking():
     ##################################
 
     # * 1. Invoke class service to update class participant
+    print("Starting slicing of json data")
     classID = data['metadata']['classId']
     userID = data['metadata']['userID']
     runID = data['metadata']['runID']
 
-    classServiceURL = "http://localhost:5006/class/{classID}/{runID}"
-    classUpdateResult = invoke_http(classServiceURL, method = 'PUT')
+    classServiceURL = f"http://localhost:5006/class/{classID}/{runID}"
+    userDataObject = {
+        "userId": userID
+    }
+    #? JSONIFY the data object
+    userDataObject = json.dumps(userDataObject)
+
+    # userDataObject = jsonify(userDataObject)
+    classUpdateResult = invoke_http(classServiceURL, method = 'PUT', json = userDataObject)
+
     print("Class service update result code")
-    print(classUpdateResult['code'])
+    print(f"Class service URL is {classServiceURL}")
+    print(userDataObject)
+    print(classUpdateResult)
+    print(type(classUpdateResult))
 
     # * 2. Invoke user service to update user booking
-    userServiceURL = "http://localhost:5001/user/addclass/{userID}"
-    userDataObject = {
-        "classID": classID,
+    userServiceURL = f"http://localhost:5001/user/addclass/{userID}"
+    classDataObject = {
+        "classId": classID
     }
-    userUpdateResult = invoke_http(userServiceURL, method = 'PUT', data = userDataObject)
+    #? JSONIFY the data object
+    classDataObject = json.dumps(classDataObject)
+    # classDataObject = jsonify(classDataObject)
+
+    userUpdateResult = invoke_http(userServiceURL, method = 'PUT', json = classDataObject)
     print("User service update result code")
-    print(userUpdateResult['code'])
+    print(f"User service URL is {userServiceURL}")
+    print(classDataObject)
+    print(userUpdateResult)
+    print(type(userUpdateResult))
 
     # * 3. Sending msg thru AMQP to message service
     print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----')
@@ -113,15 +175,24 @@ def process_booking():
         "userID" : userID
     }
 
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
-        body=dataObject, properties=pika.BasicProperties(delivery_mode=2))
+    if (classUpdateResult['code'] in range(200,300) and userUpdateResult['code'] in range(200,300)):
+        dataObject = json.dumps(dataObject)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
+            body=dataObject, properties=pika.BasicProperties(delivery_mode=2))
 
-    return {
-        "code": 201,
-        "data": {
-            "order": "booking of class is successful"
+        return {
+            "code": 200,
+            "userUpdate": userUpdateResult,
+            "classUpdate": classUpdateResult,
+            "email": "sent to queue successfullyx"
         }
-    }
+    else:
+        return {
+            "code": 200,
+            "userUpdate": userUpdateResult,
+            "classUpdate": classUpdateResult,
+            "email": "did not send to queue"
+        }
 
     # pass payment_response and class_booking jSON
     # class_booking will need to have class id , run id , userid
