@@ -30,7 +30,7 @@ update_booking_URL = "http://localhost:5007/update_booking"
 def process_booking():
 
     data = request.get_json()
-    print('This is error output', file=sys.stderr)
+    # print('This is error output', file=sys.stderr)
     print(data, file=sys.stderr)
 
     # Sample response data from payment service
