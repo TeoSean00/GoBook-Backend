@@ -298,6 +298,7 @@ def get_class(classId):
 @app.route('/class/<classId>/<runId>', methods=['PUT'])
 def add_user_class(classId, runId):
     # This will be a the json put in the request. Use postman to add the partcipant using PUT
+    print("start class update")
     data = request.get_json()
     print(data)
     object = ObjectId(classId)
@@ -314,4 +315,5 @@ def add_user_class(classId, runId):
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +
           ": manage class Schedule ...")
-    app.run(host='0.0.0.0', port=5006, debug=True)
+    app.run(host='0.0.0.0', port=portNum, debug=True)
+print(f"Class Service app is initialized on port {portNum}")
