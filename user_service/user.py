@@ -22,9 +22,9 @@ client = MongoClient(host='localhost',
 db = client['user_db']
 sample_data = [
     {
-    "userid": "112532673980137782859",
+    "userId": "112532673980137782859",
     "given_name": "Keith Loh",
-    "email" : "keith.loh.2021@smu.edu.sg",
+    "email" : "keith.loh.2021@scis.smu.edu.sg",
     "name": "Test User 1",
     "preferences": [],
     "attended_classes": [],
@@ -34,18 +34,18 @@ sample_data = [
     ]
     },
     {
-    "userid": "113532673980137782859",
+    "userId": "113532673980137782859",
     "given_name": "Joseph Hee",
-    "email" : "joseph.hee.2021@smu.edu.sg",
+    "email" : "joseph.hee.2021@scis.smu.edu.sg",
     "name": "Test User 2",
     "preferences": [],
     "attended_classes": [],
     "reviews": []
     },
     {
-    "userid": "114532673980137782859",
+    "userId": "114532673980137782859",
     "given_name": "Tyler Lian",
-    "email" : "tyler.lian.2021@smu.edu.sg",
+    "email" : "tyler.lian.2021@scis.smu.edu.sg",
     "name": "Test User 3",
     "preferences": [],
     "attended_classes": [],
@@ -56,6 +56,9 @@ sample_data = [
     ]
     },
     {
+    "userId": "115542673980137782859",
+    "given_name": "Keith Lee",
+    "email" : "keithloh99@gmail.com",
     "name": "Test User 4",
     "preferences": [],
     "attended_classes": [],
@@ -64,6 +67,9 @@ sample_data = [
     ]
     },
     {
+    "userId": "116532673980137782859",
+    "given_name": "Elton Tay",
+    "email" : "elton.tay.2021@scis.smu.edu.sg",
     "name": "Test User 5",
     "preferences": [],
     "attended_classes": [],
@@ -95,18 +101,31 @@ def get_all_users():
     return json.loads(json_util.dumps(users))
 
 # Get one user by their id (Or can change to name)
-@app.route('/users/<userid>')
-def get_user(userid):
-    object = ObjectId(userid)
-    myquery = { "_id": object }
+@app.route('/users/<userId>')
+def get_user(userId):
+    # ! not needed anymore as we arent using objectid
+    # object = ObjectId(userid)
+    myquery = { "userId": userId }
     user = db.users.find_one(myquery)
     return json.loads(json_util.dumps(user))
 
 # Add user but we dont need to
-@app.route('/users/<name>', methods=['POST'])
-def add_stored_animals(name):
+@app.route('/users/adduser', methods=['POST'])
+def add_stored_animals():
+    data = request.get_json()
+    # ? Sample User JSON object
+    #{
+    # "userid": "112532673980137782859",
+    # "given_name": "Keith Loh",
+    # "email" : "keith.loh.2021@scis.smu.edu.sg",
+    # "name": "Test User 1"
+    # }
+
     addObject = {
-        "name": name,
+        "userid": data["userid"],
+        "given_name": data["given_name"],
+        "email" : data["email"],
+        "name": data["name"],
         "preferences": [],
         "attended_classes": [],
         "reviews": []
@@ -116,12 +135,12 @@ def add_stored_animals(name):
 
 # Update a user using his userid (Not sure if we should update by username instead ah)
 # Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
+# ? subjected to changes - keith
 # add review
-@app.route('/users/addreview/<userid>', methods=['PUT'])
-def add_review(userid):
+@app.route('/users/addreview/<userId>', methods=['PUT'])
+def add_review(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    object = ObjectId(userid)
-    myquery = { "_id": object }
+    myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "reviews": data } }
     # query = db.users.find_one({"_id": object })
@@ -129,50 +148,33 @@ def add_review(userid):
     return json.loads(json_util.dumps(updated_user))
 
 # add class attended to userID
-@app.route('/users/addclass/<userid>', methods=['PUT'])
-def add_class(userid):
+@app.route('/users/addclass/<userId>', methods=['PUT'])
+def add_class(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    object = ObjectId(userid)
-    myquery = { "_id": object }
+    myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
+    # ! doesn't show the updated user (pls fix)
     return json.loads(json_util.dumps(updated_user))
 
 
 
 # Add preferences
-@app.route('/users/addpref/<userid>', methods=['PUT'])
-def add_preferences(userid):
+@app.route('/users/addpref/<userId>', methods=['PUT'])
+def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    object = ObjectId(userid)
-    myquery = { "_id": object }
+    myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "preferences": data } }
+    newvalues = { "$push": { "preferences": data['preference'] } }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
 
 
-# ! not needed was for AMQP
-# @app.route('/users/addpref/<userid>', methods=['PUT'])
-# def updateUserDetails(booking_info):
-#     print("Processing and updating backend")
-#     # obtain user id from booking_info JSON'
-#     data = booking_info
-#     print(data)
-#     object = ObjectId(data['userId'])
-#     myquery = { "_id": object }
-#     # myquery = db.users.find_one({"_id" : userid})
-#     newvalues = { "$push": { "attended_classes": data["classId"] } }
-#     # query = db.users.find_one({"_id": object })
-#     updated_user = db.users.find_one_and_update(myquery, newvalues)
-#     return json.loads(json_util.dumps(updated_user))
-#     # return
-
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
     app.run(host='0.0.0.0', port=portNum, debug=True)
-print(f"Flask app is initialized on port {portNum}")
+print(f"User Service is initialized on port {portNum}")
