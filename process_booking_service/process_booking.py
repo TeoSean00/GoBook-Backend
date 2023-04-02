@@ -8,7 +8,7 @@ from os import environ
 # from bson import json_util
 # from bson.objectid import ObjectId
 from datetime import datetime
-from kafka import KafkaProducer
+# from kafka import KafkaProducer
 import json
 import pika
 import requests
@@ -18,7 +18,7 @@ from invokes import invoke_http
 app = Flask(__name__)
 
 CORS(app)
-
+portNum = 5008
 
 update_booking_URL = "http://localhost:5007/update_booking"
 
@@ -57,12 +57,14 @@ def create_payment():
 def process_booking():
 
     data = request.get_json()
-    dataObject = json.dumps(data)
+
+    # this is to convert data to JSON string
+    # dataObject = json.dumps(data)
     # print('This is error output', file=sys.stderr)
     print(data, file=sys.stderr)
 
     # Sample response data from payment service
-    temporary_response_data = {'amount': 200000, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 200000, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB', 'confirmation_method': 'automatic', 'created': 1680003858, 'currency': 'sgd', 'id': 'pi_3MqawoJTqG9NvRuT1CIECYYH', 'latest_charge': {'id': 'ch_3MqawoJTqG9NvRuT1geYkf4z'}, 'livemode': False, 'metadata': {'courseDescription': "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management", 'userEmail': 'celov54484@gpipes.com', 'coursename': 'Data Structure Algorithms', 'runID': '1', 'orderID': '4500', 'userID': '10', 'classId': '3'}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1Mqax8JTqG9NvRuTdQ8sxHYn'}, 'payment_method_options':
+    temporary_response_data = {'amount': 1420, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 1420, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB', 'confirmation_method': 'automatic', 'created': 1680003858, 'currency': 'sgd', 'id': 'pi_3MqawoJTqG9NvRuT1CIECYYH', 'latest_charge': {'id': 'ch_3MqawoJTqG9NvRuT1geYkf4z'}, 'livemode': False, 'metadata': {'courseDescription': "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.", 'userEmail': 'celov54484@gpipes.com', 'coursename': 'Advanced-Information-Management-Classroom-Asynchronous', 'runID': '1', 'orderID': '4500', 'userID': '112532673980137782859', 'classId': '642924c830f6877e418e1650'}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1Mqax8JTqG9NvRuTdQ8sxHYn'}, 'payment_method_options':
                                {'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
 
 
@@ -76,22 +78,40 @@ def process_booking():
     ##################################
 
     # * 1. Invoke class service to update class participant
-    classID = dataObject['metadata']['classId']
-    userID = dataObject['metadata']['userID']
-    runID = dataObject['metadata']['runID']
+    classID = data['metadata']['classId']
+    userID = data['metadata']['userID']
+    runID = data['metadata']['runID']
 
-    classServiceURL = "http://localhost:5006/class/{classID}/{userID}/{runID}"
+    classServiceURL = "http://localhost:5006/class/{classID}/{runID}"
     classUpdateResult = invoke_http(classServiceURL, method = 'PUT')
     print("Class service update result code")
     print(classUpdateResult['code'])
 
     # * 2. Invoke user service to update user booking
-    
+    userServiceURL = "http://localhost:5001/user/addclass/{userID}"
+    userDataObject = {
+        "classID": classID,
+    }
+    userUpdateResult = invoke_http(userServiceURL, method = 'PUT', data = userDataObject)
+    print("User service update result code")
+    print(userUpdateResult['code'])
 
     # * 3. Sending msg thru AMQP to message service
     print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----')
     # notification is listening to email_service queue
     # binding key is email.info as well
+
+    dataObject = {
+        "userEmail" : data['metadata']['userEmail'],
+        "userName" : data['metadata']['userEmail'],
+        "orderID" : data['metadata']['orderID'],
+        "courseName" : data['metadata']['coursename'],
+        "coursePrice" : data['amount'],
+        "courseDescription" : data['metadata']['courseDescription'],
+        "classID" : classID,
+        "runID" : runID,
+        "userID" : userID
+    }
 
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
         body=dataObject, properties=pika.BasicProperties(delivery_mode=2))
@@ -107,15 +127,15 @@ def process_booking():
     # class_booking will need to have class id , run id , userid
     # response = requests.request("POST", update_booking_URL,
     # json={
-    #     "userEmail" : "celov54484@gpipes.com",
-    #     "userName" : "celo",
+    #     "userEmail" : "keithloh99@gmail.com",
+    #     "userName" : "Keith Loh",
     #     "orderID" : "4500",
-    #     "courseName" : "Data Structure Algorithms",
-    #     "coursePrice" : "$2000",
-    #     "courseDescription" : "A 3rd semester course at SMU, continues to develop students' understanding of object oriented programming, memory management",
-    #     "classId" : 3,
+    #     "courseName" : "Advanced-Information-Management-Classroom-Asynchronous",
+    #     "coursePrice" : "1420",
+    #     "courseDescription" : "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
+    #     "classId" : 642924c830f6877e418e1650,
     #     "runId": 1,
-    #     "userId": 10,
+    #     "userId": 112532673980137782859,
     #     }
     # )
 
@@ -123,5 +143,5 @@ def process_booking():
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " to coordinate payments with updating of class and user services")
-    app.run(host="0.0.0.0", port=5008, debug=True)
-print(f"Flask app is initialized on port 5008")
+    app.run(host="0.0.0.0", port=portNum, debug=True)
+print(f"Process Booking Service is initialized on port {portNum}")
