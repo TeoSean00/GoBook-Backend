@@ -140,6 +140,7 @@ def add_stored_animals():
 @app.route('/users/addreview/<userId>', methods=['PUT'])
 def add_review(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    data = json.loads(data)
     myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "reviews": data } }
@@ -151,11 +152,13 @@ def add_review(userId):
 @app.route('/users/addclass/<userId>', methods=['PUT'])
 def add_class(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    data = json.loads(data)
     myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
+    print("UPDATED USER IS ", updated_user)
     # ! doesn't show the updated user (pls fix)
     return json.loads(json_util.dumps(updated_user))
 
@@ -165,6 +168,7 @@ def add_class(userId):
 @app.route('/users/addpref/<userId>', methods=['PUT'])
 def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    data = json.loads(data)
     myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }

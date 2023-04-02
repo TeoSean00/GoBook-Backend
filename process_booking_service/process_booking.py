@@ -143,7 +143,7 @@ def process_booking():
     print(type(classUpdateResult))
 
     # * 2. Invoke user service to update user booking
-    userServiceURL = f"http://localhost:5001/user/addclass/{userID}"
+    userServiceURL = f"http://localhost:5001/users/addclass/{userID}"
     classDataObject = {
         "classId": classID
     }
@@ -175,7 +175,11 @@ def process_booking():
         "userID" : userID
     }
 
-    if (classUpdateResult['code'] in range(200,300) and userUpdateResult['code'] in range(200,300)):
+    print("classUpdateResult is", classUpdateResult)
+    print("userUpdateResut is",userUpdateResult)
+
+    # if (classUpdateResult['code'] in range(200,300) and userUpdateResult['code'] in range(200,300)):
+    if (classUpdateResult and userUpdateResult):
         dataObject = json.dumps(dataObject)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
             body=dataObject, properties=pika.BasicProperties(delivery_mode=2))

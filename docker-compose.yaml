@@ -6,10 +6,10 @@ services:
   # class_db: The Class database
   ##################################
 
-  # class_db:
-  #   image: mongo:latest
-  #   ports:
-  #     - "27017:27017"
+  class_db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
 
   ##################################
   # class_service: The Class microservice
@@ -49,11 +49,11 @@ services:
   # user_db: The User database
   ##################################
 
-  # user_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27018
-  #   ports:
-  #     - "27018-27018"
+  user_db:
+    image: mongo:latest
+    command: mongod --port 27018
+    ports:
+      - "27018:27018"
 
   ##################################
   # user_service: The User microservice
@@ -104,36 +104,36 @@ services:
   # payment_service: The payment microservice
   ##################################
 
-  payment_service:
-    platform: linux/amd64
-    build: ./payment_service/
-    container_name: payment_service
-    ports:
-      - 8080:8080
+  # payment_service:
+  #   platform: linux/amd64
+  #   build: ./payment_service/
+  #   container_name: payment_service
+  #   ports:
+  #     - 8080:8080
 
   ##################################
   # stripe-cli: Stripe CLI
   ##################################
 
-  stripe-cli:
-    image: stripe/stripe-cli
-    network_mode: host
-    container_name: stripe-cli
-    command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
-    env_file:
-      - stripe_cli.env
+  # stripe-cli:
+  #   image: stripe/stripe-cli
+  #   network_mode: host
+  #   container_name: stripe-cli
+  #   command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
+  #   env_file:
+  #     - stripe_cli.env
 
   ##################################
   # process_booking: The booking microservice
   ##################################
 
-  process_booking:
-    platform: linux/amd64
-    build: ./process_booking_service/
-    container_name: process_booking
-    restart: always
-    ports:
-      - 5008:5008
+  # process_booking:
+  #   platform: linux/amd64
+  #   build: ./process_booking_service/
+  #   container_name: process_booking
+  #   restart: always
+  #   ports:
+  #     - 5008:5008
 
   ##################################
   # rabbitmq: The rabbitmq broker
