@@ -11,24 +11,25 @@ from datetime import datetime
 import json
 
 monitorBindingKey='booking.*'
-
 app = Flask(__name__)
 
 # for docker
-client = MongoClient(host='class_db',
-                        port=27017
-                        )
+# client = MongoClient(host='class_db',
+#                         port=27017
+#                         )
 
-# client = MongoClient(host='localhost',
-#                      port=27017
-#                      )
-
+client = MongoClient(host='localhost',
+                     port=27017
+                     )
+portNum = 5006
 db = client['class_db']
 sample_data = [
     {
         "className": "CAD-Engineering-Design-5",
         "content": "On completion of the module, students should be able to create 2D drawings of engineering components using a CAD system as well as produce 3D solid models and also to design a mechanical system comprising various machine elements.\r\n\r\nCAD and Engineering Design (ME4011FP) is one of the modules leading to HIGHER NITEC IN TECHNOLOGY - MECHANICAL ENGINEERING.",
         "objective": "On completion of the module, students should be able to create 2D drawings of engineering components using a CAD system as well as produce 3D solid models and also to design a mechanical system comprising various machine elements.",
+         "participants": [
+        ],
         "categories": ["SSG-Non-WSQ"],
         "classSize": 25,
         # displayed as pills for each date
@@ -79,7 +80,6 @@ sample_data = [
         "participants": [
         ],
         "classSize":30,
-        "availableSlots":12,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -117,14 +117,13 @@ sample_data = [
         "certification":False,
         "category":["Data", "PDPA", "Cyber"]
     },
-    {
+    {   
         "className": "Advanced-Information-Management-Classroom-Asynchronous",
         "content": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "objective": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "participants": [
         ],
         "classSize":30,
-        "availableSlots":20,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -172,7 +171,6 @@ sample_data = [
         "participants": [
         ],
         "classSize":20,
-        "availableSlots":10,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -220,7 +218,6 @@ sample_data = [
         "participants": [
         ],
         "classSize":30,
-        "availableSlots":20,
         "courseRuns":{
             "1": {
                 "date": "2023-4-12",
@@ -266,18 +263,7 @@ sample_data = [
 
 CORS(app)
 
-
-@app.route('/', methods=('GET', 'POST'))
-def index():
-    return "Hello there, there are the classes"
-
-
-@app.route('/class')
-def get_all_classes():
-    classes = db.classes.find()
-    return json.loads(json_util.dumps(classes))
-
-
+# This API is to initialize the document in Mongo and fill with sample data
 @app.route('/class/createDB')
 def create_db():
     db_exists = client.list_database_names()
@@ -288,6 +274,17 @@ def create_db():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
+# Testing Route 
+@app.route('/', methods=('GET', 'POST'))
+def index():
+    return "Hello there, there are the classes"
+
+# This API will get all classes
+@app.route('/class')
+def get_all_classes():
+    classes = db.classes.find()
+    return json.loads(json_util.dumps(classes))
+
 
 # get class details from class Id
 @app.route('/class/<classId>')
@@ -297,59 +294,26 @@ def get_class(classId):
     currClass = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(currClass))
 
-# add participant
-# @app.route('/class/<classId>', methods=['PUT'])
-# def add_user_class(classId):
-#     # This will be a the json put in the request. Use postman to add the partcipant using PUT
-#     data = request.get_json()
-#     print(data)
-#     object = ObjectId(classId)
-#     myquery = {"_id": object}
-#     newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-#         "availableSlots": -1}}
-#     updated_class = db.classes.find_one_and_update(myquery, newvalues)
-#     return json.loads(json_util.dumps(updated_class))
+# add user to class participants
+@app.route('/class/<classId>/<runId>', methods=['PUT'])
+def add_user_class(classId, runId):
+    # This will be a the json put in the request. Use postman to add the partcipant using PUT
+    print("start class update")
+    data = request.get_json()
+    print(data)
+    object = ObjectId(classId)
+    courseRun = f"courseRuns.{runId}.participants"
+    courseRunSlots = f"courseRuns.{runId}.availableSlots"
+    myquery = {"_id": object}
+    # update overall class list and course run class list
+    newvalues = {"$push": {"participants": data['userId'],courseRun: data['userId']},  "$inc": {
+        courseRunSlots: -1}}
+    updated_class = db.classes.find_one_and_update(myquery, newvalues)
+    return json.loads(json_util.dumps(updated_class))
 
-
-
-
-
-
-
-
-# AMQP receiver portion
-
-# def receiveBookingInfo():
-#     amqp_setup.check_setup()
-        
-#     queue_name = 'class_service'
-    
-#     # set up a consumer and start to wait for coming messages
-#     amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
-#     amqp_setup.channel.start_consuming() # an implicit loop waiting to receive messages; 
-#     #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
-
-# def callback(channel, method, properties, body): # required signature for the callback; no return
-#     print("\n Received booking info from " + __file__)
-#     updateClassDetails(json.loads(body))
-#     print() # print a new line feed
-
-# def updateClassDetails(booking_info):
-#     print("Processing and updating backend")
-#     # obtain class id from booking_info JSON'
-#     # check pyMongo how to update
-#     data = booking_info
-#     print(booking_info)
-#     # retrieve userid instead
-#     # object = ObjectId(data['classId'])
-#     # myquery = {"_id": object}
-#     # newvalues = {"$push": {"participants": data['userId']},  "$inc": {
-#     #     "availableSlots": -1}}
-#     # updated_class = db.classes.find_one_and_update(myquery, newvalues)
-#     # return json.loads(json_util.dumps(updated_class))
-#     return
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +
           ": manage class Schedule ...")
-    app.run(host='0.0.0.0', port=5006, debug=True)
+    app.run(host='0.0.0.0', port=portNum, debug=True)
+print(f"Class Service app is initialized on port {portNum}")
