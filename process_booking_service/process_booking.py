@@ -20,9 +20,6 @@ app = Flask(__name__)
 CORS(app)
 portNum = 5008
 
-update_booking_URL = "http://localhost:5007/update_booking"
-
-
 
 # Setting up kafka producer for recommendation
 # p = KafkaProducer(bootstrap_servers=['kafka:9092'],
@@ -37,7 +34,8 @@ def create_payment():
     print('This is file recevied by create_payment', file=sys.stderr)
     print(data, file=sys.stderr)
     # This is for docker
-    url = 'http://host.docker.internal:8080/create-payment-intent'
+    url = environ.get('payment_service_URL') or 'http://localhost:8080/create-payment-intent'
+    # url = 'http://host.docker.internal:8080/create-payment-intent'
     # url = 'http://localhost:8080/create-payment-intent'
     headers = {'Content-Type': 'application/json'}
 
@@ -125,8 +123,9 @@ def process_booking():
     classID = data['metadata']['classId']
     userID = data['metadata']['userID']
     runID = data['metadata']['runID']
-
-    classServiceURL = f"http://localhost:5006/class/{classID}/{runID}"
+    class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
+    class_service_URL = class_service_base_URL + f"/class/{classID}/{runID}"
+    # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
     userDataObject = {
         "userId": userID
     }
@@ -134,16 +133,17 @@ def process_booking():
     userDataObject = json.dumps(userDataObject)
 
     # userDataObject = jsonify(userDataObject)
-    classUpdateResult = invoke_http(classServiceURL, method = 'PUT', json = userDataObject)
+    classUpdateResult = invoke_http(class_service_URL, method = 'PUT', json = userDataObject)
 
     print("Class service update result code")
-    print(f"Class service URL is {classServiceURL}")
+    print(f"Class service URL is {class_service_URL}")
     print(userDataObject)
     print(classUpdateResult)
     print(type(classUpdateResult))
 
     # * 2. Invoke user service to update user booking
-    userServiceURL = f"http://localhost:5001/users/addclass/{userID}"
+    user_service_base_URL = environ.get('user_service_URL') or "http://localhost:5001"
+    user_service_URL = user_service_base_URL + f"/users/addclass/{userID}"
     classDataObject = {
         "classId": classID
     }
@@ -151,9 +151,9 @@ def process_booking():
     classDataObject = json.dumps(classDataObject)
     # classDataObject = jsonify(classDataObject)
 
-    userUpdateResult = invoke_http(userServiceURL, method = 'PUT', json = classDataObject)
+    userUpdateResult = invoke_http(user_service_URL, method = 'PUT', json = classDataObject)
     print("User service update result code")
-    print(f"User service URL is {userServiceURL}")
+    print(f"User service URL is {user_service_URL}")
     print(classDataObject)
     print(userUpdateResult)
     print(type(userUpdateResult))

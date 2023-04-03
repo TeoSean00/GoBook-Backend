@@ -13,10 +13,10 @@ import json
 monitorBindingKey='booking.*'
 app = Flask(__name__)
 
-# for docker
-client = MongoClient(host='class_db',
-                        port=27017
-                        )
+# for docker | for local
+client = environ.get('class_db') or MongoClient(host='localhost',
+                    port=27017
+                    )
 
 # client = MongoClient(host='localhost',
 #                      port=27017
