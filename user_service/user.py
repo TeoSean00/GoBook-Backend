@@ -12,12 +12,12 @@ import json
 app = Flask(__name__)
 portNum = 5001
 # For docker
-# client = MongoClient(host='user_db',
-#                         port=27018
-#                         )
-client = MongoClient(host='localhost',
+client = MongoClient(host='user_db',
                         port=27018
                         )
+# client = MongoClient(host='localhost',
+#                         port=27018
+#                         )
 
 db = client['user_db']
 sample_data = [

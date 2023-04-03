@@ -14,13 +14,13 @@ monitorBindingKey='booking.*'
 app = Flask(__name__)
 
 # for docker
-# client = MongoClient(host='class_db',
-#                         port=27017
-#                         )
+client = MongoClient(host='class_db',
+                        port=27017
+                        )
 
-client = MongoClient(host='localhost',
-                     port=27017
-                     )
+# client = MongoClient(host='localhost',
+#                      port=27017
+#                      )
 portNum = 5006
 db = client['class_db']
 sample_data = [
