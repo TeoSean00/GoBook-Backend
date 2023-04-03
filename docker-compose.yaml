@@ -23,9 +23,9 @@ services:
     ports:
       - "5006:5006"
     environment:
-      class_db:  MongoClient(host='class_db',
-                        port=27017
-                        )
+      class_db: MongoClient(host='class_db',
+        port=27017
+        )
 
   #################################
   #? review_db: The Class database
@@ -49,9 +49,9 @@ services:
     ports:
       - "5004:5004"
     environment:
-      review_db:  MongoClient(host='review_db',
-                        port=27021
-                        )
+      review_db: MongoClient(host='review_db',
+        port=27021
+        )
 
   ##################################
   #? user_db: The User database
@@ -76,8 +76,8 @@ services:
       - user_db
     environment:
       user_db: MongoClient(host='user_db',
-                        port=27018
-                        )
+        port=27018
+        )
 
   ##################################
   #? get_class_complex_service: The user class information microservice
@@ -118,7 +118,7 @@ services:
       PORT: "5010"
       rabbitMQ: "amqp://rabbitmq:5672"
       queueName: "email_service"
-      dbUri:  "mongodb://message_db:27019/messaging"
+      dbUri: "mongodb://message_db:27019/messaging"
 
   ##################################
   #? payment_service: The payment microservice
@@ -158,7 +158,7 @@ services:
       class_service_URL: http://class_service:5006
       user_service_URL: http://user_service:5001
       payment_service_URL: http://host.docker.internal:8080/create-payment-intent
-      esd-rabbit: 'esd-rabbit'
+      esd-rabbit: "esd-rabbit"
 
   ##################################
   #? rabbitmq: The rabbitmq broker
@@ -179,45 +179,45 @@ services:
   #? kafka: The kafka broker w zookeeper
   ##################################
 
-  # zookeeper:
-  #   image: "bitnami/zookeeper:latest"
-  #   restart: always
-  #   ports:
-  #     - "2181:2181"
-  #   environment:
-  #     - ALLOW_ANONYMOUS_LOGIN=yes
-  # kafka:
-  #   image: "bitnami/kafka:latest"
-  #   restart: always
-  #   ports:
-  #     - "9092:9092"
-  #     - "29092:29092"
-  #   environment:
-  #     - KAFKA_BROKER_ID=1
-  #     - ALLOW_PLAINTEXT_LISTENER=yes
-  #     - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-  #     - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
-  #     - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
-  #     - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-  #     - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-  #   depends_on:
-  #     - zookeeper
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: "bitnami/kafka:latest"
+    restart: always
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
 
-  # recommendation_service:
-  #   build: ./recommendation_service/
-  #   container_name: recommendation_service
-  #   restart: always
-  #   depends_on:
-  #     - kafka
+  recommendation_service:
+    build: ./recommendation_service/
+    container_name: recommendation_service
+    restart: always
+    depends_on:
+      - kafka
 
-  # consumer_service:
-  #   build: ./consumer_service/
-  #   container_name: consumer_service
-  #   restart: always
-  #   depends_on:
-  #     - kafka
-  #   ports:
-  #     - "5010:5010"
+  consumer_service:
+    build: ./consumer_service/
+    container_name: consumer_service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "5011:5011"
 # networks:
 #   bookingApp:
 #     driver: bridge
