@@ -73,7 +73,7 @@ def main():
         print('Received message: {}',msg.value)
         history = msg
 
-        class_data = requests.request("GET","http://class_service:5006/class")
+        class_data = requests.get("http://class_service:5006/class")
         for item in class_data:
             print("ITEM IS", item)
         print("History is",history.value)
