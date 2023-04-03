@@ -23,9 +23,8 @@ services:
     ports:
       - "5006:5006"
     environment:
-      class_db: MongoClient(host='class_db',
-        port=27017
-        )
+      DB_ENVIRONMENT: class_db
+      port: "5006"
 
   #################################
   #? review_db: The Class database
@@ -49,9 +48,7 @@ services:
     ports:
       - "5004:5004"
     environment:
-      review_db: MongoClient(host='review_db',
-        port=27021
-        )
+      DB_ENVIRONMENT: review_db
 
   ##################################
   #? user_db: The User database
@@ -75,9 +72,7 @@ services:
     depends_on:
       - user_db
     environment:
-      user_db: MongoClient(host='user_db',
-        port=27018
-        )
+      DB_ENVIRONMENT: user_db
 
   ##################################
   #? get_class_complex_service: The user class information microservice
@@ -158,7 +153,8 @@ services:
       class_service_URL: http://class_service:5006
       user_service_URL: http://user_service:5001
       payment_service_URL: http://host.docker.internal:8080/create-payment-intent
-      esd-rabbit: "esd-rabbit"
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
 
   ##################################
   #? rabbitmq: The rabbitmq broker
@@ -166,7 +162,7 @@ services:
 
   rabbitmq:
     image: rabbitmq
-    hostname: esd-rabbit
+    hostname: rabbitmq
     container_name: rabbitmq
     restart: always
     ports:

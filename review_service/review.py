@@ -12,9 +12,11 @@ import json
 
 app = Flask(__name__)
 
-client = MongoClient(host='review_db',
+# Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
+DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
+client = MongoClient(host=DB_ENVIRONMENT,
                         port=27021
-                        )
+                    )
 
 db = client['review_db']
 sample_data = []
