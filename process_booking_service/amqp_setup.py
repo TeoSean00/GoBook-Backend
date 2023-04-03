@@ -1,11 +1,13 @@
 import pika
+import os 
+from os import environ
 
 # These module-level variables are initialized whenever a new instance of python interpreter imports the module;
 # In each instance of python interpreter (i.e., a program run), the same module is only imported once (guaranteed by the interpreter).
 # ! For Docker 
-# hostname = "esd-rabbit" # default hostname
+hostname = "esd-rabbit" # default hostname
 # ! For Local Host
-hostname = 'localhost'
+# hostname = environ.get('esd-rabbit') or 'localhost'
 port = 5672 # default port
 # ? connect to the broker and set up a communication channel in the connection
 connection = pika.BlockingConnection(
