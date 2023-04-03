@@ -3,6 +3,28 @@ volumes:
 
 services:
   ##################################
+  #? kong: API Gateway
+  ##################################
+  # kong:
+  #   image: kong:2.1.4
+  #   ports:
+  #     - "8000:8000"
+  #     - "8443:8443"
+  #     - "8001:8001"
+  #   volumes:
+  #     - "./Kong:/usr/local/kong/declarative"
+  #   environment:
+  #     KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+  #     KONG_DATABASE: "off"
+
+  # kong:
+  #   build: .
+  #   container_name: kong
+  #   restart: always
+  #   environment:
+  #     KONG_DATABASE: "off"
+  #     KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+  ##################################
   #? class_db: The Class database
   ##################################
 

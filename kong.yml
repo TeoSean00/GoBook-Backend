@@ -1,13 +1,58 @@
-_format_version: "3.0"
-_transform: true
+_format_version: “1.1”
 
 services:
-- name: my-service
-  url: https://example.com
-  plugins:
-  - name: key-auth
-  routes:
-  - name: my-route
-    paths:
-    - /
+  - name: user_service
+    url: http://user_service:5001
+    routes:
+      - name: user_service_route
+        paths:
+          - /users
 
+  - name: class_service
+    url: http://class_service:5006
+    routes:
+      - name: class_service_route
+        paths:
+          - /classes
+
+  - name: review_service
+    url: http://review_service:5004
+    routes:
+      - name: review_service_route
+        paths:
+          - /reviews
+
+  - name: get_class_complex_service
+    url: http://get_class_complex_service:5005
+    routes:
+      - name: get_class_complex_service_route
+        paths:
+          - /get_class
+
+  - name: message_service
+    url: http://message_service:5010
+    routes:
+      - name: message_service_route
+        paths:
+          - /message
+
+  - name: payment_service
+    url: http://payment_service:8080
+    routes:
+      - name: payment_service_route
+        paths:
+          - /payment
+
+  - name: process_booking
+    url: http://process_booking:5008
+    routes:
+      - name: process_booking_route
+        paths:
+          - /process_booking
+
+  - name: consumer_service
+    url: http://consumer_service:5011
+    routes:
+      - name: consumer_service
+        paths:
+          - /consumer_service
