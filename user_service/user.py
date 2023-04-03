@@ -126,7 +126,7 @@ def add_user():
         db.users.insert_one(addObject)
         return addObject
 
-# Update a user using his userid (Not sure if we should update by username instead ah)
+# Update a user using his userid
 # Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
 # ? subjected to changes - keith
 # add review
