@@ -21,23 +21,23 @@ print("Kafka Producer has been initiated...")
 
 f = [
     {
-        "className": "CAD-Engineering-Design-5",
+        "coursename": "CAD-Engineering-Design-5",
         "userId": "user1"
     },
     {
-        "className": "Advanced-Certificate-Data-Protection-Operational-Excellence-Module-2-Information-Cyber-Security-Managers-EXIN-Certification-Synchronous-Elearning",
+        "coursename": "Advanced-Certificate-Data-Protection-Operational-Excellence-Module-2-Information-Cyber-Security-Managers-EXIN-Certification-Synchronous-Elearning",
         "userId": "user2"
     },
     {
-        "className": "Advanced-Information-Management-Classroom-Asynchronous",
+        "coursename": "Advanced-Information-Management-Classroom-Asynchronous",
         "userId": "user3"
     },
     {
-        "className": "Drive-Highly-Engaging-Online-Learning-Experience-Synchronous-eLearning",
+        "coursename": "Drive-Highly-Engaging-Online-Learning-Experience-Synchronous-eLearning",
         "userId": "user2"
     },
     {
-        "className": "Robotics-Process-Automation-Begins-Synchronous-elearning-2",
+        "coursename": "Robotics-Process-Automation-Begins-Synchronous-elearning-2",
         "userId": "user3"
     }
 ]

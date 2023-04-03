@@ -231,28 +231,19 @@ class ContentBasedFilter:
     ]
 
     classes_df = pd.DataFrame(classes_data)
-
     print("------ initialised dataframe ------")
-
     # Combine the 'title' and 'description' columns into a single column
     classes_df['combined'] = classes_df['className'] + ' ' + \
         classes_df['content'] + ' ' + classes_df['objective']
-
     # Tokenize the text and remove stopwords
     stop_words = set(stopwords.words('english'))
-    
-
     classes_df['combined'] = classes_df['combined'].apply(lambda x: ' '.join([word.lower() for word in word_tokenize(x) if word.lower() not in set(stopwords.words('english'))]))
-
     # Compute TF-IDF vectors for each title
     tfidf = TfidfVectorizer()
     tfidf_matrix = tfidf.fit_transform(classes_df['combined'])
-
     print("------ generated cosine_sim ------")
-
     # Compute cosine similarity between titles
     cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
-
     # Define a function to get recommendations for a given title
 
     def get_recommendations(booking, cosine_sim=cosine_sim, df=classes_df):
