@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS
 from os import environ
 from pymongo import MongoClient
+from pymongo import ReturnDocument
 from bson import json_util
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -11,13 +12,12 @@ import json
 
 app = Flask(__name__)
 portNum = 5001
-# For docker
-client = MongoClient(host='user_db',
+# Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
+DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
+client = MongoClient(host=DB_ENVIRONMENT,
                         port=27018
                     )
-# client = MongoClient(host='localhost',
-#                         port=27018
-#                         )
+
 
 db = client['user_db']
 sample_data = [
@@ -164,6 +164,10 @@ def add_preferences(userId):
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }
     # query = db.users.find_one({"_id": object })
+    try :
+        updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
+    except :
+        return "error"
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
 
