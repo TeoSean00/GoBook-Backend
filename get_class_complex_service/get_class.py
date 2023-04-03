@@ -52,6 +52,7 @@ def get_class(userid):
 #     userreq = requests.request("PUT", "http://localhost:5001/users/addclass/" + userid, json = class_data)
 #     return data
 
-# if __name__ == '__main__':
-#     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
-#     app.run(host='0.0.0.0', port=5005, debug=True)
+
+if __name__ == '__main__':
+    print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
+    app.run(host='0.0.0.0', port=5005, debug=True)
