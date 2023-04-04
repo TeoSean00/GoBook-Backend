@@ -18,6 +18,8 @@ client = MongoClient(host=DB_ENVIRONMENT,
                         port=27018
                     )
 
+CORS(app) 
+
 
 db = client['user_db']
 sample_data = [
@@ -70,9 +72,17 @@ sample_data = [
     "attended_classes": [],
     "reviews": []
     },
-]
+] 
 
-CORS(app)  
+def main():
+    print("Loading in user data...")
+    db_exists = client.list_database_names()
+    if 'user_db' in db_exists:
+        client.drop_database('user_db')
+    db = client['user_db']
+    for data in sample_data:
+        db["users"].insert_one(data)
+    return "Sample data inserted successfully" + str(sample_data)
 
 # <-------------------------------------------Routes for userDB------------------------------------------->
 @app.route('/', methods=('GET', 'POST'))
@@ -174,5 +184,6 @@ def add_preferences(userId):
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
+    main()
     app.run(host='0.0.0.0', port=portNum, debug=True)
 print(f"User Service is initialized on port {portNum}")

@@ -8,7 +8,7 @@ from os import environ
 # from bson import json_util
 # from bson.objectid import ObjectId
 from datetime import datetime
-# from kafka import KafkaProducer
+from kafka import KafkaProducer
 import json
 import pika
 import requests
@@ -22,9 +22,9 @@ portNum = 5008
 
 
 # Setting up kafka producer for recommendation
-# p = KafkaProducer(bootstrap_servers=['kafka:9092'],
-#                          value_serializer=lambda x: json.dumps(x).encode('utf-8'))
-# print("Kafka Producer has been initiated...")
+p = KafkaProducer(bootstrap_servers=['kafka:9092'],
+                         value_serializer=lambda x: json.dumps(x).encode('utf-8'))
+print("Kafka Producer has been initiated...")
 
 # ! UI will call createpayment -> payment service creating payment intent
 @app.route('/booking/createPayment', methods=['POST'])
@@ -115,7 +115,7 @@ def process_booking():
     # ? 3. Invoke notification service to send email of ticket
     ##################################
     # Sending of booking data to kafka log
-    # p.send('booking', data)
+    p.send('booking', data)
     ##################################
 
     # * 1. Invoke class service to update class participant

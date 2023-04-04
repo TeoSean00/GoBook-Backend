@@ -2,6 +2,7 @@ package booking_system.payment_service;
 
 public class ClassBookingInfo {
     private String userEmail;
+    private String userName;
     private Integer course;
     private String orderID;
     private String courseName;
@@ -10,6 +11,14 @@ public class ClassBookingInfo {
     private Integer classID;
     private Integer runID;
     private Integer userID;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getUserEmail() {
         return userEmail;
