@@ -5,65 +5,21 @@ services:
   ##################################
   #? kong: API Gateway
   ##################################
-  # kong:
-  #   image: kong:2.1.4
-  #   ports:
-  #     - "8000:8000"
-  #     - "8443:8443"
-  #     - "8001:8001"
-  #   volumes:
-  #     - "./Kong:/usr/local/kong/declarative"
-  #   environment:
-  #     KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
-  #     KONG_DATABASE: "off"
 
   # kong:
-  #   build: .
+  #   build:
+  #     context: ./api_gateway
+  #     dockerfile: Dockerfile
+  #   image: kong:latest
   #   container_name: kong
   #   restart: always
   #   environment:
   #     KONG_DATABASE: "off"
-  #     KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
-  kong:
-    build:
-      context: ./api_gateway
-      dockerfile: Dockerfile
-    image: kong:latest
-    container_name: kong
-    restart: always
-    environment:
-      KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: kong.yml
-    ports:
-      - "8000:8000"
-      - "8443:8443"
-      - "8001:8001"
-
-  # kong:
-  #   container_name: kong
-  #   build:
-  #     context: ./api_gateway
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: [“CMD”, “curl”, “-f”, “http://kong:8000”]
-  #     interval: 5s
-  #     timeout: 2s
-  #     retries: 15
-  #   environment:
-  #     KONG_DATABASE: "off"
   #     KONG_DECLARATIVE_CONFIG: kong.yml
-  #     KONG_PROXY_ACCESS_LOG: /dev/stdout
-  #     KONG_ADMIN_ACCESS_LOG: /dev/stdout
-  #     KONG_PROXY_ERROR_LOG: /dev/stderr
-  #     KONG_ADMIN_ERROR_LOG: /dev/stderr
-  #     KONG_ADMIN_LISTEN: 0.0.0.0:8001
-  #     KONG_ADMIN_GUI_URL: http://localhost:8002
-
   #   ports:
-  #     - "8444:"
-  #     - "80:8000"
-  #     - "443:8443"
+  #     - "8000:8000"
+  #     - "8443:8443"
+  #     - "8001:8001"
 
   ##################################
   #? class_db: The Class database
