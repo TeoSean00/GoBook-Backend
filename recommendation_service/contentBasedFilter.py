@@ -69,7 +69,7 @@ class ContentBasedFilter:
             print("class data received is! HERE!",class_data)
             recommendation_output.append(class_data.json())
 
-
+        print("recommendation output is! HERE!",recommendation_output)
         # Return the top 3 most similar titles
-        return json.dumps(recommendation_output)
+        return recommendation_output
         # return df.iloc[titles_indices]['className'].tolist()
