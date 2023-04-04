@@ -74,7 +74,7 @@ def main():
         history = msg
 
         class_data = requests.get("http://class_service:5006/class")
-        for item in class_data:
+        for item in class_data.json():
             print("ITEM IS", item)
         print("History is",history.value)
         latestBooking = history.value
