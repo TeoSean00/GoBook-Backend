@@ -37,4 +37,4 @@ if __name__ == '__main__':
           ": receiving Kafka recommendations ...")
     kafka_thread = threading.Thread(target=kafka_listener)
     kafka_thread.start()
-    socketio.run(app, host='0.0.0.0', port=5010, **{'allow_unsafe_werkzeug': True})
+    socketio.run(app, host='0.0.0.0', port=5011, **{'allow_unsafe_werkzeug': True})

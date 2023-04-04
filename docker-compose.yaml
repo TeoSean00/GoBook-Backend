@@ -3,6 +3,25 @@ volumes:
 
 services:
   ##################################
+  #? kong: API Gateway
+  ##################################
+
+  # kong:
+  #   build:
+  #     context: ./api_gateway
+  #     dockerfile: Dockerfile
+  #   image: kong:latest
+  #   container_name: kong
+  #   restart: always
+  #   environment:
+  #     KONG_DATABASE: "off"
+  #     KONG_DECLARATIVE_CONFIG: kong.yml
+  #   ports:
+  #     - "8000:8000"
+  #     - "8443:8443"
+  #     - "8001:8001"
+
+  ##################################
   #? class_db: The Class database
   ##################################
 
@@ -175,45 +194,45 @@ services:
   #? kafka: The kafka broker w zookeeper
   ##################################
 
-  # zookeeper:
-  #   image: "bitnami/zookeeper:latest"
-  #   restart: always
-  #   ports:
-  #     - "2181:2181"
-  #   environment:
-  #     - ALLOW_ANONYMOUS_LOGIN=yes
-  # kafka:
-  #   image: "bitnami/kafka:latest"
-  #   restart: always
-  #   ports:
-  #     - "9092:9092"
-  #     - "29092:29092"
-  #   environment:
-  #     - KAFKA_BROKER_ID=1
-  #     - ALLOW_PLAINTEXT_LISTENER=yes
-  #     - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-  #     - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
-  #     - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
-  #     - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-  #     - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-  #   depends_on:
-  #     - zookeeper
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: "bitnami/kafka:latest"
+    restart: always
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
 
-  # recommendation_service:
-  #   build: ./recommendation_service/
-  #   container_name: recommendation_service
-  #   restart: always
-  #   depends_on:
-  #     - kafka
+  recommendation_service:
+    build: ./recommendation_service/
+    container_name: recommendation_service
+    restart: always
+    depends_on:
+      - kafka
 
-  # consumer_service:
-  #   build: ./consumer_service/
-  #   container_name: consumer_service
-  #   restart: always
-  #   depends_on:
-  #     - kafka
-  #   ports:
-  #     - "5011:5011"
+  consumer_service:
+    build: ./consumer_service/
+    container_name: consumer_service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "5011:5011"
 # networks:
 #   bookingApp:
 #     driver: bridge

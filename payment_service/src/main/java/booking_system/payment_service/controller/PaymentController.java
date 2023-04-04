@@ -24,12 +24,21 @@ public class PaymentController {
         private String courseName;
         private Integer coursePrice;
         private String userEmail;
+        private String userName;
         private Integer course;
         private String orderID;
         private String courseDescription;
         private Integer classID;
         private Integer runID;
         private Integer userID;
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
 
         public String getUserEmail() {
             return userEmail;
@@ -127,6 +136,7 @@ public class PaymentController {
                 .putMetadata("orderID", createPayment.getOrderID())
                 .putMetadata("runID", Integer.toString(createPayment.getRunID()))
                 .putMetadata("userID", Integer.toString(createPayment.getUserID()))
+                .putMetadata("userName", createPayment.getUserName())
 
                 .setAutomaticPaymentMethods(
                         PaymentIntentCreateParams.AutomaticPaymentMethods
