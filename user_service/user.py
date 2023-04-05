@@ -136,7 +136,7 @@ def add_user():
             "email": data["email"],
             "preferences": [],
             "attended_classes": [],
-            "reviews": []
+            "recommended_classes": [],
         }
         db.users.insert_one(addObject)
         return addObject
