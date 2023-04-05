@@ -44,3 +44,6 @@ packages/**/lib
 **/build/*.tgz
 *.sqlite
 docs/.vitepress/cache
+
+#env files
+env
