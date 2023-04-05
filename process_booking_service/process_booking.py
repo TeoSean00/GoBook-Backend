@@ -85,7 +85,7 @@ def process_booking():
     "metadata": {
         "courseDescription": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "userEmail": "celov54484@gpipes.com",
-        "coursename": "Advanced-Information-Management-Classroom-Asynchronous",
+        "className": "Advanced-Information-Management-Classroom-Asynchronous",
         "runID": "1",
         "orderID": "4500",
         "userID": "112532673980137782859",
@@ -118,50 +118,63 @@ def process_booking():
     p.send('booking', data)
     ##################################
 
-    # * 1. Invoke class service to update class participant
-    print("Starting slicing of json data")
+    # * 1. Invoke get_class service to update class participant and update user attended classes
+    get_classes_base_URL = environ.get('get_classes_base_URL') or "http://localhost:5005"
+    get_classes_URL = get_classes_base_URL + f"/update_class_details"
+    get_classes_updateResult = invoke_http(get_classes_URL, method = 'PUT', json = data)
+
+
+    ##################################
+    # Moving this bit to get_classes
+    ##################################
+
+    # # * 1. Invoke class service to update class participant
+    # print("Starting slicing of json data")
+    # classID = data['metadata']['classId']
+    # userID = data['metadata']['userID']
+    # runID = data['metadata']['runID']
+    # class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
+    # class_service_URL = class_service_base_URL + f"/class/{classID}/{runID}"
+    # # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
+    # userDataObject = {
+    #     "userId": userID
+    # }
+    # #? JSONIFY the data object
+    # userDataObject = json.dumps(userDataObject)
+
+    # # userDataObject = jsonify(userDataObject)
+    # classUpdateResult = invoke_http(class_service_URL, method = 'PUT', json = userDataObject)
+
+    # print("Class service update result code")
+    # print(f"Class service URL is {class_service_URL}")
+    # print(userDataObject)
+    # print(classUpdateResult)
+    # print(type(classUpdateResult))
+
+    # # * 2. Invoke user service to update user booking
+    # user_service_base_URL = environ.get('user_service_URL') or "http://localhost:5001"
+    # user_service_URL = user_service_base_URL + f"/users/addclass/{userID}"
+    # classDataObject = {
+    #     "classId": classID
+    # }
+    # #? JSONIFY the data object
+    # classDataObject = json.dumps(classDataObject)
+    # # classDataObject = jsonify(classDataObject)
+
+    # userUpdateResult = invoke_http(user_service_URL, method = 'PUT', json = classDataObject)
+    # print("User service update result code")
+    # print(f"User service URL is {user_service_URL}")
+    # print(classDataObject)
+    # print(userUpdateResult)
+    # print(type(userUpdateResult))
+
+    # * 3. Sending msg thru AMQP to message service
+    print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----',file=sys.stderr)
+    # notification is listening to email_service queue
+    # binding key is email.info as well
     classID = data['metadata']['classId']
     userID = data['metadata']['userID']
     runID = data['metadata']['runID']
-    class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
-    class_service_URL = class_service_base_URL + f"/class/{classID}/{runID}"
-    # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
-    userDataObject = {
-        "userId": userID
-    }
-    #? JSONIFY the data object
-    userDataObject = json.dumps(userDataObject)
-
-    # userDataObject = jsonify(userDataObject)
-    classUpdateResult = invoke_http(class_service_URL, method = 'PUT', json = userDataObject)
-
-    print("Class service update result code")
-    print(f"Class service URL is {class_service_URL}")
-    print(userDataObject)
-    print(classUpdateResult)
-    print(type(classUpdateResult))
-
-    # * 2. Invoke user service to update user booking
-    user_service_base_URL = environ.get('user_service_URL') or "http://localhost:5001"
-    user_service_URL = user_service_base_URL + f"/users/addclass/{userID}"
-    classDataObject = {
-        "classId": classID
-    }
-    #? JSONIFY the data object
-    classDataObject = json.dumps(classDataObject)
-    # classDataObject = jsonify(classDataObject)
-
-    userUpdateResult = invoke_http(user_service_URL, method = 'PUT', json = classDataObject)
-    print("User service update result code")
-    print(f"User service URL is {user_service_URL}")
-    print(classDataObject)
-    print(userUpdateResult)
-    print(type(userUpdateResult))
-
-    # * 3. Sending msg thru AMQP to message service
-    print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----')
-    # notification is listening to email_service queue
-    # binding key is email.info as well
 
     dataObject = {
         "userEmail" : data['metadata']['userEmail'],
@@ -175,26 +188,25 @@ def process_booking():
         "userID" : userID
     }
 
-    print("classUpdateResult is", classUpdateResult)
-    print("userUpdateResut is",userUpdateResult)
+    print("get_classes_updateResult is", get_classes_updateResult,file=sys.stderr)
 
     # if (classUpdateResult['code'] in range(200,300) and userUpdateResult['code'] in range(200,300)):
-    if (classUpdateResult and userUpdateResult):
+    if (get_classes_updateResult['code'] in range(200,300)):
         dataObject = json.dumps(dataObject)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
             body=dataObject, properties=pika.BasicProperties(delivery_mode=2))
 
         return {
             "code": 200,
-            "userUpdate": userUpdateResult,
-            "classUpdate": classUpdateResult,
+            "userUpdate": get_classes_updateResult["userUpdate"],
+            "classUpdate": get_classes_updateResult["classUpdate"],
             "email": "sent to queue successfullyx"
         }
     else:
         return {
-            "code": 200,
-            "userUpdate": userUpdateResult,
-            "classUpdate": classUpdateResult,
+            "code": 500,
+            "userUpdate": get_classes_updateResult["userUpdate"],
+            "classUpdate": get_classes_updateResult["classUpdate"],
             "email": "did not send to queue"
         }
 

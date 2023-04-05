@@ -45,4 +45,5 @@ packages/**/lib
 *.sqlite
 docs/.vitepress/cache
 
+#env files
 env
