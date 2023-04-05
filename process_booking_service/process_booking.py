@@ -85,7 +85,7 @@ def process_booking():
     "metadata": {
         "courseDescription": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "userEmail": "celov54484@gpipes.com",
-        "coursename": "Advanced-Information-Management-Classroom-Asynchronous",
+        "className": "Advanced-Information-Management-Classroom-Asynchronous",
         "runID": "1",
         "orderID": "4500",
         "userID": "112532673980137782859",
