@@ -71,16 +71,20 @@ def main():
     for msg in c:
         print('Received message: {}',msg.value)
         history = msg
-        print("History is",history.value)
-        latestBooking = history.value
-        recommendations = ContentBasedFilter.get_recommendations(latestBooking["className"].strip())
+        print("History is", history.value["metadata"])
+
+        latestBooking = history.value['metadata']
+        print("latestBooking is",latestBooking)
+        recommendations = ContentBasedFilter.get_recommendations(latestBooking["coursename"].strip())
         recommendObj = {
-            "userId" : latestBooking["userId"],
+            "userId" : latestBooking["userID"],
             "recommendation" : recommendations
         }
         print("------- recommendation received is --------",file=sys.stderr)
         print(recommendObj,file=sys.stderr)
         producer.send('recommendations', recommendObj)
+        print("Recommendations sent ---------------------------------")
+        # producer.flush()
 
 
 if __name__ == '__main__':
