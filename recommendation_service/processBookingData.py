@@ -68,17 +68,12 @@ c = KafkaConsumer('booking',bootstrap_servers= ['kafka:9092'],group_id='my_group
     # Define a function to get recommendations for a given title
 
 def main():
-    url = ""
     for msg in c:
         print('Received message: {}',msg.value)
         history = msg
-
-        class_data = requests.get("http://class_service:5006/class")
-        for item in class_data.json():
-            print("ITEM IS", item)
         print("History is",history.value)
         latestBooking = history.value
-        recommendations = ContentBasedFilter.get_recommendations(latestBooking["coursename"].strip())
+        recommendations = ContentBasedFilter.get_recommendations(latestBooking["className"].strip())
         recommendObj = {
             "userId" : latestBooking["userId"],
             "recommendation" : recommendations
