@@ -30,7 +30,7 @@ public class PaymentController {
         private String courseDescription;
         private Integer classID;
         private Integer runID;
-        private Integer userID;
+        private String userID;
 
         public String getUserName() {
             return userName;
@@ -88,11 +88,11 @@ public class PaymentController {
             this.runID = runID;
         }
 
-        public Integer getUserID() {
+        public String getUserID() {
             return userID;
         }
 
-        public void setUserID(Integer userID) {
+        public void setUserID(String userID) {
             this.userID = userID;
         }
 
@@ -135,7 +135,7 @@ public class PaymentController {
                 .putMetadata("userEmail", createPayment.getUserEmail())
                 .putMetadata("orderID", createPayment.getOrderID())
                 .putMetadata("runID", Integer.toString(createPayment.getRunID()))
-                .putMetadata("userID", Integer.toString(createPayment.getUserID()))
+                .putMetadata("userID", createPayment.getUserID())
                 .putMetadata("userName", createPayment.getUserName())
 
                 .setAutomaticPaymentMethods(
