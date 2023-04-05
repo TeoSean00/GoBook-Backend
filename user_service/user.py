@@ -174,31 +174,31 @@ def add_class(userId):
 @app.route('/users/addpref/<userId>', methods=['PUT'])
 def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    data = json.loads(data)
+    # data = json.loads(data)
     myquery = { "userId": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }
     # query = db.users.find_one({"_id": object })
-    try :
-        updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
-    except :
-        return "error"
+    # try :
+    #     updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
+    # except :
+    #     return "error"
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
 
 # Add recommended classes
 @app.route('/users/addrecc/<userId>', methods=['PUT'])
-def add_preferences(userId):
+def add_recommendations(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    data = json.loads(data)
-    myquery = { "userId": userId }
+    # data = json.loads(data)
+    myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$set": { "recommended_classes": data['recommended_classes'] } }
     # query = db.users.find_one({"_id": object })
-    try :
-        updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
-    except :
-        return "error"
+    # try :
+    #     updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
+    # except :
+    #     return "error"
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
 
