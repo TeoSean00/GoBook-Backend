@@ -3,6 +3,7 @@ import requests
 from flask import Flask, render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS
 from os import environ
+from invokes import invoke_http
 
 
 from datetime import datetime
@@ -23,7 +24,7 @@ def get_class(userid):
     class_output = []
     # This is for docker
     # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
-    user_service_url = environ.get('user_service_url') or "http://localhost:5001/getUser/"
+    user_service_url = environ.get('user_service_URL') or "http://localhost:5001/"
     user_data = requests.request("GET", user_service_url + "/getUser/" + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
@@ -36,21 +37,67 @@ def get_class(userid):
 
 
 
-# Booking class service can save for when we use it
-# @app.route('/users/joinclass/<userid>', methods=['PUT'])
-# # test userid 640c50c9ed0c22144794d080
-# # test classid 640c50c23203cab91d70d509
-# # REMEMBER TO CHANGE THE ID AND CLASS IN POSTMAN WHENEVER YOU DROP DATABASE
-# # Postman input data style for now: {"classId" : "640c50c23203cab91d70d509"}
-# def join_class(userid):
-#     data = request.get_json()
-#     class_data = data
-#     user_data = {
-#         "userId": userid,
-#     }
-#     classreq = requests.request("PUT", "http://localhost:5000/class/" + data['classId'], json = user_data)
-#     userreq = requests.request("PUT", "http://localhost:5001/users/addclass/" + userid, json = class_data)
-#     return data
+@app.route('/update_class_details', methods=['PUT'])
+def update_class():
+    data = request.get_json()
+    # * 1. Invoke class service to update class participant
+    print("Starting slicing of json data")
+    classID = data['metadata']['classId']
+    userID = data['metadata']['userID']
+    runID = data['metadata']['runID']
+    class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
+    class_service_URL = class_service_base_URL + f"/{classID}/{runID}"
+    # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
+    userDataObject = {
+        "userId": userID
+    }
+    #? JSONIFY the data object
+    userDataObject = json.dumps(userDataObject)
+
+    # userDataObject = jsonify(userDataObject)
+    classUpdateResult = invoke_http(class_service_URL, method = 'PUT', json = userDataObject)
+
+    print("Class service update result code")
+    print(f"Class service URL is {class_service_URL}")
+    print(userDataObject)
+    print(classUpdateResult)
+    print(type(classUpdateResult))
+
+    # * 2. Invoke user service to update user booking
+    user_service_base_URL = environ.get('user_service_URL') or "http://localhost:5001"
+    user_service_URL = user_service_base_URL + f"/addclass/{userID}"
+    classDataObject = {
+        "classId": classID
+    }
+    #? JSONIFY the data object
+    classDataObject = json.dumps(classDataObject)
+    # classDataObject = jsonify(classDataObject)
+
+    userUpdateResult = invoke_http(user_service_URL, method = 'PUT', json = classDataObject)
+    print("User service update result code")
+    print(f"User service URL is {user_service_URL}")
+    print(classDataObject)
+    print(userUpdateResult)
+    print(type(userUpdateResult))
+
+    # * 3. Sending msg thru AMQP to message service
+    print('\n\n-----Class_ updated, return success to process_booking-----')
+    # notification is listening to email_service queue
+    # binding key is email.info as well
+    if (userUpdateResult and classUpdateResult):
+        return {
+            "code": 200,
+            "userUpdate": userUpdateResult,
+            "classUpdate": classUpdateResult,
+        }
+    else:
+        return {
+            "code": 500,
+            "userUpdate": userUpdateResult,
+            "classUpdate": classUpdateResult,
+            "email": "did not send to queue"
+        }
+    
 
 
 if __name__ == '__main__':
