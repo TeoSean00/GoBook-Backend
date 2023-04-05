@@ -27,6 +27,7 @@ sample_data = [
     "_id": "112532673980137782859",
     "given_name": "Keith Loh",
     "email" : "keith.loh.2021@scis.smu.edu.sg",
+    "picture": "",
     "preferences": [],
     "attended_classes": [],
     "reviews": [
@@ -39,6 +40,7 @@ sample_data = [
     "_id": "113532673980137782859",
     "given_name": "Joseph Hee",
     "email" : "joseph.hee.2021@scis.smu.edu.sg",
+    "picture": "",
     "preferences": [],
     "attended_classes": [],
     "reviews": [],
@@ -48,6 +50,7 @@ sample_data = [
     "_id": "114532673980137782859",
     "given_name": "Tyler Lian",
     "email" : "tyler.lian.2021@scis.smu.edu.sg",
+    "picture": "",
     "preferences": [],
     "attended_classes": [],
     "reviews": [
@@ -60,7 +63,8 @@ sample_data = [
     {
     "_id": "115542673980137782859",
     "given_name": "Teo Sean",
-    "email" : "seanteo56@gmail.com",
+    "email" : "teosean@outlook.com",
+    "picture": "",
     "preferences": [],
     "attended_classes": [],
     "reviews": [
@@ -72,6 +76,7 @@ sample_data = [
     "_id": "116532673980137782859",
     "given_name": "Elton Tay",
     "email" : "elton.tay.2021@scis.smu.edu.sg",
+    "picture": "",
     "preferences": [],
     "attended_classes": [],
     "reviews": [],
@@ -134,6 +139,7 @@ def add_user():
             "_id": data["id"],
             "given_name": data["given_name"],
             "email": data["email"],
+            "picture": data["picture"],
             "preferences": [],
             "attended_classes": [],
             "recommended_classes": [],
