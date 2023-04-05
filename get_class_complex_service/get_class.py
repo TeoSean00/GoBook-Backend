@@ -24,7 +24,7 @@ def get_class(userid):
     class_output = []
     # This is for docker
     # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
-    user_service_url = environ.get('user_service_URL') or "http://localhost:5001/"
+    user_service_url = environ.get('user_service_URL') or "http://localhost:5001"
     user_data = requests.request("GET", user_service_url + "/getUser/" + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
@@ -41,10 +41,12 @@ def get_class(userid):
 def update_class():
     data = request.get_json()
     # * 1. Invoke class service to update class participant
+  
     print("Starting slicing of json data")
-    classID = data['metadata']['classId']
+    classID = data["metadata"]['classId']
     userID = data['metadata']['userID']
     runID = data['metadata']['runID']
+    
     class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
     class_service_URL = class_service_base_URL + f"/{classID}/{runID}"
     # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
