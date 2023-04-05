@@ -34,8 +34,8 @@ def create_payment():
     print('This is file recevied by create_payment', file=sys.stderr)
     print(data, file=sys.stderr)
     # This is for docker
-    url = environ.get('payment_service_URL') or 'http://localhost:8080/create-payment-intent'
-    # url = 'http://host.docker.internal:8080/create-payment-intent'
+    # url = environ.get('payment_service_URL') or 'http://localhost:8080/create-payment-intent'
+    url = 'http://host.docker.internal:8080/create-payment-intent'
     # url = 'http://localhost:8080/create-payment-intent'
     headers = {'Content-Type': 'application/json'}
 

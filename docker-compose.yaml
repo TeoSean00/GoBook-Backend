@@ -6,20 +6,20 @@ services:
   #? kong: API Gateway
   ##################################
 
-  # kong:
-  #   build:
-  #     context: ./api_gateway
-  #     dockerfile: Dockerfile
-  #   image: kong:latest
-  #   container_name: kong
-  #   restart: always
-  #   environment:
-  #     KONG_DATABASE: "off"
-  #     KONG_DECLARATIVE_CONFIG: kong.yml
-  #   ports:
-  #     - "8000:8000"
-  #     - "8443:8443"
-  #     - "8001:8001"
+  kong:
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
+    image: kong:latest
+    container_name: kong
+    restart: always
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: kong.yml
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
 
   ##################################
   #? class_db: The Class database
@@ -110,29 +110,29 @@ services:
   #? message_db: The Message database
   ##################################
 
-  message_db:
-    image: mongo:latest
-    command: mongod --port 27019
-    ports:
-      - "27019-27019"
+  # message_db:
+  #   image: mongo:latest
+  #   command: mongod --port 27019
+  #   ports:
+  #     - "27019-27019"
 
   ##################################
   #? messaging service: The messaging microservice
   ##################################
 
-  message_service:
-    build: ./message_service/
-    container_name: message_service
-    restart: always
-    ports:
-      - "5010:5010"
-    depends_on:
-      - rabbitmq
-    environment:
-      PORT: "5010"
-      rabbitMQ: "amqp://rabbitmq:5672"
-      queueName: "email_service"
-      dbUri: "mongodb://message_db:27019/messaging"
+  # message_service:
+  #   build: ./message_service/
+  #   container_name: message_service
+  #   restart: always
+  #   ports:
+  #     - "5010:5010"
+  #   depends_on:
+  #     - rabbitmq
+  #   environment:
+  #     PORT: "5010"
+  #     rabbitMQ: "amqp://rabbitmq:5672"
+  #     queueName: "email_service"
+  #     dbUri: "mongodb://message_db:27019/messaging"
 
   ##################################
   #? payment_service: The payment microservice
@@ -194,7 +194,6 @@ services:
   ##################################
   #? kafka: The kafka broker w zookeeper
   ##################################
-
   zookeeper:
     image: "bitnami/zookeeper:latest"
     restart: always
@@ -234,7 +233,7 @@ services:
       - kafka
     ports:
       - "5011:5011"
-# networks:
+# # networks:
 #   bookingApp:
 #     driver: bridge
 
