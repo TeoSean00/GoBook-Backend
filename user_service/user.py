@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 from os import environ
 from pymongo import MongoClient
 from pymongo import ReturnDocument
@@ -11,8 +12,22 @@ import json
 
 
 app = Flask(__name__)
-portNum = 5001
-# Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
+
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
+API_URL = '/static/user_swagger.json'  # Our API url (can of course be a local resource)
+
+# Call factory function to create our blueprint
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={  # Swagger UI config overrides
+        'app_name': "User Service"
+    },
+)
+
+app.register_blueprint(swaggerui_blueprint)
+
+PORTNUMBER = 5001
 DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
 client = MongoClient(host=DB_ENVIRONMENT,
                         port=27018
@@ -100,7 +115,7 @@ def index():
     return "Hello there, there are the users"
 
 # Initalise the user database with the sample data above
-@app.route('/users/createDB')
+@app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
     if 'user_db' in db_exists:
@@ -111,7 +126,7 @@ def create_db():
     return "Sample data inserted successfully" + str(sample_data)
 
 # Get all users in the userDB
-@app.route('/users/getUsers')
+@app.route('/getUsers')
 def get_all_users():
     users = db.users.find()
     if (users == None):
@@ -120,7 +135,7 @@ def get_all_users():
         return json.loads(json_util.dumps(users))
 
 # Get a particular user by their userId else return string saying no such user
-@app.route('/users/getUser/<userId>')
+@app.route('/getUser/<userId>')
 def get_user(userId):
     myquery = { "_id": userId }
     user = db.users.find_one(myquery)
@@ -170,7 +185,7 @@ def add_user():
 #     return json.loads(json_util.dumps(updated_user))
 
 # add class attended to userID
-@app.route('/users/addclass/<userId>', methods=['PUT'])
+@app.route('/addClass/<userId>', methods=['PUT'])
 def add_class(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the class using PUT
     data = json.loads(data)
@@ -216,5 +231,5 @@ def add_recommendations(userId):
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
     main()
-    app.run(host='0.0.0.0', port=portNum, debug=True)
-print(f"User Service is initialized on port {portNum}")
+    app.run(host='0.0.0.0', port=PORTNUMBER, debug=True)
+print(f"User Service is initialized on port {PORTNUMBER}")

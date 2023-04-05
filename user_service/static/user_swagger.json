@@ -1,0 +1,243 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "User Service - 1.0",
+    "description": "This is the user microservice",
+    "contact": {
+      "email": "keith.loh.2021@scis.smu.edu.sg"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "externalDocs": {
+    "description": "Find out more about Gobook",
+    "url": "https://github.com/JosephJL/ESD-ClassBookingSystem-Backend"
+  },
+  "servers": [
+    {
+      "url": "localhost:8000/users/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations about user"
+    }
+  ],
+  "paths": {
+    "/createDB": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Load DB with User Data",
+        "description": "Load MongoDB with User Data",
+        "operationId": "createDB",
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getUsers": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all users",
+        "description": "Returns a list of all users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getUser/{userId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get specific user",
+        "description": "Get a user based on userId",
+        "operationId": "getUser{userId}",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User's user ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "no such user"
+          }
+        }
+      }
+    },
+    "/addUser": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add user",
+        "description": "Add a user to DB",
+        "operationId": "addUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/addclass/{userId}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add class attended to userId",
+        "description": "Updates user object with class attended",
+        "operationId": "addclass/{userId}",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "user's id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update user adding class attended",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "112532673980137782859"
+          },
+          "given_name": {
+            "type": "string",
+            "example": "Keith Loh"
+          },
+          "picture": {
+            "type": "string",
+            "example": ""
+          },
+          "preferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attended_class": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Review 1"
+            }
+          },
+          "recommended_class": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Drive-Highly-Engaging-Online-Learning-Experience-Synchronous-eLearning"
+            }
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "addClass": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      }
+    }
+  }
+}
