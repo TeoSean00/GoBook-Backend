@@ -87,7 +87,7 @@ def create_db():
     return "Sample data inserted successfully" + str(sample_data)
 
 # Get all users in the userDB
-@app.route('/getUsers')
+@app.route('/users/getUsers')
 def get_all_users():
     users = db.users.find()
     if (users == None):
@@ -96,7 +96,7 @@ def get_all_users():
         return json.loads(json_util.dumps(users))
 
 # Get a particular user by their userId else return string saying no such user
-@app.route('/getUser/<userId>')
+@app.route('/users/getUser/<userId>')
 def get_user(userId):
     myquery = { "_id": userId }
     user = db.users.find_one(myquery)
@@ -130,7 +130,7 @@ def add_user():
 # def add_review(userId):
 #     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
 #     data = json.loads(data)
-#     myquery = { "userId": userId }
+#     myquery = { "_id": userId }
 #     # myquery = db.users.find_one({"_id" : userid})
 #     newvalues = { "$push": { "reviews": data } }
 #     # query = db.users.find_one({"_id": object })
@@ -142,7 +142,7 @@ def add_user():
 def add_class(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
     data = json.loads(data)
-    myquery = { "userId": userId }
+    myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
@@ -156,7 +156,7 @@ def add_class(userId):
 def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
     data = json.loads(data)
-    myquery = { "userId": userId }
+    myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }
     # query = db.users.find_one({"_id": object })

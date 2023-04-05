@@ -17,14 +17,14 @@ def index():
     return "Hello there, there are the classes"
 
 # Getting classes signed up by user
-@app.route('/users/get_class_details/<userid>', methods=['GET'])
+@app.route('/get_class_details/<userid>', methods=['GET'])
 def get_class(userid):
     print("USER ID IS",userid)
     class_output = []
     # This is for docker
     # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
     user_service_url = environ.get('user_service_url') or "http://localhost:5001/getUser/"
-    user_data = requests.request("GET", user_service_url + userid)
+    user_data = requests.request("GET", user_service_url + "/getUser/" + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
         # This is for docker
