@@ -73,7 +73,7 @@ def main():
         history = msg
         print("History is",history.value)
         latestBooking = history.value
-        recommendations = ContentBasedFilter.get_recommendations(latestBooking["className"].strip())
+        recommendations = ContentBasedFilter.get_recommendations(latestBooking["metadata"]["className"].strip())
         recommendObj = {
             "userId" : latestBooking["userId"],
             "recommendation" : recommendations

@@ -30,7 +30,7 @@ def get_class(userid):
     for enrolled_class in enrolled_classes:
         # This is for docker
         # class_data = requests.request("GET", "http://class_service:5006/class/" + enrolled_class)
-        class_data = requests.request("GET", "http://localhost:5006/class/" + enrolled_class)
+        class_data = requests.request("GET", "http://localhost:5006/class/" + str(enrolled_class))
         class_output.append(class_data.json())
     return class_output
 
