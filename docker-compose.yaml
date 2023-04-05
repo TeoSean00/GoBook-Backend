@@ -25,49 +25,49 @@ services:
   #? class_db: The Class database
   ##################################
 
-  # class_db:
-  #   image: mongo:latest
-  #   ports:
-  #     - "27017:27017"
+  class_db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
 
   ##################################
   #? class_service: The Class microservice
   ##################################
 
-  # class_service:
-  #   build: ./class_service/
-  #   container_name: class_service
-  #   depends_on:
-  #     - class_db
-  #   ports:
-  #     - "5006:5006"
-  #   environment:
-  #     DB_ENVIRONMENT: class_db
-  #     port: "5006"
+  class_service:
+    build: ./class_service/
+    container_name: class_service
+    depends_on:
+      - class_db
+    ports:
+      - "5006:5006"
+    environment:
+      DB_ENVIRONMENT: class_db
+      port: "5006"
 
   #################################
   #? review_db: The Class database
   #################################
 
-  # review_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27021
-  #   ports:
-  #     - "27021:27021"
+  review_db:
+    image: mongo:latest
+    command: mongod --port 27021
+    ports:
+      - "27021:27021"
 
   #################################
   #? review_service: The Class microservice
   #################################
 
-  # review_service:
-  #   build: ./review_service/
-  #   container_name: review_service
-  #   depends_on:
-  #     - review_db
-  #   ports:
-  #     - "5004:5004"
-  #   environment:
-  #     DB_ENVIRONMENT: review_db
+  review_service:
+    build: ./review_service/
+    container_name: review_service
+    depends_on:
+      - review_db
+    ports:
+      - "5004:5004"
+    environment:
+      DB_ENVIRONMENT: review_db
 
   ##################################
   #? user_db: The User database
@@ -97,143 +97,142 @@ services:
   #? get_class_complex_service: The user class information microservice
   ##################################
 
-  # get_class_complex_service:
-  #   build: ./get_class_complex_service/
-  #   container_name: get_class_complex_service
-  #   ports:
-  #     - "5005:5005"
-  #   environment:
-  #     class_service_URL: http://class_service:5006/class
-  #     user_service_URL: http://user_service:5001/users
+  get_class_complex_service:
+    build: ./get_class_complex_service/
+    container_name: get_class_complex_service
+    ports:
+      - "5005:5005"
+    environment:
+      class_service_URL: http://class_service:5006/class
+      user_service_URL: http://user_service:5001/users
 
   ##################################
   #? message_db: The Message database
   ##################################
 
-  # message_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27019
-  #   ports:
-  #     - "27019-27019"
+  message_db:
+    image: mongo:latest
+    command: mongod --port 27019
+    ports:
+      - "27019-27019"
 
   ##################################
   #? messaging service: The messaging microservice
   ##################################
 
-  # message_service:
-  #   build: ./message_service/
-  #   container_name: message_service
-  #   restart: always
-  #   ports:
-  #     - "5010:5010"
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     PORT: "5010"
-  #     rabbitMQ: "amqp://rabbitmq:5672"
-  #     queueName: "email_service"
-  #     dbUri: "mongodb://message_db:27019/messaging"
+  message_service:
+    build: ./message_service/
+    container_name: message_service
+    restart: always
+    ports:
+      - "5010:5010"
+    depends_on:
+      - rabbitmq
+    environment:
+      PORT: "5010"
+      rabbitMQ: "amqp://rabbitmq:5672"
+      queueName: "email_service"
+      dbUri: "mongodb://message_db:27019/messaging"
 
   ##################################
   #? payment_service: The payment microservice
   ##################################
 
-  # payment_service:
-  #   platform: linux/amd64
-  #   build: ./payment_service/
-  #   container_name: payment_service
-  #   ports:
-  #     - 8080:8080
+  payment_service:
+    platform: linux/amd64
+    build: ./payment_service/
+    container_name: payment_service
+    ports:
+      - 8080:8080
 
   ##################################
   #? stripe-cli: Stripe CLI
   ##################################
 
-  # stripe-cli:
-  #   image: stripe/stripe-cli
-  #   network_mode: host
-  #   container_name: stripe-cli
-  #   command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
-  #   env_file:
-  #     - stripe_cli.env
+  stripe-cli:
+    image: stripe/stripe-cli
+    network_mode: host
+    container_name: stripe-cli
+    command: "listen --api-key sk_test_51MkznJJTqG9NvRuTocMwazTMTEeBy768PQxBvO4Srz98L9TVFOmQu09Q5HXpmuJuPHedPsgfVEQLX3RDMyEtveqE007p8h6WmP --device-name bookingApp --forward-to host.docker.internal:8080/stripe/events"
+    env_file:
+      - stripe_cli.env
 
   ##################################
   #? process_booking: The booking microservice
   ##################################
 
-  # process_booking:
-  #   platform: linux/amd64
-  #   build: ./process_booking_service/
-  #   container_name: process_booking
-  #   restart: always
-  #   ports:
-  #     - 5008:5008
-  #   environment:
-  #     get_classes_base_URL: http://get_class_complex_service:5005
-  #     # class_service_URL: http://class_service:5006
-  #     # user_service_URL: http://user_service:5001
-  #     payment_service_URL: http://host.docker.internal:8080/create-payment-intent
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
+  process_booking:
+    platform: linux/amd64
+    build: ./process_booking_service/
+    container_name: process_booking
+    restart: always
+    ports:
+      - 5008:5008
+    environment:
+      get_classes_base_URL: http://get_class_complex_service:5005
+      # class_service_URL: http://class_service:5006
+      # user_service_URL: http://user_service:5001
+      payment_service_URL: http://host.docker.internal:8080/create-payment-intent
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
 
   ##################################
   #? rabbitmq: The rabbitmq broker
   ##################################
 
-  # rabbitmq:
-  #   image: rabbitmq
-  #   hostname: rabbitmq
-  #   container_name: rabbitmq
-  #   restart: always
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   volumes:
-  #     - rabbitmq_data:/var/lib/rabbitmq
+  rabbitmq:
+    image: rabbitmq
+    hostname: rabbitmq
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
 
   ##################################
   #? kafka: The kafka broker w zookeeper
   ##################################
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: "bitnami/kafka:latest"
+    restart: always
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
 
-#   zookeeper:
-#     image: "bitnami/zookeeper:latest"
-#     restart: always
-#     ports:
-#       - "2181:2181"
-#     environment:
-#       - ALLOW_ANONYMOUS_LOGIN=yes
-#   kafka:
-#     image: "bitnami/kafka:latest"
-#     restart: always
-#     ports:
-#       - "9092:9092"
-#       - "29092:29092"
-#     environment:
-#       - KAFKA_BROKER_ID=1
-#       - ALLOW_PLAINTEXT_LISTENER=yes
-#       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-#       - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
-#       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
-#       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-#       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-#     depends_on:
-#       - zookeeper
+  recommendation_service:
+    build: ./recommendation_service/
+    container_name: recommendation_service
+    restart: always
+    depends_on:
+      - kafka
 
-#   recommendation_service:
-#     build: ./recommendation_service/
-#     container_name: recommendation_service
-#     restart: always
-#     depends_on:
-#       - kafka
-
-#   consumer_service:
-#     build: ./consumer_service/
-#     container_name: consumer_service
-#     restart: always
-#     depends_on:
-#       - kafka
-#     ports:
-#       - "5011:5011"
+  consumer_service:
+    build: ./consumer_service/
+    container_name: consumer_service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "5011:5011"
 # # networks:
 #   bookingApp:
 #     driver: bridge
