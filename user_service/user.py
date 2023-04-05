@@ -135,17 +135,24 @@ def add_user():
     if (data == None):
         return "invalid user details"
     else:
-        addObject = {            
-            "_id": data["id"],
-            "given_name": data["given_name"],
-            "email": data["email"],
-            "picture": data["picture"],
-            "preferences": [],
-            "attended_classes": [],
-            "recommended_classes": [],
-        }
-        db.users.insert_one(addObject)
-        return addObject
+        # queries the userDB for an existing user via the given id, if user exists return existing user, otherwise create new user with the given details
+        userId = data["id"]
+        myquery = { "_id": userId }
+        user = db.users.find_one(myquery)
+        if (user != None):
+            return json.loads(json_util.dumps(user))
+        else:
+            addObject = {            
+                "_id": data["id"],
+                "given_name": data["given_name"],
+                "email": data["email"],
+                "picture": data["picture"],
+                "preferences": [],
+                "attended_classes": [],
+                "recommended_classes": [],
+            }
+            db.users.insert_one(addObject)
+            return addObject
 
 # Update a user using his userid
 # Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
