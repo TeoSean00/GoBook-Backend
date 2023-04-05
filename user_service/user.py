@@ -29,10 +29,6 @@ sample_data = [
     "email" : "keith.loh.2021@scis.smu.edu.sg",
     "preferences": [],
     "attended_classes": [],
-    "reviews": [
-        "Review 1",
-        "Review 2"
-    ]
     },
     {
     "_id": "113532673980137782859",
@@ -40,7 +36,6 @@ sample_data = [
     "email" : "joseph.hee.2021@scis.smu.edu.sg",
     "preferences": [],
     "attended_classes": [],
-    "reviews": []
     },
     {
     "_id": "114532673980137782859",
@@ -48,11 +43,6 @@ sample_data = [
     "email" : "tyler.lian.2021@scis.smu.edu.sg",
     "preferences": [],
     "attended_classes": [],
-    "reviews": [
-        "Review 1",
-        "Review 2",
-        "Review 3"
-    ]
     },
     {
     "_id": "115542673980137782859",
@@ -60,9 +50,6 @@ sample_data = [
     "email" : "seanteo56@gmail.com",
     "preferences": [],
     "attended_classes": [],
-    "reviews": [
-        "Review 1",
-    ]
     },
     {
     "_id": "116532673980137782859",
@@ -70,7 +57,6 @@ sample_data = [
     "email" : "elton.tay.2021@scis.smu.edu.sg",
     "preferences": [],
     "attended_classes": [],
-    "reviews": []
     },
 ] 
 
@@ -140,16 +126,16 @@ def add_user():
 # Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
 # ? subjected to changes - keith
 # add review
-@app.route('/users/addreview/<userId>', methods=['PUT'])
-def add_review(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-    data = json.loads(data)
-    myquery = { "userId": userId }
-    # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "reviews": data } }
-    # query = db.users.find_one({"_id": object })
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_user))
+# @app.route('/users/addreview/<userId>', methods=['PUT'])
+# def add_review(userId):
+#     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+#     data = json.loads(data)
+#     myquery = { "userId": userId }
+#     # myquery = db.users.find_one({"_id" : userid})
+#     newvalues = { "$push": { "reviews": data } }
+#     # query = db.users.find_one({"_id": object })
+#     updated_user = db.users.find_one_and_update(myquery, newvalues)
+#     return json.loads(json_util.dumps(updated_user))
 
 # add class attended to userID
 @app.route('/users/addclass/<userId>', methods=['PUT'])

@@ -23,7 +23,7 @@ def get_class(userid):
     class_output = []
     # This is for docker
     # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
-    user_service_url = environ.get('user_service_url') or "http://localhost:5001/users/"
+    user_service_url = environ.get('user_service_url') or "http://localhost:5001/getUser/"
     user_data = requests.request("GET", user_service_url + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
