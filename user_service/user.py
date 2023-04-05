@@ -153,29 +153,27 @@ def add_user():
 #     # myquery = db.users.find_one({"_id" : userid})
 #     newvalues = { "$push": { "reviews": data } }
 #     # query = db.users.find_one({"_id": object })
-#     updated_user = db.users.find_one_and_update(myquery, newvalues)
+#     updated_user = db.users.find_one_and_update(myquery, newvalues, return_document = ReturnDocument.AFTER)
 #     return json.loads(json_util.dumps(updated_user))
 
 # add class attended to userID
 @app.route('/users/addclass/<userId>', methods=['PUT'])
 def add_class(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the class using PUT
     data = json.loads(data)
     myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
-    print("UPDATED USER IS ", updated_user)
-    # ! doesn't show the updated user (pls fix)
     return json.loads(json_util.dumps(updated_user))
 
 # Add preferences
 @app.route('/users/addpref/<userId>', methods=['PUT'])
 def add_preferences(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
     # data = json.loads(data)
-    myquery = { "userId": userId }
+    myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }
     # query = db.users.find_one({"_id": object })
@@ -189,7 +187,7 @@ def add_preferences(userId):
 # Add recommended classes
 @app.route('/users/addrecc/<userId>', methods=['PUT'])
 def add_recommendations(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the recommendationsD using PUT
     # data = json.loads(data)
     myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
