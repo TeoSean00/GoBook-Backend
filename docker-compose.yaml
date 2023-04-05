@@ -169,8 +169,9 @@ services:
     ports:
       - 5008:5008
     environment:
-      class_service_URL: http://class_service:5006
-      user_service_URL: http://user_service:5001
+      get_classes_base_URL: http://get_class_complex_service:5005
+      # class_service_URL: http://class_service:5006
+      # user_service_URL: http://user_service:5001
       payment_service_URL: http://host.docker.internal:8080/create-payment-intent
       rabbit_host: rabbitmq
       rabbit_port: 5672
