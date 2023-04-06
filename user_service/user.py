@@ -200,7 +200,7 @@ def add_class(userId):
 @app.route('/pref/<userId>', methods=['PUT'])
 def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
-    # data = json.loads(data)
+    data = json.loads(data)
     myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }
@@ -216,7 +216,7 @@ def add_preferences(userId):
 @app.route('/recc/<userId>', methods=['PUT'])
 def add_recommendations(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the recommendationsD using PUT
-    # data = json.loads(data)
+    data = json.loads(data)
     myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$set": { "recommended_classes": data['recommended_classes'] } }
