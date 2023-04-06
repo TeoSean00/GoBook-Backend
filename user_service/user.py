@@ -29,7 +29,9 @@ sample_data = [
     "email" : "keith.loh.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_classes": [],
+    "attended_class_runs": [
+        {"1": ["2"]},
+    ],
     "reviews": [
         "Review 1",
         "Review 2"
@@ -42,7 +44,7 @@ sample_data = [
     "email" : "joseph.hee.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_classes": [],
+    "attended_class_runs": [],
     "reviews": [],
     "recommended_classes": [],
     },
@@ -52,7 +54,7 @@ sample_data = [
     "email" : "tyler.lian.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_classes": [],
+    "attended_class_runs": [],
     "reviews": [
         "Review 1",
         "Review 2",
@@ -66,7 +68,7 @@ sample_data = [
     "email" : "teosean@outlook.com",
     "picture": "",
     "preferences": [],
-    "attended_classes": [],
+    "attended_class_runs": [],
     "reviews": [
         "Review 1",
     ],
@@ -78,7 +80,7 @@ sample_data = [
     "email" : "elton.tay.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_classes": [],
+    "attended_class_runs": [],
     "reviews": [],
     "recommended_classes": [],
     },
@@ -148,7 +150,7 @@ def add_user():
                 "email": data["email"],
                 "picture": data["picture"],
                 "preferences": [],
-                "attended_classes": [],
+                "attended_class_runs": [],
                 "recommended_classes": [],
             }
             db.users.insert_one(addObject)
@@ -176,7 +178,7 @@ def add_class(userId):
     data = json.loads(data)
     myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "attended_classes": data["classId"] } }
+    newvalues = { "$push": { "attended_class_runs": {data["classId"]: [data["runId"]] }} }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
