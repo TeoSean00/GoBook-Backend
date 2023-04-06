@@ -29,9 +29,7 @@ sample_data = [
     "email" : "keith.loh.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_class_runs": [
-        {"1": ["2"]},
-    ],
+    "attended_classes": [],
     "reviews": [
         "Review 1",
         "Review 2"
@@ -44,7 +42,7 @@ sample_data = [
     "email" : "joseph.hee.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_class_runs": [],
+    "attended_classes": [],
     "reviews": [],
     "recommended_classes": [],
     },
@@ -54,7 +52,7 @@ sample_data = [
     "email" : "tyler.lian.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_class_runs": [],
+    "attended_classes": [],
     "reviews": [
         "Review 1",
         "Review 2",
@@ -68,7 +66,7 @@ sample_data = [
     "email" : "teosean@outlook.com",
     "picture": "https://lh3.googleusercontent.com/a/AGNmyxZr5-3b5UcQFgka72_O7-Hci1I664JFT-ZJHVsV0eM=s96-c",
     "preferences": [],
-    "attended_class_runs": [],
+    "attended_classes": [],
     "reviews": [
         "Review 1",
     ],
@@ -80,7 +78,7 @@ sample_data = [
     "email" : "elton.tay.2021@scis.smu.edu.sg",
     "picture": "",
     "preferences": [],
-    "attended_class_runs": [],
+    "attended_classes": [],
     "reviews": [],
     "recommended_classes": [],
     },
@@ -150,7 +148,7 @@ def add_user():
                 "email": data["email"],
                 "picture": data["picture"],
                 "preferences": [],
-                "attended_class_runs": [],
+                "attended_classes": [],
                 "recommended_classes": [],
             }
             db.users.insert_one(addObject)
@@ -178,7 +176,7 @@ def add_class(userId):
     data = json.loads(data)
     myquery = { "_id": userId }
     # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "attended_class_runs": {data["classId"]: [data["runId"]] }} }
+    newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
     updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
