@@ -17,8 +17,9 @@ from invokes import invoke_http
 
 app = Flask(__name__)
 
+PORT = 5008
 CORS(app)
-portNum = 5008
+
 
 # Setting up kafka producer for recommendation
 p = KafkaProducer(bootstrap_servers=['kafka:9092'],
@@ -58,63 +59,14 @@ def create_payment():
 @cross_origin()
 def process_booking():
     data = request.get_json()
-    # this is to convert data to JSON string
-    # dataObject = json.dumps(data)
-    # print('This is error output', file=sys.stderr)
     print(data, file=sys.stderr)
-
-    # Sample response data from payment service
-    {
-    "amount": 1420,
-    "amount_capturable": 0,
-    "amount_details": {
-        "tip": {}
-    },
-    "amount_received": 1420,
-    "automatic_payment_methods": {
-        "enabled": True
-    },
-    "capture_method": "automatic",
-    "client_secret": "pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB",
-    "confirmation_method": "automatic",
-    "created": 1680003858,
-    "currency": "sgd",
-    "id": "pi_3MqawoJTqG9NvRuT1CIECYYH",
-    "latest_charge": {
-        "id": "ch_3MqawoJTqG9NvRuT1geYkf4z"
-    },
-    "livemode": False,
-    "metadata": {
-        "courseDescription": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
-        "userEmail": "celov54484@gpipes.com",
-        "className": "Advanced-Information-Management-Classroom-Asynchronous",
-        "runID": "1",
-        "orderID": "4500",
-        "userID": "112532673980137782859",
-        "classId": "64294fd360d77b957414d18b"
-    },
-    "object": "payment_intent",
-    "payment_method": {
-        "id": "pm_1Mqax8JTqG9NvRuTdQ8sxHYn"
-    },
-    "payment_method_options": {
-        "card": {
-            "request_three_d_secure": "automatic"
-        },
-        "paynow": {}
-    },
-    "payment_method_types": [
-        "card",
-        "paynow"
-    ],
-    "status": "succeeded"
-}
     
 
     # ? Now to update the class and user service that book is confirmed
-    # ? 1. Invoke class service
-    # ? 2. Invoke user service
-    # ? 3. Invoke notification service to send email of ticket
+
+    # ? 1. Call get_class complex to Invoke class service and user service
+    # ? 2. Invoke notification service to send email of ticket
+
     ##################################
     # Sending of booking data to kafka log
     p.send('booking', data)
@@ -125,52 +77,7 @@ def process_booking():
     get_classes_URL = get_classes_base_URL + f"/update_class_details"
     get_classes_updateResult = invoke_http(get_classes_URL, method = 'PUT', json = data)
 
-
-    ##################################
-    # Moving this bit to get_classes
-    ##################################
-
-    # # * 1. Invoke class service to update class participant
-    # print("Starting slicing of json data")
-    # classID = data['metadata']['classId']
-    # userID = data['metadata']['userID']
-    # runID = data['metadata']['runID']
-    # class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
-    # class_service_URL = class_service_base_URL + f"/class/{classID}/{runID}"
-    # # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
-    # userDataObject = {
-    #     "userId": userID
-    # }
-    # #? JSONIFY the data object
-    # userDataObject = json.dumps(userDataObject)
-
-    # # userDataObject = jsonify(userDataObject)
-    # classUpdateResult = invoke_http(class_service_URL, method = 'PUT', json = userDataObject)
-
-    # print("Class service update result code")
-    # print(f"Class service URL is {class_service_URL}")
-    # print(userDataObject)
-    # print(classUpdateResult)
-    # print(type(classUpdateResult))
-
-    # # * 2. Invoke user service to update user booking
-    # user_service_base_URL = environ.get('user_service_URL') or "http://localhost:5001"
-    # user_service_URL = user_service_base_URL + f"/users/addclass/{userID}"
-    # classDataObject = {
-    #     "classId": classID
-    # }
-    # #? JSONIFY the data object
-    # classDataObject = json.dumps(classDataObject)
-    # # classDataObject = jsonify(classDataObject)
-
-    # userUpdateResult = invoke_http(user_service_URL, method = 'PUT', json = classDataObject)
-    # print("User service update result code")
-    # print(f"User service URL is {user_service_URL}")
-    # print(classDataObject)
-    # print(userUpdateResult)
-    # print(type(userUpdateResult))
-
-    # * 3. Sending msg thru AMQP to message service
+    # * 2. Sending msg thru AMQP to message service
     print('\n\n-----Backend updated, publishing the (class booking) message with routing_key=email.info-----',file=sys.stderr)
     # notification is listening to email_service queue
     # binding key is email.info as well
@@ -232,5 +139,5 @@ def process_booking():
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " to coordinate payments with updating of class and user services")
-    app.run(host="0.0.0.0", port=portNum, debug=True)
-print(f"Process Booking Service is initialized on port {portNum}")
+    app.run(host="0.0.0.0", port=PORT, debug=True)
+print(f"Process Booking Service is initialized on port {PORT}")

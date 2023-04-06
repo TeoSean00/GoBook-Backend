@@ -10,12 +10,16 @@ from bson.objectid import ObjectId
 from datetime import datetime
 import json
 
-
 app = Flask(__name__)
+
+PORT = 5001
+DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
+client = MongoClient(host=DB_ENVIRONMENT,
+                        port=27018
+                    )
 
 SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
 API_URL = '/static/user_swagger.json'  # Our API url (can of course be a local resource)
-
 # Call factory function to create our blueprint
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
@@ -24,14 +28,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
         'app_name': "User Service"
     },
 )
-
 app.register_blueprint(swaggerui_blueprint)
-
-PORTNUMBER = 5001
-DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
-client = MongoClient(host=DB_ENVIRONMENT,
-                        port=27018
-                    )
 
 CORS(app) 
 
@@ -231,5 +228,5 @@ def add_recommendations(userId):
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
     main()
-    app.run(host='0.0.0.0', port=PORTNUMBER, debug=True)
-print(f"User Service is initialized on port {PORTNUMBER}")
+    app.run(host='0.0.0.0', port=PORT, debug=True)
+print(f"User Service is initialized on port {PORT}")

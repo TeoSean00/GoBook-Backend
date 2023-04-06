@@ -103,8 +103,8 @@ services:
     ports:
       - "5005:5005"
     environment:
-      class_service_URL: http://class_service:5006/
-      user_service_URL: http://user_service:5001/
+      class_service_URL: http://class_service:5006
+      user_service_URL: http://user_service:5001
 
   ##################################
   #? message_db: The Message database

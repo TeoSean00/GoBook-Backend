@@ -11,6 +11,7 @@ import json
 
 app = Flask(__name__)
 
+PORT=5005
 CORS(app)  
 
 @app.route('/health', methods=('GET', 'POST'))
@@ -38,12 +39,10 @@ def get_class(userid):
 def update_class():
     data = request.get_json()
     # * 1. Invoke class service to update class participant
-  
     print("Starting slicing of json data")
     classID = data["metadata"]['classId']
     userID = data['metadata']['userID']
     runID = data['metadata']['runID']
-    
     class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
     class_service_URL = class_service_base_URL + f"/{classID}/{runID}"
     # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
@@ -64,7 +63,7 @@ def update_class():
 
     # * 2. Invoke user service to update user booking
     user_service_base_URL = environ.get('user_service_URL') or "http://localhost:5001"
-    user_service_URL = user_service_base_URL + f"/addclass/{userID}"
+    user_service_URL = user_service_base_URL + f"/addClass/{userID}"
     classDataObject = {
         "classId": classID
     }
@@ -101,4 +100,5 @@ def update_class():
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
-    app.run(host='0.0.0.0', port=5005, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)
+print(f"get_class Service is initialized on port {PORT}")

@@ -12,7 +12,7 @@ import json
 
 app = Flask(__name__)
 
-# Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
+PORT = 5004
 DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
 client = MongoClient(host=DB_ENVIRONMENT,
                         port=27021
@@ -64,4 +64,5 @@ def add_user_review():
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
-    app.run(host='0.0.0.0', port=5004, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)
+print(f"Review Service is initialized on port {PORT}")
