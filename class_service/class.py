@@ -306,7 +306,7 @@ def add_user_class(classId, runId):
     courseRunSlots = f"courseRuns.{runId}.availableSlots"
     myquery = {"_id": classId}
     # update overall class list and course run class list
-    newvalues = {"$push": {courseRun: data['_id']},  "$inc": {
+    newvalues = {"$push": {courseRun: data['userId']},  "$inc": {
         courseRunSlots: -1}}
     updated_class = db.classes.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_class))
