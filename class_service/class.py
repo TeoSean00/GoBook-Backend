@@ -298,12 +298,10 @@ def get_class(classId):
     return json.loads(json_util.dumps(currClass))
 
 # get all unique class objects details for a specific user
-@app.route('/class/getUserClass')
-def get_user_class():
+@app.route('/class/getUserClass/<userId>')
+def get_user_class(userId):
     matching_classes = {}
     returned_classes = []
-    data = request.get_json()
-    userId = data["_id"]
     for class_doc in db.classes.find():
         for course_run in class_doc['courseRuns']:
             if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["className"] not in matching_classes:
