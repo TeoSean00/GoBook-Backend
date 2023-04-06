@@ -9,7 +9,7 @@ Simplifying bookings one class at a time
 # Project Overview
 
 <p align="center">
-  <img src="readme_files\gobook.png" width=200px>
+  <img src="readme_files\GoBook.png" width=200px>
 </p>
 
 # Technical Overview Diagram
