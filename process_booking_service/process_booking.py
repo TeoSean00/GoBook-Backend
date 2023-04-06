@@ -20,11 +20,14 @@ app = Flask(__name__)
 CORS(app)
 portNum = 5008
 
-
 # Setting up kafka producer for recommendation
 p = KafkaProducer(bootstrap_servers=['kafka:9092'],
                          value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 print("Kafka Producer has been initiated...")
+
+@app.route('/health', methods=['GET'])
+def health():
+    return "Process booking service is running and healthy"
 
 # ! UI will call createpayment -> payment service creating payment intent
 @app.route('/booking/createPayment', methods=['POST'])
@@ -53,9 +56,7 @@ def create_payment():
 #! Upon successful payment payment service will call this API with payment data
 @app.route('/update_payment', methods=['POST'])
 def process_booking():
-
     data = request.get_json()
-
     # this is to convert data to JSON string
     # dataObject = json.dumps(data)
     # print('This is error output', file=sys.stderr)

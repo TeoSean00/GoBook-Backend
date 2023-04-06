@@ -13,28 +13,25 @@ app = Flask(__name__)
 
 CORS(app)  
 
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/health', methods=('GET', 'POST'))
 def index():
-    return "Hello there, there are the classes"
+    return "get_class service is up and running"
 
 # Getting classes signed up by user
-@app.route('/get_class_details/<userid>', methods=['GET'])
+@app.route('/<userid>', methods=['GET'])
 def get_class(userid):
     print("USER ID IS",userid)
     class_output = []
-    # This is for docker
-    # user_data = requests.request("GET", "http://user_service:5001/users/" + userid)
     user_service_url = environ.get('user_service_URL') or "http://localhost:5001/"
+    class_service_url = environ.get('class_serice_URL') or "http://localhost:5006/"
     user_data = requests.request("GET", user_service_url + "/getUser/" + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
         # This is for docker
         # class_data = requests.request("GET", "http://class_service:5006/class/" + enrolled_class)
-        class_data = requests.request("GET", "http://localhost:5006/class/" + str(enrolled_class))
+        class_data = requests.request("GET", class_service_url + str(enrolled_class))
         class_output.append(class_data.json())
     return class_output
-
-
 
 
 @app.route('/update_class_details', methods=['PUT'])

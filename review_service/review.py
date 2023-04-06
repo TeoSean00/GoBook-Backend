@@ -23,17 +23,17 @@ sample_data = []
 
 CORS(app)  
 
-@app.route('/', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def index():
-    return "Hello there, here are the reviews"
+    return "Review service is running and healthy"
 
 
-@app.route('/review' , methods=['GET'])
+@app.route('/' , methods=['GET'])
 def get_all_classes():
     reviews = db.reviews.find()
     return json.loads(json_util.dumps(reviews))
 
-@app.route('/review/createDB')
+@app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
     if 'review_db' in db_exists:
@@ -44,19 +44,19 @@ def create_db():
     return "Sample data inserted successfully" + str(sample_data)
 
 # get all reviews made by user
-@app.route('/review/<userId>')
+@app.route('/user/<userId>')
 def get_classes_from_user(userId):
     reviews  = db.reviews.find( { "userId": userId } )
     return json.loads(json_util.dumps(reviews))
 
 # get all reviews fors this class
-@app.route('/review/class/<classId>')
+@app.route('/class/<classId>')
 def get_reviews_for_class(classId):
     reviews = db.reviews.find({"classId": classId})
     return json.loads(json_util.dumps(reviews))
 
 # add review
-@app.route('/review', methods=['POST'])
+@app.route('/', methods=['POST'])
 def add_user_review():
     data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
     db.reviews.insert_one(data)

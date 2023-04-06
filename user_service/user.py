@@ -110,9 +110,9 @@ def main():
     return "Sample data inserted successfully" + str(sample_data)
 
 # <-------------------------------------------Routes for userDB------------------------------------------->
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/health', methods=('GET', 'POST'))
 def index():
-    return "Hello there, there are the users"
+    return "User Service is up and running"
 
 # Initalise the user database with the sample data above
 @app.route('/createDB')
@@ -126,7 +126,7 @@ def create_db():
     return "Sample data inserted successfully" + str(sample_data)
 
 # Get all users in the userDB
-@app.route('/getUsers')
+@app.route('/')
 def get_all_users():
     users = db.users.find()
     if (users == None):
@@ -135,7 +135,7 @@ def get_all_users():
         return json.loads(json_util.dumps(users))
 
 # Get a particular user by their userId else return string saying no such user
-@app.route('/getUser/<userId>')
+@app.route('/<userId>')
 def get_user(userId):
     myquery = { "_id": userId }
     user = db.users.find_one(myquery)
@@ -144,7 +144,7 @@ def get_user(userId):
     return json.loads(json_util.dumps(user))
 
 # Add user to the userDB if user does not exist in DB, else return string saying user exists already
-@app.route('/users/addUser', methods=['POST'])
+@app.route('/', methods=['POST'])
 def add_user():
     data = request.get_json()
     if (data == None):
@@ -197,7 +197,7 @@ def add_class(userId):
     return json.loads(json_util.dumps(updated_user))
 
 # Add preferences
-@app.route('/users/addpref/<userId>', methods=['PUT'])
+@app.route('/pref/<userId>', methods=['PUT'])
 def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
     # data = json.loads(data)
@@ -213,7 +213,7 @@ def add_preferences(userId):
     return json.loads(json_util.dumps(updated_user))
 
 # Add recommended classes
-@app.route('/users/addrecc/<userId>', methods=['PUT'])
+@app.route('/recc/<userId>', methods=['PUT'])
 def add_recommendations(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the recommendationsD using PUT
     # data = json.loads(data)

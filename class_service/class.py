@@ -257,18 +257,8 @@ sample_data = [
     }
 ]
 
-def main():
-    print("Loading in class data...")
-    db_exists = client.list_database_names()
-    if 'class_db' in db_exists:
-        client.drop_database('class_db')
-    db = client['class_db']
-    for data in sample_data:
-        db["classes"].insert_one(data)
-    return "Sample data inserted successfully" + str(sample_data)
-
-# This API is to initialize the document in Mongo and fill with sample data
-@app.route('/class/createDB')
+# Initialize Mongo with sample data
+@app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
     if 'class_db' in db_exists:
@@ -278,27 +268,27 @@ def create_db():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
-# Testing Route 
-@app.route('/', methods=('GET', 'POST'))
+# Health Check 
+@app.route('/health', methods=('GET', 'POST'))
 def index():
-    return "Hello there, there are the classes"
+    return "Class Service is up and running"
 
-# This API will get all classes
-@app.route('/class')
+# Get All classes
+@app.route('/')
 def get_all_classes():
     classes = db.classes.find()
     return json.loads(json_util.dumps(classes))
 
 
-# get class details from class Id
-@app.route('/class/<classId>')
+# Get class details from class Id
+@app.route('/<classId>')
 def get_class(classId):
     myquery = {"_id": classId}
     currClass = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(currClass))
 
-# add user to class participants
-@app.route('/class/<classId>/<runId>', methods=['PUT'])
+# Add user to class participants
+@app.route('/<classId>/<runId>', methods=['PUT'])
 def add_user_class(classId, runId):
     # This will be a the json put in the request. Use postman to add the partcipant using PUT
     print("start class update")
@@ -317,6 +307,6 @@ def add_user_class(classId, runId):
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +": manage class Schedule ...")
-    main()
+    create_db()
     app.run(host='0.0.0.0', port=portNum, debug=True)
 print(f"Class Service app is initialized on port {portNum}")
