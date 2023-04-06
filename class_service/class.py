@@ -1,12 +1,15 @@
 import os
+
 from flask import Flask, render_template, request, url_for, redirect, jsonify
 from flask_cors import CORS
 from os import environ
 from pymongo import MongoClient
 from bson import json_util
+
 from datetime import datetime
 import json
 
+monitorBindingKey='booking.*'
 app = Flask(__name__)
 portNum = 5006
 # Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
@@ -264,7 +267,7 @@ def main():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
-# This API is to initialize the document in Mongo and fill with sample data as shown above 
+# This API is to initialize the document in Mongo and fill with sample data
 @app.route('/class/createDB')
 def create_db():
     db_exists = client.list_database_names()
@@ -276,9 +279,9 @@ def create_db():
     return "Sample data inserted successfully" + str(sample_data)
 
 # Testing Route 
-# @app.route('/', methods=('GET', 'POST'))
-# def index():
-#     return "Hello there, here are the classes"
+@app.route('/', methods=('GET', 'POST'))
+def index():
+    return "Hello there, there are the classes"
 
 # This API will get all classes
 @app.route('/class')
