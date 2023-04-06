@@ -227,6 +227,6 @@ def add_recommendations(userId):
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
-    main()
+    create_db()
     app.run(host='0.0.0.0', port=PORT, debug=True)
 print(f"User Service is initialized on port {PORT}")

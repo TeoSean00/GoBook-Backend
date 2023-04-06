@@ -5,7 +5,6 @@ from flask_cors import CORS
 from os import environ
 from invokes import invoke_http
 
-
 from datetime import datetime
 import json
 
@@ -33,7 +32,6 @@ def get_class(userid):
         class_data = requests.request("GET", class_service_url + "/" + str(enrolled_class))
         class_output.append(class_data.json())
     return class_output
-
 
 @app.route('/update_class_details', methods=['PUT'])
 def update_class():
@@ -95,7 +93,6 @@ def update_class():
             "classUpdate": classUpdateResult,
             "email": "did not send to queue"
         }
-    
 
 
 if __name__ == '__main__':
