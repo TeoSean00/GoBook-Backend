@@ -141,7 +141,7 @@ def get_user(userId):
     return json.loads(json_util.dumps(user))
 
 # Add user to the userDB if user does not exist in DB, else return string saying user exists already
-@app.route('/', methods=['POST'])
+@app.route('/addUser', methods=['POST'])
 def add_user():
     data = request.get_json()
     if (data == None):
