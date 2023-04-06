@@ -32,7 +32,6 @@ app.register_blueprint(swaggerui_blueprint)
 
 CORS(app) 
 
-
 db = client['user_db']
 sample_data = [
     {
@@ -96,15 +95,6 @@ sample_data = [
     },
 ] 
 
-def main():
-    print("Loading in user data...")
-    db_exists = client.list_database_names()
-    if 'user_db' in db_exists:
-        client.drop_database('user_db')
-    db = client['user_db']
-    for data in sample_data:
-        db["users"].insert_one(data)
-    return "Sample data inserted successfully" + str(sample_data)
 
 # <-------------------------------------------Routes for userDB------------------------------------------->
 @app.route('/health', methods=('GET', 'POST'))
@@ -137,10 +127,11 @@ def get_user(userId):
     myquery = { "_id": userId }
     user = db.users.find_one(myquery)
     if user == None:
-        return "no such user"
+        return f"User with _id:{userId} does not exist in the database ", 400
     return json.loads(json_util.dumps(user))
 
-# Add user to the userDB if user does not exist in DB, else return string saying user exists already
+# Add user to the userDB if user does not exist in DB, else return string saying user exists already 
+# ! your checking of user exists does not work dude
 @app.route('/addUser', methods=['POST'])
 def add_user():
     data = request.get_json()
@@ -184,13 +175,15 @@ def add_user():
 # add class attended to userID
 @app.route('/addClass/<userId>', methods=['PUT'])
 def add_class(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the class using PUT
-    data = json.loads(data)
+    data = request.get_json()
+    # data = json.loads(data)
     myquery = { "_id": userId }
-    # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "attended_classes": data["classId"] } }
-    # query = db.users.find_one({"_id": object })
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    #! might cause CORS error on frontend
+    updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
+    if not updated_user:
+        return f"User with _id: {userId} does not exist", 400
+    # updated_user = db.users.find_one_and_update(myquery, newvalues)
     return json.loads(json_util.dumps(updated_user))
 
 # Add preferences
