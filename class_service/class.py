@@ -297,6 +297,17 @@ def get_class(classId):
     currClass = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(currClass))
 
+# get all unique class objects details for a specific user
+@app.route('/class/getUserClass/<userId>')
+def get_user_class(userId):
+    matching_classes = {}
+    returned_classes = []
+    for class_doc in db.classes.find():
+        for course_run in class_doc['courseRuns']:
+            if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["className"] not in matching_classes:
+                returned_classes.append(class_doc)
+    return returned_classes
+
 # add user to class participants
 @app.route('/class/<classId>/<runId>', methods=['PUT'])
 def add_user_class(classId, runId):

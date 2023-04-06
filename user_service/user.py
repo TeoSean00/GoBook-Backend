@@ -64,7 +64,7 @@ sample_data = [
     "_id": "115542673980137782859",
     "given_name": "Teo Sean",
     "email" : "teosean@outlook.com",
-    "picture": "",
+    "picture": "https://lh3.googleusercontent.com/a/AGNmyxZr5-3b5UcQFgka72_O7-Hci1I664JFT-ZJHVsV0eM=s96-c",
     "preferences": [],
     "attended_classes": [],
     "reviews": [
