@@ -13,7 +13,7 @@ monitorBindingKey='booking.*'
 app = Flask(__name__)
 portNum = 5006
 # Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
-DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or 'local'
+DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or 'localhost'
 client = MongoClient(host=DB_ENVIRONMENT,
                     port=27017
                     )
@@ -279,13 +279,23 @@ def get_all_classes():
     classes = db.classes.find()
     return json.loads(json_util.dumps(classes))
 
-
 # Get class details from class Id
 @app.route('/<classId>')
 def get_class(classId):
     myquery = {"_id": classId}
     currClass = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(currClass))
+
+# get all unique class objects details for a specific user
+@app.route('/getUserClass/<userId>')
+def get_user_class(userId):
+    matching_classes = {}
+    returned_classes = []
+    for class_doc in db.classes.find():
+        for course_run in class_doc['courseRuns']:
+            if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["className"] not in matching_classes:
+                returned_classes.append(class_doc)
+    return returned_classes
 
 # Add user to class participants
 @app.route('/<classId>/<runId>', methods=['PUT'])

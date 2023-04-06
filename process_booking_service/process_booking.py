@@ -55,6 +55,7 @@ def create_payment():
 
 #! Upon successful payment payment service will call this API with payment data
 @app.route('/update_payment', methods=['POST'])
+@cross_origin()
 def process_booking():
     data = request.get_json()
     # this is to convert data to JSON string

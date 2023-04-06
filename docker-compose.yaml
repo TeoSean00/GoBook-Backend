@@ -18,7 +18,7 @@ services:
       KONG_DECLARATIVE_CONFIG: kong.yml
     ports:
       - "8000:8000"
-      - "8443:8443"
+      - "8443:8443" 
       - "8001:8001"
 
   ##################################
@@ -103,36 +103,36 @@ services:
     ports:
       - "5005:5005"
     environment:
-      class_service_URL: http://class_service:5006/class
-      user_service_URL: http://user_service:5001/users
+      class_service_URL: http://class_service:5006/
+      user_service_URL: http://user_service:5001/
 
   ##################################
   #? message_db: The Message database
   ##################################
 
-  # message_db:
-  #   image: mongo:latest
-  #   command: mongod --port 27019
-  #   ports:
-  #     - "27019-27019"
+  message_db:
+    image: mongo:latest
+    command: mongod --port 27019
+    ports:
+      - "27019-27019"
 
   ##################################
   #? messaging service: The messaging microservice
   ##################################
 
-  # message_service:
-  #   build: ./message_service/
-  #   container_name: message_service
-  #   restart: always
-  #   ports:
-  #     - "5010:5010"
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     PORT: "5010"
-  #     rabbitMQ: "amqp://rabbitmq:5672"
-  #     queueName: "email_service"
-  #     dbUri: "mongodb://message_db:27019/messaging"
+  message_service:
+    build: ./message_service/
+    container_name: message_service
+    restart: always
+    ports:
+      - "5010:5010"
+    depends_on:
+      - rabbitmq
+    environment:
+      PORT: "5010"
+      rabbitMQ: "amqp://rabbitmq:5672"
+      queueName: "email_service"
+      dbUri: "mongodb://message_db:27019/messaging"
 
   ##################################
   #? payment_service: The payment microservice
@@ -233,7 +233,7 @@ services:
       - kafka
     ports:
       - "5011:5011"
-# # networks:
-#   bookingApp:
-#     driver: bridge
+networks:
+  bookingApp:
+    driver: bridge
 

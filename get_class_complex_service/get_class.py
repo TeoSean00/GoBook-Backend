@@ -38,10 +38,12 @@ def get_class(userid):
 def update_class():
     data = request.get_json()
     # * 1. Invoke class service to update class participant
+  
     print("Starting slicing of json data")
-    classID = data['metadata']['classId']
+    classID = data["metadata"]['classId']
     userID = data['metadata']['userID']
     runID = data['metadata']['runID']
+    
     class_service_base_URL = environ.get('class_service_URL') or "http://localhost:5006"
     class_service_URL = class_service_base_URL + f"/{classID}/{runID}"
     # f"http://localhost:5006/class/{classID}/{runID}" or environ('class_service_URL')
