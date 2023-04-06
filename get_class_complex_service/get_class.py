@@ -23,14 +23,14 @@ def index():
 def get_class(userid):
     print("USER ID IS",userid)
     class_output = []
-    user_service_url = environ.get('user_service_URL') or "http://localhost:5001/"
-    class_service_url = environ.get('class_serice_URL') or "http://localhost:5006/"
-    user_data = requests.request("GET", user_service_url + "/getUser/" + userid)
+    user_service_url = environ.get('user_service_URL') or "http://localhost:5001"
+    class_service_url = environ.get('class_serice_URL') or "http://localhost:5006"
+    user_data = requests.request("GET", user_service_url + "/" + userid)
     enrolled_classes = user_data.json()['attended_classes']
     for enrolled_class in enrolled_classes:
         # This is for docker
         # class_data = requests.request("GET", "http://class_service:5006/class/" + enrolled_class)
-        class_data = requests.request("GET", class_service_url + str(enrolled_class))
+        class_data = requests.request("GET", class_service_url + "/" + str(enrolled_class))
         class_output.append(class_data.json())
     return class_output
 
