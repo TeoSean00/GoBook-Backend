@@ -130,7 +130,7 @@ public class PaymentController {
                 .setAmount(createPayment.getCoursePrice() * 100L)
                 .setCurrency("sgd")
                 .putMetadata("courseDescription", createPayment.getCourseDescription())
-                .putMetadata("className", createPayment.getCourseName())
+                .putMetadata("coursename", createPayment.getCourseName())
                 .putMetadata("classId", Integer.toString(createPayment.getClassID()))
                 .putMetadata("userEmail", createPayment.getUserEmail())
                 .putMetadata("orderID", createPayment.getOrderID())
