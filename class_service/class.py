@@ -319,10 +319,15 @@ def add_user_class(classId, runId):
     courseRun = f"courseRuns.{runId}.participants"
     courseRunSlots = f"courseRuns.{runId}.availableSlots"
     myquery = {"_id": classId}
-    # update overall class list and course run class list
-    newvalues = {"$push": {courseRun: data['userId']},  "$inc": {
-        courseRunSlots: -1}}
-    updated_class = db.classes.find_one_and_update(myquery, newvalues)
+    # update course run class list
+    class_doc = db.classes.find_one(myquery)
+    print("participants list is",class_doc["courseRuns"][runId]["participants"])
+    if data['userId'] not in class_doc["courseRuns"][runId]["participants"]:
+        newvalues = {"$push": {courseRun: data['userId']},  "$inc": {
+            courseRunSlots: -1}}
+        updated_class = db.classes.find_one_and_update(myquery, newvalues)
+    else:
+        updated_class = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(updated_class))
 
 
