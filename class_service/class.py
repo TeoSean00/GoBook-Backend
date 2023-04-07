@@ -256,6 +256,466 @@ sample_data = [
         "certification":True,
         # course category
         "category":["RPA", "Automation", "Process", "Robotics"]
+    },
+    {
+        "_id": "6",
+        "coursename": "Senior-Strength-and-Conditioning",
+        "content": "This 2-days course will give you the practicals skills and knowledge to move forward with confidence in writing and delivering programs to senior clients at any level of physical competence",
+        "objective": "Assessments as Exercises Patterns for Competency and Confidence",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":790,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Health", "Fitness", "Senior", "Strength"]
+    },
+    {
+        "_id": "7",
+        "coursename": "Sports-Massage-Therapy",
+        "content": "The general public is becoming more aware of the alternative therapies available for musculoskeletal injuries. Injuries do not only occur when participating in physical activity. Prolonged sitting and being deskbound can take a toll on one's well-being if left unchecked.",
+        "objective": "Learn new skills and knowledge on how one can assist in facilitating the recovery from musculoskeletal injuries. Gain a better understanding to what the body may experience during injuries. Learn new skills and knowledge on how one can assist in facilitating the recovery.",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":700,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Health", "Fitness", "Massage", "Sports"]
+    },
+    {
+        "_id": "8",
+        "coursename": "Maximising-Running-Performance",
+        "content": "You will finish this 2-days course with an understanding of the science, programming and practical competencies required to program for, and train runners to personal best performances.",
+        "objective": "Learn exercise prescription, programming weekly units of training, Master the art and technique of running and the strength training behind superior performance. The mobilisation techniques required to achieve or maintain symmetry in running and maintain healthy fascial and muscular integrity. Identify running faults and making the right decisions on how to fix them",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":900,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Health", "Fitness", "Running", "Performance"]
+    },
+    {
+        "_id": "9",
+        "coursename": "Science-To-Gym-Floor",
+        "content": "Build a foundational understanding of concepts in physiology, body composition, strength, performance, and nutrition. Recall various structural (anatomical) and functional (physiological) concepts that are relevant to exercise and nutrition application.",
+        "objective": "Science to Gym Floor is a two-day learning experience for exercise professionals looking to gain a comprehensive understanding of the science behind training and nutrition, and its practical application.",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":900,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Health", "Gym", "Exercise", "Performance"]
+    },
+    {
+        "_id": "10",
+        "coursename": "Workplace-Safety-and-Health-Practices",
+        "content": "This course is assessment only (No training), and is designed specifically for cleaning stewards who are already working in the environmental services industry, and who understands the importance of the Workplace Safety and Health Act and practices at the workplace.",
+        "objective": "This AOP will equip the participants with the necessary knowledge on how to understand and observe workplace safety through adherence to organisational guidelines and regulatory requirements",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":100,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Workplace", "Safety", "Organisation", "Environment"]
+    },
+    {
+        "_id": "11",
+        "coursename": "L2-Washroom-Maintenance",
+        "content": "Methods to remove stubborn stains in washroom facilities; Periodic maintenance or checks of washroom facilities; Appropriate PPE; Organisational procedures relating to the use of special and/or corrosive detergent to remove stubborn stains; Placement of signages; Types and proper use of cleaning tools, equipment and supplies; Types of special cleaning chemicals and their colour coding for cleaning washroom facilities; Wirkplace Safety and Health Act; Public Utilities (Water Supply) Regulation 38=9.",
+        "objective": "Apply advanced cleaning and perform maintenance of washroom facilities.",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":1200,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Workplace", "Washroom", "Organisation", "Maintainance"]
+    },
+    {
+        "_id": "12",
+        "coursename": "Environmental-Control-Coordinator-Course",
+        "content": "This course will equip participants with the knowledge and skills to develop and implement an environmental sanitation programme for their workplace, which includes baseline standards such as cleaning frequencies, cleaning and disinfection protocols, pest management, etc. Participants who complete this program will be able to register with NEA and perform their duty as Environmental Control Coordinators.",
+        "objective": "By the end of the course, the participants would be able to understand the importance of the Environmental Sanitation Regime, the roles of key stakeholders i.e. Premises Managers and Environmental Control Coordinators, and an overview of pest management, cleaning and disinfection, and indoor air quality, to draft and oversee the implementation of an Environmental Sanitation Programme as Environmental Control Coordinators. The participants will be equipped with the essential knowledge and skills to perform their duties and for obtaining an ECC certificate of registration.",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":450,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Workplace", "Environment", "Organisation", "Sanitation"]
+    },
+    {
+        "_id": "13",
+        "coursename": "Operate-Waste-Collection-Vehicle-to-Collect-Waste",
+        "content": "On completion of this unit, learners will have the knowledge and application skills in preparing for work activities for collecting waste, preparing vehicles (hook lift and rear end loader) for waste collection to collect waste and reinstating work area and vehicle at depot / heavy vehicle park.",
+        "objective": "On completion of this unit, learners will have the knowledge and application skills in preparing for work activities for collecting waste, preparing vehicles (hook lift and rear end loader) for waste collection to collect waste and reinstating work area and vehicle at depot / heavy vehicle park.",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":450,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Workplace", "Environment", "Waste", "Collection"]
+    },
+    {
+        "_id": "14",
+        "coursename": "Washroom-Maintenance",
+        "content": "Understand requirements of Perform basic cleaning of washrooms (CLG-CPR-101E-1) with the knowledge and skills required in daily cleaning and removing soilage from sanitary fixtures, fittings, toilet floors, and replenishing consumables in sanitary area.",
+        "objective": "In completion of this unit, the learner will have knowledge and application skills in the workplace. ",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":4050,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Workplace", "Washroom", "Maintainance", "Cleanliness"]
+    },
+    {
+        "_id": "15",
+        "coursename": "Customer-Management",
+        "content": "Develop the ability to collaborate with customers to achieve service outcomes.",
+        "objective": "Collaborate with customers to provide service follow up. Analyse gaps between actual service performance and organisation’s service standards. Deploy service quality improvement tools to improve service delivery process.",
+        "classSize":30,
+        "courseRuns":{
+            "1": {
+                "date": "2023-4-12",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ]},
+            "2":{
+                "date": "2023-4-12",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "3":{
+                "date": "2023-4-13",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "4":{
+                "date": "2023-4-13",
+                "timeslot" : "12.00pm - 3.00pm",
+                "availableSlots": 25,
+                "participants": [
+                ], },
+            "5":{
+                "date": "2023-4-14",
+                "timeslot" : "10.00am - 11.00am",
+                "availableSlots": 25,
+                "participants": [
+                ], }
+        },
+        "fees":40,
+        # if assessment true, display "An assessment will be conducted at the end of the course."
+        "assessment":True,
+        # if true display "Upon completion of all 6 modules within a maximum duration of 3 years, participants will be awarded a digital Certificate in Professional Certificate in Python Programming."
+        "certification":True,
+        # course category
+        "category":["Workplace", "Business", "Customer", "Management"]
     }
 ]
 

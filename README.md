@@ -3,7 +3,9 @@
 Simplifying bookings one class at a time
 
 1. [Project Report & API Docs](https://docs.google.com/document/d/1CZLL4ou799Og1fIFK7gp1xN9LmwuiTaI/edit?usp=sharing&ouid=112532673980137782859&rtpof=true&sd=true)
-2. [Project slides](https://docs.google.com/presentation/d/17ox5rou8biMvc6pwpcZbFa26uinjy5jrazzRUo2o5Hk/edit?usp=sharing)
+2. [Project Slides](https://docs.google.com/presentation/d/17ox5rou8biMvc6pwpcZbFa26uinjy5jrazzRUo2o5Hk/edit?usp=sharing)
+3. [Project Video](https://youtu.be/S4vLItXFAvE)
+
 
 # Project Overview
 
@@ -35,7 +37,7 @@ Simplifying bookings one class at a time
 </p>
 <br>
 
-<p align="center"><strong>Databases</strong></p>
+<p align="center"><strong>Database</strong></p>
 <p align="center">
 <a href="https://www.mongodb.com/"><img src="https://findlogovector.com/wp-content/uploads/2022/04/mongodb-logo-vector-2022.png" alt="MongoDB" height="40"/></a>&nbsp;&nbsp;
 </p>
@@ -49,7 +51,11 @@ Simplifying bookings one class at a time
 
 <p align="center"><strong>Others</strong></p>
 <p align="center">
+<<<<<<< HEAD
 <a href="https://stripe.com/en-gb-sg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1280px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe Payment API" width="88"/></a>&nbsp;&nbsp;<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" width="105"/></a>&nbsp;&nbsp;<a href="https://socket.io/"><img src="https://socket.io/images/logo.svg" alt="SocketIO" width="40"/></a>
+=======
+<a href="https://stripe.com/en-gb-sg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1280px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe Payment API" width="88"/></a>&nbsp;&nbsp;<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" width="105"/></a><a href="https://socket.io/"></a>
+>>>>>>> main
 <br>
 
 </p>
@@ -93,7 +99,7 @@ docker compose up --build
         <td align="center"><img src="readme_files\joseph.jpg" width="150px"/><br /><sub><b>Joseph Hee</b></sub></a></td>
         <td align="center"><img src="readme_files\jerome.jpg" width="150px"/><br /><sub><b>Jerome Wong</b></sub></a></td>
         <td align="center"><img src="readme_files\tyler.jpg" width="150px"/><br /><sub><b>Tyler Lian</b></sub></a></td>
-        <td align="center"><img src="readme_files\sean.jpg" width="150px"/><br /><sub><b>Sean Teo</b></sub></a></td>
+        <td align="center"><img src="https://user-images.githubusercontent.com/79046481/230642745-1c792d1b-fed9-446c-ab9c-1840178156de.png" width="150px"/><br /><sub><b>Sean Teo</b></sub></a></td>
         <td align="center"><img src="readme_files\elton.jpg" width="150px"/><br /><sub><b>Elton Tay</b></sub></a></td>
     </tr>
 </table>
