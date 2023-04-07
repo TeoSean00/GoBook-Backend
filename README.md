@@ -23,7 +23,7 @@ Simplifying bookings one class at a time
 
 <p align="center"><strong>Services and UI</strong></p>
 <p align="center">
-<a href="https://flask.palletsprojects.com/en/2.2.x/"><img src="https://flask.palletsprojects.com/en/2.2.x/_images/flask-logo.png" alt="Flask" width="88"/></a>&nbsp;&nbsp;
+<a href="https://flask.palletsprojects.com/en/2.2.x/"><img src="https://www.techlifediary.com/wp-content/uploads/2020/09/1_0G5zu7CnXdMT9pGbYUTQLQ.png" alt="Flask" width="88"/></a>&nbsp;&nbsp;
 <a href="https://react.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" alt="React" height="40"/>&nbsp;&nbsp;<a href="https://spring.io/"><img src="https://4.bp.blogspot.com/-ou-a_Aa1t7A/W6IhNc3Q0gI/AAAAAAAAD6Y/pwh44arKiuM_NBqB1H7Pz4-7QhUxAgZkACLcBGAs/s1600/spring-boot-logo.png" alt="SpringBoot" height="40"/>&nbsp;&nbsp;<a href="https://nodejs.org/en"><img src="https://nodejs.org/static/images/logo.svg" alt="NodeJS" width="88"/></a></a>&nbsp;&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/512px-Unofficial_JavaScript_logo_2.svg.png" alt="Javascript" height="40"/></a>&nbsp;&nbsp;<a href="https://expressjs.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/120px-Expressjs.png" alt="Express" height="40"/></a>&nbsp;&nbsp;<a href="https://handlebarsjs.com/"><img src="https://handlebarsjs.com/images/handlebars_logo.png" alt="HandleBars" height="40"/></a>&nbsp;&nbsp;
 </p>
 <br>
@@ -37,7 +37,7 @@ Simplifying bookings one class at a time
 
 <p align="center"><strong>Databases</strong></p>
 <p align="center">
-<a href="https://www.mongodb.com/"><img src="https://webimages.mongodb.com/_com_assets/cms/kuyjf3vea2hg34taa-horizontal_default_slate_blue.svg?auto=format%252Ccompress" alt="MongoDB" height="40"/></a>&nbsp;&nbsp;
+<a href="https://www.mongodb.com/"><img src="https://findlogovector.com/wp-content/uploads/2022/04/mongodb-logo-vector-2022.png" alt="MongoDB" height="40"/></a>&nbsp;&nbsp;
 </p>
 <br>
 
@@ -69,6 +69,15 @@ For testing of GoBook please log in into your gmail account and not a SMU email 
 
 Clone this repository or download the files to a local directory.
 Open a terminal session and navigate to the path of this repository/ codebase.
+
+### Set-up Frontend Services
+```
+npm install
+```
+
+```
+npm run dev
+```
 
 ### Set-up Backend Services
 ```
