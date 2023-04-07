@@ -305,7 +305,7 @@ def add_user_class(classId, runId):
     # This will be a the json put in the request. Use postman to add the partcipant using PUT
     print("start class update")
     data = request.get_json()
-    data = json.loads(data)
+    # data = json.loads(data)
     # object = ObjectId(classId)
     courseRun = f"courseRuns.{runId}.participants"
     courseRunSlots = f"courseRuns.{runId}.availableSlots"
