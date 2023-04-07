@@ -25,7 +25,6 @@ public class PaymentController {
         private Integer coursePrice;
         private String userEmail;
         private String userName;
-        private Integer course;
         private String orderID;
         private String courseDescription;
         private Integer classID;
@@ -46,14 +45,6 @@ public class PaymentController {
 
         public void setUserEmail(String userEmail) {
             this.userEmail = userEmail;
-        }
-
-        public Integer getCourse() {
-            return course;
-        }
-
-        public void setCourse(Integer course) {
-            this.course = course;
         }
 
         public String getOrderID() {
