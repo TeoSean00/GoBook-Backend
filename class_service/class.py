@@ -5,6 +5,8 @@ from flask_cors import CORS
 from os import environ
 from pymongo import MongoClient
 from bson import json_util
+import sys
+
 
 from datetime import datetime
 import json
@@ -308,10 +310,16 @@ def add_user_class(classId, runId):
     courseRun = f"courseRuns.{runId}.participants"
     courseRunSlots = f"courseRuns.{runId}.availableSlots"
     myquery = {"_id": classId}
-    # update overall class list and course run class list
+    # update course run class list
+    class_doc = db.classes.find_one(myquery)
+    print("class_doc is",  class_doc,file=sys.stderr)
+    print("participants list is",class_doc["courseRuns"][runId]["participants"],file=sys.stderr)
     newvalues = {"$push": {courseRun: data['userId']},  "$inc": {
-        courseRunSlots: -1}}
-    updated_class = db.classes.find_one_and_update(myquery, newvalues)
+            courseRunSlots: -1}}
+    if data['userId'] not in class_doc["courseRuns"][runId]["participants"]:
+        updated_class = db.classes.find_one_and_update(myquery, newvalues)
+    else:
+        updated_class = class_doc
     return json.loads(json_util.dumps(updated_class))
 
 

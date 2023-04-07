@@ -148,11 +148,16 @@ def add_class(userId):
     data = request.get_json()
     # data = json.loads(data)
     myquery = { "_id": userId }
+    user_doc = db.users.find_one(myquery)
+    if not user_doc:
+            return f"User with _id: {userId} does not exist", 400
     newvalues = { "$push": { "attended_classes": data["classId"] } }
-    updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
-    if not updated_user:
-        return f"User with _id: {userId} does not exist", 400
-    return json.loads(json_util.dumps(updated_user))
+    if data["classId"] not in user_doc["attended_classes"]:
+        updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
+        return json.loads(json_util.dumps(updated_user))
+    else:
+        updated_user = user_doc
+        return f"User with _id: {userId} already attended class",400
 
 # Add preferences
 @app.route('/pref/<userId>', methods=['PUT'])

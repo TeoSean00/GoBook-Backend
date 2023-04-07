@@ -177,9 +177,13 @@ services:
       payment_service_URL: http://host.docker.internal:8080/create-payment-intent
       rabbit_host: rabbitmq
       rabbit_port: 5672
+<<<<<<< HEAD
     depends_on:
       - user_service
       - class_service
+=======
+
+>>>>>>> main
   ##################################
   #? rabbitmq: The rabbitmq broker
   ##################################
@@ -237,7 +241,14 @@ services:
       - kafka
     ports:
       - "5011:5011"
+<<<<<<< HEAD
 networks:
   bookingApp:
     driver: bridge
+=======
+      
+# networks:
+#   bookingApp:
+#     driver: bridge
+>>>>>>> main
 
