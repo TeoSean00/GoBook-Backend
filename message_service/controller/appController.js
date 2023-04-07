@@ -147,7 +147,6 @@ const emailTicket = async (data) => {
   console.log(formattedDate);
   let transporter = nodemailer.createTransport(config);
 
-  // Create of PDF
   const dataObject = {
     COURSE_NAME: courseName,
     NAME: userName,
@@ -155,7 +154,6 @@ const emailTicket = async (data) => {
     DATE: formattedDate,
     IMG_SRC: "https://classhero.netlify.app/",
   };
-  // I need the link to the course on the website
 
   logger.info("starting createPDF Function call ");
   await createPDF(dataObject);
@@ -177,8 +175,8 @@ const emailTicket = async (data) => {
         data: [
           {
             item: courseName,
-            description: coursePrice,
-            price: courseDescription,
+            description: courseDescription,
+            price: coursePrice,
           },
         ],
       },

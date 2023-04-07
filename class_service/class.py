@@ -286,6 +286,8 @@ def get_all_classes():
 def get_class(classId):
     myquery = {"_id": classId}
     currClass = db.classes.find_one(myquery)
+    if not currClass:
+        return f"Class of _id: {classId} does not exist", 404
     return json.loads(json_util.dumps(currClass))
 
 # get all unique class objects details for a specific user
@@ -302,22 +304,23 @@ def get_user_class(userId):
 # Add user to class participants
 @app.route('/<classId>/<runId>', methods=['PUT'])
 def add_user_class(classId, runId):
-    # This will be a the json put in the request. Use postman to add the partcipant using PUT
-    print("start class update")
     data = request.get_json()
-    # data = json.loads(data)
-    # object = ObjectId(classId)
     courseRun = f"courseRuns.{runId}.participants"
     courseRunSlots = f"courseRuns.{runId}.availableSlots"
     myquery = {"_id": classId}
-    # update course run class list
     class_doc = db.classes.find_one(myquery)
+    if not class_doc:
+        return f"Class of _id: {classId} does not exist", 404
     print("class_doc is",  class_doc,file=sys.stderr)
     print("participants list is",class_doc["courseRuns"][runId]["participants"],file=sys.stderr)
     newvalues = {"$push": {courseRun: data['userId']},  "$inc": {
             courseRunSlots: -1}}
+    if not newvalues:
+        return f"Invalid class run of {runId}", 400
     if data['userId'] not in class_doc["courseRuns"][runId]["participants"]:
         updated_class = db.classes.find_one_and_update(myquery, newvalues)
+        if not updated_class:
+            return f"Invalid class run of {runId}", 400
     else:
         updated_class = class_doc
     return json.loads(json_util.dumps(updated_class))
