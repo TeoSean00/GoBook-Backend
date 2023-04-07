@@ -49,7 +49,7 @@ Simplifying bookings one class at a time
 
 <p align="center"><strong>Others</strong></p>
 <p align="center">
-<a href="https://stripe.com/en-gb-sg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1280px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe Payment API" width="88"/></a>&nbsp;&nbsp;<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" width="105"/></a>
+<a href="https://stripe.com/en-gb-sg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1280px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe Payment API" width="88"/></a>&nbsp;&nbsp;<a href="https://www.docker.com/"><img src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" alt="Docker" width="105"/></a>&nbsp;&nbsp;<a href="https://socket.io/"><img src="https://socket.io/images/logo.svg" alt="SocketIO" width="40"/></a>
 <br>
 
 </p>
