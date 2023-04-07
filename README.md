@@ -57,6 +57,11 @@ Simplifying bookings one class at a time
 
 # Getting Started
 
+
+```
+For testing of GoBook please log in into your gmail account and not a SMU email acount 
+```
+
 ### Frontend Repository can be found here
 [GoBook](https://github.com/TeoSean00/ESD-ClassBookingSystem-Frontend)
 
