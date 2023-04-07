@@ -238,7 +238,3 @@ services:
       - kafka
     ports:
       - "5011:5011"
-# networks:
-#   bookingApp:
-#     driver: bridge
-

@@ -55,6 +55,59 @@ def create_payment():
 def process_booking():
     data = request.get_json()
     print(data, file=sys.stderr)
+
+    # this is to convert data to JSON string
+    # dataObject = json.dumps(data)
+    # print('This is error output', file=sys.stderr)
+    print("DATA IS HERE", file=sys.stderr)
+    print(data, file=sys.stderr)
+
+    # Sample response data from payment service
+    {
+    "amount": 1420,
+    "amount_capturable": 0,
+    "amount_details": {
+        "tip": {}
+    },
+    "amount_received": 1420,
+    "automatic_payment_methods": {
+        "enabled": True
+    },
+    "capture_method": "automatic",
+    "client_secret": "pi_3MqawoJTqG9NvRuT1CIECYYH_secret_FhWhAZ6MUjAnfbAqvBOxOjxwB",
+    "confirmation_method": "automatic",
+    "created": 1680003858,
+    "currency": "sgd",
+    "id": "pi_3MqawoJTqG9NvRuT1CIECYYH",
+    "latest_charge": {
+        "id": "ch_3MqawoJTqG9NvRuT1geYkf4z"
+    },
+    "livemode": False,
+    "metadata": {
+        "courseDescription": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
+        "userEmail": "celov54484@gpipes.com",
+        "coursename": "Advanced-Information-Management-Classroom-Asynchronous",
+        "runID": "1",
+        "orderID": "4500",
+        "userID": "112532673980137782859",
+        "classId": "64294fd360d77b957414d18b"
+    },
+    "object": "payment_intent",
+    "payment_method": {
+        "id": "pm_1Mqax8JTqG9NvRuTdQ8sxHYn"
+    },
+    "payment_method_options": {
+        "card": {
+            "request_three_d_secure": "automatic"
+        },
+        "paynow": {}
+    },
+    "payment_method_types": [
+        "card",
+        "paynow"
+    ],
+    "status": "succeeded"
+}
     
     # ? Now to update the class and user service that book is confirmed
 
