@@ -3,7 +3,9 @@
 Simplifying bookings one class at a time
 
 1. [Project Report & API Docs](https://docs.google.com/document/d/1CZLL4ou799Og1fIFK7gp1xN9LmwuiTaI/edit?usp=sharing&ouid=112532673980137782859&rtpof=true&sd=true)
-2. [Project slides](https://docs.google.com/presentation/d/17ox5rou8biMvc6pwpcZbFa26uinjy5jrazzRUo2o5Hk/edit?usp=sharing)
+2. [Project Slides](https://docs.google.com/presentation/d/17ox5rou8biMvc6pwpcZbFa26uinjy5jrazzRUo2o5Hk/edit?usp=sharing)
+3. [Project Video](https://youtu.be/S4vLItXFAvE)
+
 
 # Project Overview
 
@@ -93,7 +95,7 @@ docker compose up --build
         <td align="center"><img src="readme_files\joseph.jpg" width="150px"/><br /><sub><b>Joseph Hee</b></sub></a></td>
         <td align="center"><img src="readme_files\jerome.jpg" width="150px"/><br /><sub><b>Jerome Wong</b></sub></a></td>
         <td align="center"><img src="readme_files\tyler.jpg" width="150px"/><br /><sub><b>Tyler Lian</b></sub></a></td>
-        <td align="center"><img src="readme_files\sean.jpg" width="150px"/><br /><sub><b>Sean Teo</b></sub></a></td>
+        <td align="center"><img src="https://user-images.githubusercontent.com/79046481/230642745-1c792d1b-fed9-446c-ab9c-1840178156de.png" width="150px"/><br /><sub><b>Sean Teo</b></sub></a></td>
         <td align="center"><img src="readme_files\elton.jpg" width="150px"/><br /><sub><b>Elton Tay</b></sub></a></td>
     </tr>
 </table>
