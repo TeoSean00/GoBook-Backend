@@ -45,9 +45,9 @@ def create_payment():
 
     response_data = requests.post(url, data=json.dumps(data), headers=headers)
     for item in response_data:
-        print("ITEM IS", item)
+        print("ITEM IS", item, file=sys.stderr)
     response_str = response_data.content.decode()
-    return json.loads(response_str)
+    return json.loads(response_str), 200
 
 #! Upon successful payment payment service will call this API with payment data
 @app.route('/update_payment', methods=['POST'])
@@ -59,6 +59,7 @@ def process_booking():
     # this is to convert data to JSON string
     # dataObject = json.dumps(data)
     # print('This is error output', file=sys.stderr)
+    print("DATA RESPONSE IS HERE",data,file=sys.stderr)
     print("DATA IS HERE", file=sys.stderr)
     print(data, file=sys.stderr)
 
@@ -158,14 +159,14 @@ def process_booking():
             "userUpdate": get_classes_updateResult["userUpdate"],
             "classUpdate": get_classes_updateResult["classUpdate"],
             "email": "sent to queue successfullyx"
-        }
+        },200
     else:
         return {
             "code": 500,
             "userUpdate": get_classes_updateResult["userUpdate"],
             "classUpdate": get_classes_updateResult["classUpdate"],
             "email": "did not send to queue"
-        }
+        },500
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
