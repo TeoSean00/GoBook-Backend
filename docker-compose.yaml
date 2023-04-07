@@ -6,20 +6,20 @@ services:
   #? kong: API Gateway
   ##################################
 
-  kong:
-    build:
-      context: ./api_gateway
-      dockerfile: Dockerfile
-    image: kong:latest
-    container_name: kong
-    restart: always
-    environment:
-      KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: kong.yml
-    ports:
-      - "8000:8000"
-      - "8443:8443"
-      - "8001:8001"
+  # kong:
+  #   build:
+  #     context: ./api_gateway
+  #     dockerfile: Dockerfile
+  #   image: kong:latest
+  #   container_name: kong
+  #   restart: always
+  #   environment:
+  #     KONG_DATABASE: "off"
+  #     KONG_DECLARATIVE_CONFIG: kong.yml
+  #   ports:
+  #     - "8000:8000"
+  #     - "8443:8443"
+  #     - "8001:8001"
 
   ##################################
   #? class_db: The Class database
@@ -233,7 +233,8 @@ services:
       - kafka
     ports:
       - "5011:5011"
-# # networks:
+      
+# networks:
 #   bookingApp:
 #     driver: bridge
 

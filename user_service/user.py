@@ -154,31 +154,20 @@ def add_user():
             db.users.insert_one(addObject)
             return addObject
 
-# Update a user using his userid
-# Test user 1 sample userid to use : 640b0cd4c65fe29244b71a53
-# ? subjected to changes - keith
-# add review
-# @app.route('/users/addreview/<userId>', methods=['PUT'])
-# def add_review(userId):
-#     data = request.get_json() #This will be a the json put in the request. Use postman to add the review using PUT
-#     data = json.loads(data)
-#     myquery = { "_id": userId }
-#     # myquery = db.users.find_one({"_id" : userid})
-#     newvalues = { "$push": { "reviews": data } }
-#     # query = db.users.find_one({"_id": object })
-#     updated_user = db.users.find_one_and_update(myquery, newvalues, return_document = ReturnDocument.AFTER)
-#     return json.loads(json_util.dumps(updated_user))
-
 # add class attended to userID
 @app.route('/users/addclass/<userId>', methods=['PUT'])
 def add_class(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the class using PUT
     data = json.loads(data)
     myquery = { "_id": userId }
+    user_doc = db.users.find_one(myquery)
     # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "attended_classes": data["classId"] } }
     # query = db.users.find_one({"_id": object })
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    if data["classId"] not in user_doc["attended_classes"]:
+        updated_user = db.users.find_one_and_update(myquery, newvalues)
+    else:
+        updated_user = user_doc
     return json.loads(json_util.dumps(updated_user))
 
 # Add preferences

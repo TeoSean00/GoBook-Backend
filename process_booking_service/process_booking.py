@@ -117,8 +117,9 @@ def process_booking():
     # ? 3. Invoke notification service to send email of ticket
     ##################################
     # Sending of booking data to kafka log
-    p.send('booking', data)
     ##################################
+    print("META DATA RECEIVED IS",data["metadata"],file=sys.stderr)
+    p.send('booking', data)
 
     # * 1. Invoke get_class service to update class participant and update user attended classes
     get_classes_base_URL = environ.get('get_classes_base_URL') or "http://localhost:5005"
