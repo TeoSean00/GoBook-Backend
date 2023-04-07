@@ -46,7 +46,7 @@ const test = async (req, res) => {
     NAME: userName,
     TICKET_NUMBER: orderID,
     DATE: formattedDate,
-    IMG_SRC: "https://www.skillsfuture.gov.sg",
+    IMG_SRC: "https://classhero.netlify.app/",
   };
   // I need the link to the course on the website
 
@@ -57,8 +57,8 @@ const test = async (req, res) => {
   let MailGenerator = new Mailgen({
     theme: "salted",
     product: {
-      name: "Skills Future",
-      link: "https://www.skillsfuture.gov.sg",
+      name: "GoBook",
+      link: "https://classhero.netlify.app/",
     },
   });
 
@@ -153,7 +153,7 @@ const emailTicket = async (data) => {
     NAME: userName,
     TICKET_NUMBER: orderID,
     DATE: formattedDate,
-    IMG_SRC: "https://www.skillsfuture.gov.sg",
+    IMG_SRC: "https://classhero.netlify.app/",
   };
   // I need the link to the course on the website
 
@@ -164,10 +164,8 @@ const emailTicket = async (data) => {
   let MailGenerator = new Mailgen({
     theme: "salted",
     product: {
-      name: "Skills Future",
-      link: "https://www.skillsfuture.gov.sg",
-      // Optional Product Logo
-      // logo: 'https://mailgen.js/img/logo.png'
+      name: "GoBook",
+      link: "https://classhero.netlify.app/",
     },
   });
 
@@ -184,7 +182,7 @@ const emailTicket = async (data) => {
           },
         ],
       },
-      outro: "Looking forward to do more business with you",
+      outro: "Looking forward to doing more business with you",
     },
   };
 
