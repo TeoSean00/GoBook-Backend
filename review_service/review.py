@@ -19,7 +19,29 @@ client = MongoClient(host=DB_ENVIRONMENT,
                     )
 
 db = client['review_db']
-sample_data = []
+sample_data = [
+    {
+    "userId":"116532673980137782859",
+    "classId":"2",
+    "date":"12-2-2023",
+    "rating": 1,
+    "reviewContent": "Poor Lesson",
+    },
+    {
+    "userId":"115542673980137782859",
+    "classId":"2",
+    "date":"10-3-2023",
+    "rating": 5,
+    "reviewContent": "Good Lesson",
+    },
+    {
+    "userId":"114532673980137782859",
+    "classId":"1",
+    "date":"8-1-2023",
+    "rating": 3,
+    "reviewContent": "Still ok la this instructor, might not go again",
+    },
+]
 
 CORS(app)  
 
@@ -32,7 +54,7 @@ def index():
 def get_all_classes():
     reviews = db.reviews.find()
     return json.loads(json_util.dumps(reviews))
-
+# initialise reviews_DB with the one above
 @app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
@@ -64,5 +86,6 @@ def add_user_review():
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
+    create_db()
     app.run(host='0.0.0.0', port=PORT, debug=True)
 print(f"Review Service is initialized on port {PORT}")
