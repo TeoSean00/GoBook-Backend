@@ -14,7 +14,7 @@ nltk.download('punkt')
 
 class ContentBasedFilter:
 
-    class_data = requests.get("http://class_service:5006/class")
+    class_data = requests.get("http://class_service:5006/")
     classes_df = pd.DataFrame(class_data.json())
     print("------ initialised dataframe ------")
     # Combine the 'title' and 'description' columns into a single column
