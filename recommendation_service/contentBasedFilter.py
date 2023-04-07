@@ -15,6 +15,8 @@ nltk.download('punkt')
 class ContentBasedFilter:
 
     class_data = requests.get("http://class_service:5006/")
+    # print("------ get class data ------")
+    # print(class_data.json())
     classes_df = pd.DataFrame(class_data.json())
     print("------ initialised dataframe ------")
     # Combine the 'title' and 'description' columns into a single column
@@ -64,7 +66,7 @@ class ContentBasedFilter:
         recommendation_output = []
         for enrolled_class in recommendation_items:
             # This is for docker
-            class_data = requests.request("GET", "http://class_service:5006/class/" + str(enrolled_class))
+            class_data = requests.request("GET", "http://class_service:5006/" + str(enrolled_class))
             # class_data = requests.request("GET", "http://localhost:5006/class/" + enrolled_class)
             print("class data received is! HERE!",class_data)
             recommendation_output.append(class_data.json())
