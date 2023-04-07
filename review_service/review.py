@@ -1,12 +1,9 @@
 import os
-from flask import Flask, render_template, request, url_for, redirect,jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from os import environ
 from pymongo import MongoClient
 from bson import json_util
-from bson.objectid import ObjectId
-
-from datetime import datetime
 import json
 
 app = Flask(__name__)
@@ -48,12 +45,13 @@ CORS(app)
 def index():
     return "Review service is running and healthy"
 
+# to retrieve all reviews in the reviewDB
 @app.route('/' , methods=['GET'])
-def get_all_classes():
+def get_all_reviews():
     reviews = db.reviews.find()
     return json.loads(json_util.dumps(reviews))
 
-# initialise reviews_DB with the one above
+# initialise reviews_DB with the sample review data above
 @app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
@@ -66,11 +64,11 @@ def create_db():
 
 # get all reviews made by user
 @app.route('/user/<userId>')
-def get_classes_from_user(userId):
+def get_reviews_from_user(userId):
     reviews  = db.reviews.find( { "userId": userId } )
     return json.loads(json_util.dumps(reviews))
 
-# get all reviews fors this class
+# get all reviews for this class
 @app.route('/class/<classId>')
 def get_reviews_for_class(classId):
     reviews = db.reviews.find({"classId": classId})
@@ -79,7 +77,7 @@ def get_reviews_for_class(classId):
 # add review
 @app.route('/', methods=['POST'])
 def add_user_review():
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the partcipant using PUT
+    data = request.get_json()
     db.reviews.insert_one(data)
     return "added review successfully"
 
