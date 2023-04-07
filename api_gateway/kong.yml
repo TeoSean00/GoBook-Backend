@@ -78,3 +78,10 @@ plugins:
         - Content-Length
         - Content-MD5
         - Content-Type
+        
+  # Justification for local policy over redis/cluster - Backend protection. Accuracy is not as relevant. The requirement is only to protect backend services from overloading that’s caused either by specific users or by attacks.
+  # Stripe Test API limited at 25 / sec
+  - name: rate-limiting
+    config: 
+      second: 25
+      policy: local

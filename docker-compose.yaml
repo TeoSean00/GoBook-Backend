@@ -6,20 +6,23 @@ services:
   #? kong: API Gateway
   ##################################
 
-  # kong:
-  #   build:
-  #     context: ./api_gateway
-  #     dockerfile: Dockerfile
-  #   image: kong:latest
-  #   container_name: kong
-  #   restart: always
-  #   environment:
-  #     KONG_DATABASE: "off"
-  #     KONG_DECLARATIVE_CONFIG: kong.yml
-  #   ports:
-  #     - "8000:8000"
-  #     - "8443:8443"
-  #     - "8001:8001"
+  kong:
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
+    image: kong:latest
+    container_name: kong
+    restart: always
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: kong.yml
+    ports:
+      - "8000:8000"
+      - "8443:8443" 
+      - "8001:8001"
+    depends_on:
+      - process_booking
+      - kafka
 
   ##################################
   #? class_db: The Class database
@@ -37,14 +40,13 @@ services:
   class_service:
     build: ./class_service/
     container_name: class_service
-    depends_on:
-      - class_db
     ports:
       - "5006:5006"
     environment:
       DB_ENVIRONMENT: class_db
       port: "5006"
-
+    depends_on:
+      - class_db
   #################################
   #? review_db: The Class database
   #################################
@@ -103,8 +105,8 @@ services:
     ports:
       - "5005:5005"
     environment:
-      class_service_URL: http://class_service:5006/class
-      user_service_URL: http://user_service:5001/users
+      class_service_URL: http://class_service:5006
+      user_service_URL: http://user_service:5001
 
   ##################################
   #? message_db: The Message database
@@ -175,6 +177,9 @@ services:
       payment_service_URL: http://host.docker.internal:8080/create-payment-intent
       rabbit_host: rabbitmq
       rabbit_port: 5672
+    depends_on:
+      - user_service
+      - class_service
 
   ##################################
   #? rabbitmq: The rabbitmq broker
@@ -233,8 +238,3 @@ services:
       - kafka
     ports:
       - "5011:5011"
-      
-# networks:
-#   bookingApp:
-#     driver: bridge
-

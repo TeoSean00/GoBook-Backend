@@ -15,7 +15,7 @@ monitorBindingKey='booking.*'
 app = Flask(__name__)
 portNum = 5006
 # Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
-DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or 'local'
+DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or 'localhost'
 client = MongoClient(host=DB_ENVIRONMENT,
                     port=27017
                     )
@@ -259,18 +259,8 @@ sample_data = [
     }
 ]
 
-def main():
-    print("Loading in class data...")
-    db_exists = client.list_database_names()
-    if 'class_db' in db_exists:
-        client.drop_database('class_db')
-    db = client['class_db']
-    for data in sample_data:
-        db["classes"].insert_one(data)
-    return "Sample data inserted successfully" + str(sample_data)
-
-# This API is to initialize the document in Mongo and fill with sample data
-@app.route('/class/createDB')
+# Initialize Mongo with sample data
+@app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
     if 'class_db' in db_exists:
@@ -280,43 +270,42 @@ def create_db():
         db["classes"].insert_one(data)
     return "Sample data inserted successfully" + str(sample_data)
 
-# Testing Route 
-@app.route('/', methods=('GET', 'POST'))
+# Health Check 
+@app.route('/health', methods=('GET', 'POST'))
 def index():
-    return "Hello there, there are the classes"
+    return "Class Service is up and running"
 
-# This API will get all classes
-@app.route('/class')
+# Get All classes
+@app.route('/')
 def get_all_classes():
     classes = db.classes.find()
     return json.loads(json_util.dumps(classes))
 
-
-# get class details from class Id
-@app.route('/class/<classId>')
+# Get class details from class Id
+@app.route('/<classId>')
 def get_class(classId):
     myquery = {"_id": classId}
     currClass = db.classes.find_one(myquery)
     return json.loads(json_util.dumps(currClass))
 
 # get all unique class objects details for a specific user
-@app.route('/class/getUserClass/<userId>')
+@app.route('/getUserClass/<userId>')
 def get_user_class(userId):
     matching_classes = {}
     returned_classes = []
     for class_doc in db.classes.find():
         for course_run in class_doc['courseRuns']:
-            if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["className"] not in matching_classes:
+            if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["coursename"] not in matching_classes:
                 returned_classes.append(class_doc)
     return returned_classes
 
-# add user to class participants
-@app.route('/class/<classId>/<runId>', methods=['PUT'])
+# Add user to class participants
+@app.route('/<classId>/<runId>', methods=['PUT'])
 def add_user_class(classId, runId):
     # This will be a the json put in the request. Use postman to add the partcipant using PUT
     print("start class update")
     data = request.get_json()
-    data = json.loads(data)
+    # data = json.loads(data)
     # object = ObjectId(classId)
     courseRun = f"courseRuns.{runId}.participants"
     courseRunSlots = f"courseRuns.{runId}.availableSlots"
@@ -336,6 +325,6 @@ def add_user_class(classId, runId):
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) +": manage class Schedule ...")
-    main()
+    create_db()
     app.run(host='0.0.0.0', port=portNum, debug=True)
 print(f"Class Service app is initialized on port {portNum}")

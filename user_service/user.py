@@ -9,17 +9,15 @@ from bson.objectid import ObjectId
 from datetime import datetime
 import json
 
-
 app = Flask(__name__)
-portNum = 5001
-# Switches between DB_ENVIRONMENT and localhost depending on whether the app is running on docker or not
+
+PORT = 5001
 DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
 client = MongoClient(host=DB_ENVIRONMENT,
                         port=27018
                     )
 
 CORS(app) 
-
 
 db = client['user_db']
 sample_data = [
@@ -84,23 +82,14 @@ sample_data = [
     },
 ] 
 
-def main():
-    print("Loading in user data...")
-    db_exists = client.list_database_names()
-    if 'user_db' in db_exists:
-        client.drop_database('user_db')
-    db = client['user_db']
-    for data in sample_data:
-        db["users"].insert_one(data)
-    return "Sample data inserted successfully" + str(sample_data)
 
 # <-------------------------------------------Routes for userDB------------------------------------------->
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/health', methods=('GET', 'POST'))
 def index():
-    return "Hello there, there are the users"
+    return "User Service is up and running"
 
 # Initalise the user database with the sample data above
-@app.route('/users/createDB')
+@app.route('/createDB')
 def create_db():
     db_exists = client.list_database_names()
     if 'user_db' in db_exists:
@@ -111,7 +100,7 @@ def create_db():
     return "Sample data inserted successfully" + str(sample_data)
 
 # Get all users in the userDB
-@app.route('/users/getUsers')
+@app.route('/')
 def get_all_users():
     users = db.users.find()
     if (users == None):
@@ -120,22 +109,21 @@ def get_all_users():
         return json.loads(json_util.dumps(users))
 
 # Get a particular user by their userId else return string saying no such user
-@app.route('/users/getUser/<userId>')
+@app.route('/<userId>')
 def get_user(userId):
     myquery = { "_id": userId }
     user = db.users.find_one(myquery)
     if user == None:
-        return "no such user"
+        return f"User with _id:{userId} does not exist in the database ", 400
     return json.loads(json_util.dumps(user))
 
-# Add user to the userDB if user does not exist in DB, else return string saying user exists already
-@app.route('/users/addUser', methods=['POST'])
+# Add user to the userDB if user does not exist in DB, else return string saying user exists already 
+@app.route('/addUser', methods=['POST'])
 def add_user():
     data = request.get_json()
     if (data == None):
-        return "invalid user details"
+        return "Invalid user details", 400
     else:
-        # queries the userDB for an existing user via the given id, if user exists return existing user, otherwise create new user with the given details
         userId = data["id"]
         myquery = { "_id": userId }
         user = db.users.find_one(myquery)
@@ -155,55 +143,46 @@ def add_user():
             return addObject
 
 # add class attended to userID
-@app.route('/users/addclass/<userId>', methods=['PUT'])
+@app.route('/addClass/<userId>', methods=['PUT'])
 def add_class(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the class using PUT
-    data = json.loads(data)
-    myquery = { "_id": userId }
-    user_doc = db.users.find_one(myquery)
-    # myquery = db.users.find_one({"_id" : userid})
-    newvalues = { "$push": { "attended_classes": data["classId"] } }
-    # query = db.users.find_one({"_id": object })
-    if data["classId"] not in user_doc["attended_classes"]:
-        updated_user = db.users.find_one_and_update(myquery, newvalues)
-    else:
-        updated_user = user_doc
-    return json.loads(json_util.dumps(updated_user))
-
-# Add preferences
-@app.route('/users/addpref/<userId>', methods=['PUT'])
-def add_preferences(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
+    data = request.get_json()
     # data = json.loads(data)
     myquery = { "_id": userId }
-    # myquery = db.users.find_one({"_id" : userid})
+    user_doc = db.users.find_one(myquery)
+    if not user_doc:
+            return f"User with _id: {userId} does not exist", 400
+    newvalues = { "$push": { "attended_classes": data["classId"] } }
+    if data["classId"] not in user_doc["attended_classes"]:
+        updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
+        return json.loads(json_util.dumps(updated_user))
+    else:
+        updated_user = user_doc
+        return f"User with _id: {userId} already attended class",400
+
+# Add preferences
+@app.route('/pref/<userId>', methods=['PUT'])
+def add_preferences(userId):
+    data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
+    myquery = { "_id": userId }
     newvalues = { "$push": { "preferences": data['preference'] } }
-    # query = db.users.find_one({"_id": object })
-    # try :
-    #     updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
-    # except :
-    #     return "error"
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
+    if not updated_user:
+        return f"User with _id: {userId} does not exist", 400
     return json.loads(json_util.dumps(updated_user))
 
 # Add recommended classes
-@app.route('/users/addrecc/<userId>', methods=['PUT'])
+@app.route('/recc/<userId>', methods=['PUT'])
 def add_recommendations(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the recommendationsD using PUT
-    # data = json.loads(data)
     myquery = { "_id": userId }
-    # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$set": { "recommended_classes": data['recommended_classes'] } }
-    # query = db.users.find_one({"_id": object })
-    # try :
-    #     updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
-    # except :
-    #     return "error"
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    updated_user = db.users.find_one_and_update(myquery, newvalues,return_document=ReturnDocument.AFTER)
+    if not updated_user:
+        return f"User with _id: {userId} does not exist", 400
     return json.loads(json_util.dumps(updated_user))
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage class Schedule ...")
-    main()
-    app.run(host='0.0.0.0', port=portNum, debug=True)
-print(f"User Service is initialized on port {portNum}")
+    create_db()
+    app.run(host='0.0.0.0', port=PORT, debug=True)
+print(f"User Service is initialized on port {PORT}")

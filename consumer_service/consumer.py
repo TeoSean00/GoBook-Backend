@@ -6,6 +6,7 @@ import os
 import threading
 
 app = Flask(__name__)
+PORT = 5011
 socketio = SocketIO(app,cors_allowed_origins="*")
 
 consumer = KafkaConsumer('recommendations',
@@ -37,4 +38,4 @@ if __name__ == '__main__':
           ": receiving Kafka recommendations ...")
     kafka_thread = threading.Thread(target=kafka_listener)
     kafka_thread.start()
-    socketio.run(app, host='0.0.0.0', port=5011, **{'allow_unsafe_werkzeug': True})
+    socketio.run(app, host='0.0.0.0', port=PORT, **{'allow_unsafe_werkzeug': True})
