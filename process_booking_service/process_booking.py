@@ -153,12 +153,11 @@ def process_booking():
         dataObject = json.dumps(dataObject)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="email.info",
             body=dataObject, properties=pika.BasicProperties(delivery_mode=2))
-
         return {
             "code": 200,
             "userUpdate": get_classes_updateResult["userUpdate"],
             "classUpdate": get_classes_updateResult["classUpdate"],
-            "email": "sent to queue successfullyx"
+            "email": "sent to queue successfully"
         },200
     else:
         return {
