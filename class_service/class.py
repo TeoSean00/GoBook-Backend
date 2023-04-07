@@ -295,7 +295,7 @@ def get_user_class(userId):
     returned_classes = []
     for class_doc in db.classes.find():
         for course_run in class_doc['courseRuns']:
-            if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["className"] not in matching_classes:
+            if userId in class_doc['courseRuns'][course_run]['participants'] and class_doc["coursename"] not in matching_classes:
                 returned_classes.append(class_doc)
     return returned_classes
 
@@ -305,7 +305,7 @@ def add_user_class(classId, runId):
     # This will be a the json put in the request. Use postman to add the partcipant using PUT
     print("start class update")
     data = request.get_json()
-    data = json.loads(data)
+    # data = json.loads(data)
     # object = ObjectId(classId)
     courseRun = f"courseRuns.{runId}.participants"
     courseRunSlots = f"courseRuns.{runId}.availableSlots"

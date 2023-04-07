@@ -180,6 +180,7 @@ services:
     depends_on:
       - user_service
       - class_service
+
   ##################################
   #? rabbitmq: The rabbitmq broker
   ##################################
@@ -237,5 +238,3 @@ services:
       - kafka
     ports:
       - "5011:5011"
-
-

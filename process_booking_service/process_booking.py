@@ -46,13 +46,8 @@ def create_payment():
     response_data = requests.post(url, data=json.dumps(data), headers=headers)
     for item in response_data:
         print("ITEM IS", item)
-
-    # data received is
-    # {'amount': 1500, 'amount_capturable': 0, 'amount_details': {'tip': {}}, 'amount_received': 1500, 'automatic_payment_methods': {'enabled': True}, 'capture_method': 'automatic', 'client_secret': 'pi_3MnMh6JTqG9NvRuT0xGeHdCj_secret_gsKWOlAlwTsdvsj1Ru9cK6goW', 'confirmation_method': 'automatic', 'created': 1679234084, 'currency': 'sgd', 'id': 'pi_3MnMh6JTqG9NvRuT0xGeHdCj', 'latest_charge': {'id': 'ch_3MnMh6JTqG9NvRuT0DB1hg0w'}, 'livemode': False, 'metadata': {}, 'object': 'payment_intent', 'payment_method': {'id': 'pm_1MnMhFJTqG9NvRuT8Hf2rccH'}, 'payment_method_options': {'card': {'request_three_d_secure': 'automatic'}, 'paynow': {}}, 'payment_method_types': ['card', 'paynow'], 'status': 'succeeded'}
     response_str = response_data.content.decode()
     return json.loads(response_str)
-
-
 
 #! Upon successful payment payment service will call this API with payment data
 @app.route('/update_payment', methods=['POST'])
@@ -114,7 +109,6 @@ def process_booking():
     "status": "succeeded"
 }
     
-
     # ? Now to update the class and user service that book is confirmed
 
     # ? 1. Call get_class complex to Invoke class service and user service
@@ -172,23 +166,6 @@ def process_booking():
             "classUpdate": get_classes_updateResult["classUpdate"],
             "email": "did not send to queue"
         }
-
-    # pass payment_response and class_booking jSON
-    # class_booking will need to have class id , run id , userid
-    # response = requests.request("POST", update_booking_URL,
-    # json={
-    #     "userEmail" : "keithloh99@gmail.com",
-    #     "userName" : "Keith Loh",
-    #     "orderID" : "4500",
-    #     "courseName" : "Advanced-Information-Management-Classroom-Asynchronous",
-    #     "coursePrice" : "1420",
-    #     "courseDescription" : "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
-    #     "classId" : 642924c830f6877e418e1650,
-    #     "runId": 1,
-    #     "userId": 112532673980137782859,
-    #     }
-    # )
-
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +

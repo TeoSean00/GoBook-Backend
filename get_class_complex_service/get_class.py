@@ -48,9 +48,8 @@ def update_class():
         "userId": userID
     }
     #? JSONIFY the data object
-    userDataObject = json.dumps(userDataObject)
+    # userDataObject = json.dumps(userDataObject)
 
-    # userDataObject = jsonify(userDataObject)
     classUpdateResult = invoke_http(class_service_URL, method = 'PUT', json = userDataObject)
 
     print("Class service update result code")
@@ -66,7 +65,7 @@ def update_class():
         "classId": classID
     }
     #? JSONIFY the data object
-    classDataObject = json.dumps(classDataObject)
+    # classDataObject = json.dumps(classDataObject)
     # classDataObject = jsonify(classDataObject)
 
     userUpdateResult = invoke_http(user_service_URL, method = 'PUT', json = classDataObject)
@@ -92,7 +91,7 @@ def update_class():
             "userUpdate": userUpdateResult,
             "classUpdate": classUpdateResult,
             "email": "did not send to queue"
-        }
+        }, 500
 
 
 if __name__ == '__main__':

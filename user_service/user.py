@@ -1,7 +1,6 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS
-from flask_swagger_ui import get_swaggerui_blueprint
 from os import environ
 from pymongo import MongoClient
 from pymongo import ReturnDocument
@@ -17,18 +16,6 @@ DB_ENVIRONMENT = environ.get('DB_ENVIRONMENT') or "localhost"
 client = MongoClient(host=DB_ENVIRONMENT,
                         port=27018
                     )
-
-SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
-API_URL = '/static/user_swagger.json'  # Our API url (can of course be a local resource)
-# Call factory function to create our blueprint
-swaggerui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={  # Swagger UI config overrides
-        'app_name': "User Service"
-    },
-)
-app.register_blueprint(swaggerui_blueprint)
 
 CORS(app) 
 
@@ -131,14 +118,12 @@ def get_user(userId):
     return json.loads(json_util.dumps(user))
 
 # Add user to the userDB if user does not exist in DB, else return string saying user exists already 
-# ! your checking of user exists does not work dude
 @app.route('/addUser', methods=['POST'])
 def add_user():
     data = request.get_json()
     if (data == None):
-        return "invalid user details"
+        return "Invalid user details", 400
     else:
-        # queries the userDB for an existing user via the given id, if user exists return existing user, otherwise create new user with the given details
         userId = data["id"]
         myquery = { "_id": userId }
         user = db.users.find_one(myquery)
@@ -163,44 +148,37 @@ def add_class(userId):
     data = request.get_json()
     # data = json.loads(data)
     myquery = { "_id": userId }
+    user_doc = db.users.find_one(myquery)
+    if not user_doc:
+            return f"User with _id: {userId} does not exist", 400
     newvalues = { "$push": { "attended_classes": data["classId"] } }
-    #! might cause CORS error on frontend
-    updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
-    if not updated_user:
-        return f"User with _id: {userId} does not exist", 400
-    # updated_user = db.users.find_one_and_update(myquery, newvalues)
-    return json.loads(json_util.dumps(updated_user))
+    if data["classId"] not in user_doc["attended_classes"]:
+        updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
+        return json.loads(json_util.dumps(updated_user))
+    else:
+        updated_user = user_doc
+        return f"User with _id: {userId} already attended class",400
 
 # Add preferences
 @app.route('/pref/<userId>', methods=['PUT'])
 def add_preferences(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
-    data = json.loads(data)
     myquery = { "_id": userId }
-    # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$push": { "preferences": data['preference'] } }
-    # query = db.users.find_one({"_id": object })
-    # try :
-    #     updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
-    # except :
-    #     return "error"
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
+    if not updated_user:
+        return f"User with _id: {userId} does not exist", 400
     return json.loads(json_util.dumps(updated_user))
 
 # Add recommended classes
 @app.route('/recc/<userId>', methods=['PUT'])
 def add_recommendations(userId):
     data = request.get_json() #This will be a the json put in the request. Use postman to add the recommendationsD using PUT
-    data = json.loads(data)
     myquery = { "_id": userId }
-    # myquery = db.users.find_one({"_id" : userid})
     newvalues = { "$set": { "recommended_classes": data['recommended_classes'] } }
-    # query = db.users.find_one({"_id": object })
-    # try :
-    #     updated_user = db.users.find_one_and_update(myquery, newvalues, returnDocument = ReturnDocument.AFTER)
-    # except :
-    #     return "error"
-    updated_user = db.users.find_one_and_update(myquery, newvalues)
+    updated_user = db.users.find_one_and_update(myquery, newvalues,return_document=ReturnDocument.AFTER)
+    if not updated_user:
+        return f"User with _id: {userId} does not exist", 400
     return json.loads(json_util.dumps(updated_user))
 
 if __name__ == '__main__':
