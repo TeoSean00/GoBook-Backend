@@ -83,7 +83,7 @@ sample_data = [
 ] 
 
 
-# <-------------------------------------------Routes for userDB------------------------------------------->
+# <------Routes for userDB------>
 @app.route('/health', methods=('GET', 'POST'))
 def index():
     return "User Service is up and running"
@@ -117,7 +117,7 @@ def get_user(userId):
         return f"User with _id:{userId} does not exist in the database ", 400
     return json.loads(json_util.dumps(user))
 
-# Add user to the userDB if user does not exist in DB, else return string saying user exists already 
+# Add user to the userDB if user does not exist in DB, else update user details
 @app.route('/addUser', methods=['POST'])
 def add_user():
     data = request.get_json()
@@ -146,39 +146,38 @@ def add_user():
 @app.route('/addClass/<userId>', methods=['PUT'])
 def add_class(userId):
     data = request.get_json()
-    # data = json.loads(data)
     myquery = { "_id": userId }
     user_doc = db.users.find_one(myquery)
     if not user_doc:
-            return f"User with _id: {userId} does not exist", 400
+            return f"User with _id: {userId} does not exist", 404
     newvalues = { "$push": { "attended_classes": data["classId"] } }
     if data["classId"] not in user_doc["attended_classes"]:
         updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
         return json.loads(json_util.dumps(updated_user))
     else:
         updated_user = user_doc
-        return f"User with _id: {userId} already attended class",400
+        return f"User with _id: {userId} already attended class",404
 
 # Add preferences
 @app.route('/pref/<userId>', methods=['PUT'])
 def add_preferences(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the preferences using PUT
+    data = request.get_json()
     myquery = { "_id": userId }
     newvalues = { "$push": { "preferences": data['preference'] } }
     updated_user = db.users.find_one_and_update(myquery, newvalues, return_document=ReturnDocument.AFTER)
     if not updated_user:
-        return f"User with _id: {userId} does not exist", 400
+        return f"User with _id: {userId} does not exist", 404
     return json.loads(json_util.dumps(updated_user))
 
 # Add recommended classes
 @app.route('/recc/<userId>', methods=['PUT'])
 def add_recommendations(userId):
-    data = request.get_json() #This will be a the json put in the request. Use postman to add the recommendationsD using PUT
+    data = request.get_json()
     myquery = { "_id": userId }
     newvalues = { "$set": { "recommended_classes": data['recommended_classes'] } }
     updated_user = db.users.find_one_and_update(myquery, newvalues,return_document=ReturnDocument.AFTER)
     if not updated_user:
-        return f"User with _id: {userId} does not exist", 400
+        return f"User with _id: {userId} does not exist", 404
     return json.loads(json_util.dumps(updated_user))
 
 if __name__ == '__main__':
