@@ -21,6 +21,7 @@ async function connectQueue() {
       const parsedData = JSON.parse(data.content.toString());
       // Call the function emailTicket
       emailTicket(parsedData);
+      console.log("Email sent")
       channel.ack(data);
     });
   } catch (error) {

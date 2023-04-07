@@ -7,7 +7,7 @@ const { getLogger } = require("nodemailer/lib/shared/index.js");
 const createPDF = require("./ticket.js");
 const date = require("date-and-time");
 
-// Testing function to send email to user using POST Request
+// Testing function to send email to user using POST Request for Sanity Check
 const test = async (req, res) => {
   // testing account
   const { userEmail } = req.body;
@@ -175,11 +175,18 @@ const emailTicket = async (data) => {
         data: [
           {
             item: courseName,
-            description: courseDescription,
             price: coursePrice,
           },
         ],
       },
+      action: {
+            instructions: 'Book more courses today!',
+            button: {
+                color: '#1E40AF',
+                text: 'Visit GoBook',
+                link: 'http://localhost:5173'
+            }
+        },
       outro: "Looking forward to doing more business with you",
     },
   };
