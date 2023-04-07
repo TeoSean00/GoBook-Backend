@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, render_template, request, url_for, redirect,jsonify
 from flask_cors import CORS
 from os import environ
@@ -49,11 +48,11 @@ CORS(app)
 def index():
     return "Review service is running and healthy"
 
-
 @app.route('/' , methods=['GET'])
 def get_all_classes():
     reviews = db.reviews.find()
     return json.loads(json_util.dumps(reviews))
+
 # initialise reviews_DB with the one above
 @app.route('/createDB')
 def create_db():

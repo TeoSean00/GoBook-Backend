@@ -1,12 +1,8 @@
 import os
-import requests
-from flask import Flask, render_template, request, url_for, redirect,jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from os import environ
 from invokes import invoke_http
-
-from datetime import datetime
-import json
 
 app = Flask(__name__)
 
@@ -17,6 +13,7 @@ CORS(app)
 def index():
     return "get_class service is up and running"
 
+# Complex microservice route to update class details, by invoking class service, user service and AMQP messaging service
 @app.route('/update_class_details', methods=['PUT'])
 def update_class():
     data = request.get_json()
