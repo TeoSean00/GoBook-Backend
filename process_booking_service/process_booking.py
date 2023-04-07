@@ -60,6 +60,7 @@ def process_booking():
     # this is to convert data to JSON string
     # dataObject = json.dumps(data)
     # print('This is error output', file=sys.stderr)
+    print("DATA IS HERE", file=sys.stderr)
     print(data, file=sys.stderr)
 
     # Sample response data from payment service
@@ -86,7 +87,7 @@ def process_booking():
     "metadata": {
         "courseDescription": "Define a coherent data strategy and spearhead new approaches to enrich, synthesise and apply data, to maximise the value of data as a critical business asset and driver.",
         "userEmail": "celov54484@gpipes.com",
-        "className": "Advanced-Information-Management-Classroom-Asynchronous",
+        "coursename": "Advanced-Information-Management-Classroom-Asynchronous",
         "runID": "1",
         "orderID": "4500",
         "userID": "112532673980137782859",
@@ -188,7 +189,7 @@ def process_booking():
         "runID" : runID,
         "userID" : userID
     }
-
+    print("get_classes_updateResult is", get_classes_updateResult,file=sys.stderr)
     print("get_classes_updateResult is", get_classes_updateResult,file=sys.stderr)
 
     # if (classUpdateResult['code'] in range(200,300) and userUpdateResult['code'] in range(200,300)):
