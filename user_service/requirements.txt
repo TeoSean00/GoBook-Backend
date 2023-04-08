@@ -3,4 +3,3 @@ Flask-Cors==3.0.10
 mysql-connector-python==8.0.32
 requests==2.28.2
 pymongo==4.3.3
-flask_swagger_ui==4.11.1
