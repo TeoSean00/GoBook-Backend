@@ -4,7 +4,7 @@ Simplifying bookings one class at a time
 
 1. [Project Report & API Docs](https://docs.google.com/document/d/1CZLL4ou799Og1fIFK7gp1xN9LmwuiTaI/edit?usp=sharing&ouid=112532673980137782859&rtpof=true&sd=true)
 2. [Project Slides](https://docs.google.com/presentation/d/17ox5rou8biMvc6pwpcZbFa26uinjy5jrazzRUo2o5Hk/edit?usp=sharing)
-3. [Project Video](https://youtu.be/S4vLItXFAvE)
+3. [Project Video Demo](https://youtu.be/S4vLItXFAvE)
 
 
 # Project Overview
